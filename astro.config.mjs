@@ -11,7 +11,7 @@ export default defineConfig({
   // ⚠️ Ganti dengan domain produksi Anda yang sebenarnya
   site: 'https://grandbedahanresidence.com',
 
-  output: 'static',
+  output: 'server',
   vite: {
     plugins: [tailwindcss()],
     server: {

@@ -23,26 +23,15 @@ import {
   MessageSquare
 } from 'lucide-react';
 
-export async function getStaticPaths() {
-  const list = await getTipeRumahList();
-  return list.map((tipe) => ({
-    params: { slug: tipe.slug },
-    props: { tipe, allTypes: list }
-  }));
-}
-
-interface Props {
-  tipe: TipeRumah;
-  allTypes?: TipeRumah[];
-}
-
-const { tipe, allTypes } = Astro.props;
+const { slug } = Astro.params;
+const fullList = await getTipeRumahList();
+const tipe = Astro.props.tipe || fullList.find((t) => t.slug === slug);
+const allTypes = Astro.props.allTypes || fullList;
 
 if (!tipe) {
   return Astro.redirect('/#tipe-rumah');
 }
 
-const fullList = allTypes || (await getTipeRumahList());
 const otherTypes = fullList.filter((t) => t.slug !== tipe.slug);
 
 // 1. Fallback Galeri: Gunakan foto utama jika galeri kosong

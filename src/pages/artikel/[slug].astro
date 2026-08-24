@@ -3,18 +3,12 @@ import MainLayout from '../../layouts/MainLayout.astro';
 import { getPublishedArtikelList, getArtikelBySlug } from '../../lib/api';
 import { renderMarkdownAndHtml } from '../../lib/markdown';
 
-export async function getStaticPaths() {
-  const articles = await getPublishedArtikelList();
-  return articles.map((art) => ({
-    params: { slug: art.slug },
-    props: { articleItem: art }
-  }));
-}
-
 const { slug } = Astro.params;
-const { articleItem } = Astro.props;
+const articleItem = Astro.props.articleItem || (await getArtikelBySlug(slug as string));
 
-const fetched = articleItem || (await getArtikelBySlug(slug as string));
+if (!articleItem) {
+  return Astro.redirect('/artikel');
+}
 
 const formatDate = (dateString?: string) => {
   if (!dateString) return '';
@@ -22,19 +16,14 @@ const formatDate = (dateString?: string) => {
   return new Date(dateString).toLocaleDateString('id-ID', options);
 };
 
-const rawContent = fetched?.isi_konten || '<p>Maaf, konten artikel yang Anda cari tidak tersedia.</p>';
+const rawContent = articleItem.isi_konten || '<p>Maaf, konten artikel yang Anda cari tidak tersedia.</p>';
 const formattedHtml = renderMarkdownAndHtml(rawContent);
 
-const article = fetched ? {
-  judul: fetched.judul,
-  tanggal: formatDate(fetched.tanggal_publish),
-  gambar_utama_url: fetched.gambar_utama_url,
+const article = {
+  judul: articleItem.judul,
+  tanggal: formatDate(articleItem.tanggal_publish),
+  gambar_utama_url: articleItem.gambar_utama_url,
   konten: formattedHtml
-} : {
-  judul: 'Artikel Tidak Ditemukan',
-  tanggal: '',
-  gambar_utama_url: '',
-  konten: '<p>Maaf, konten artikel yang Anda cari tidak tersedia.</p>'
 };
 ---
 
