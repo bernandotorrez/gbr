@@ -1,28 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 
 export default function FloatingWhatsApp() {
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    // Show after scrolling down 300px
-    const toggleVisibility = () => {
-      if (window.scrollY > 300) {
-        setIsVisible(true);
-      } else {
-        setIsVisible(false);
-      }
-    };
-
-    window.addEventListener('scroll', toggleVisibility);
-    return () => window.removeEventListener('scroll', toggleVisibility);
-  }, []);
-
   return (
-    <div 
-      className={`fixed bottom-6 right-6 z-50 transition-all duration-500 transform ${
-        isVisible ? 'translate-y-0 opacity-100' : 'translate-y-12 opacity-0 pointer-events-none'
-      }`}
-    >
+    <div className="fixed bottom-6 right-6 z-50 transition-all duration-300">
       <a
         href="https://wa.me/6281215776218?text=Halo%20Grand%20Bedahan%20Residence,%20saya%20ingin%20bertanya..."
         target="_blank"
