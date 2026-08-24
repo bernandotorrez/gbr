@@ -29,7 +29,7 @@
         },
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://benixai.web.id; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://xlbxjeieoznucclltjco.supabase.co https://images.unsplash.com https://maps.google.com https://*.google.com https://*.gstatic.com; media-src 'self' https://xlbxjeieoznucclltjco.supabase.co; frame-src 'self' https://maps.google.com https://www.google.com https://benixai.web.id; connect-src 'self' https://benixai.web.id https://xlbxjeieoznucclltjco.supabase.co; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' https://benixai.web.id https://www.google.com https://www.gstatic.com https://www.recaptcha.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' data: https://fonts.gstatic.com; img-src 'self' data: blob: https://xlbxjeieoznucclltjco.supabase.co https://images.unsplash.com https://maps.google.com https://*.google.com https://*.gstatic.com https://www.gstatic.com; media-src 'self' https://xlbxjeieoznucclltjco.supabase.co; frame-src 'self' https://maps.google.com https://www.google.com https://www.recaptcha.net https://benixai.web.id; connect-src 'self' https://benixai.web.id https://xlbxjeieoznucclltjco.supabase.co https://www.google.com https://www.gstatic.com https://www.recaptcha.net; frame-ancestors 'none'; base-uri 'self'; form-action 'self';"
         }
       ]
     }
