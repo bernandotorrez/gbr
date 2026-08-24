@@ -158,17 +158,19 @@ export default function ContactForm() {
 
     try {
       // 5. Invisible reCAPTCHA v3 Token
+      let token: string | null = null;
       if (isRecaptchaConfigured()) {
-        await getRecaptchaToken('submit_lead');
+        token = await getRecaptchaToken('submit_lead');
       }
 
-      // 6. Submit with sanitized payload
+      // 6. Submit with sanitized payload & verification token
       const res = await submitLead({
         nama: formData.nama,
         no_hp: formData.no_hp,
         email: formData.email || undefined,
         tipe_rumah_diminati: formData.tipe_rumah_diminati || undefined,
-        pesan: formData.pesan
+        pesan: formData.pesan,
+        recaptcha_token: token
       });
 
       if (res.success) {

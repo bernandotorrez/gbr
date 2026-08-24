@@ -291,7 +291,23 @@ export async function submitLead(lead: {
   email?: string;
   tipe_rumah_diminati?: string;
   pesan: string;
+  recaptcha_token?: string | null;
 }): Promise<{ success: boolean; error?: string }> {
+  // If running in browser, use serverless API endpoint with Secret Key reCAPTCHA verification
+  if (typeof window !== 'undefined') {
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(lead)
+      });
+      const data = await res.json();
+      return data;
+    } catch (err) {
+      console.warn('API route call failed, attempting direct Supabase submission:', err);
+    }
+  }
+
   if (!isSupabaseConfigured()) {
     // When Supabase keys are not set yet, simulate successful submission
     return { success: true };
