@@ -1,36 +1,9 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
 import { Calendar, ArrowRight, BookOpen, ChevronRight } from 'lucide-react';
+import { getPublishedArtikelList } from '../../lib/api';
 
-const articles = [
-  {
-    id: 1,
-    judul: '5 Tips Memilih Rumah Pertama untuk Keluarga Muda',
-    slug: 'tips-memilih-rumah-pertama',
-    gambar_utama_url: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    tanggal_publish: '2026-08-10T08:00:00Z',
-    kategori: 'Panduan Properti',
-    excerpt: 'Memilih rumah pertama bisa jadi tantangan tersendiri. Simak 5 hal penting yang harus Anda perhatikan sebelum membeli rumah idaman.'
-  },
-  {
-    id: 2,
-    judul: 'Keuntungan Tinggal di Kawasan Bedahan Depok',
-    slug: 'keuntungan-tinggal-di-bedahan-depok',
-    gambar_utama_url: 'https://images.unsplash.com/photo-1449844908441-8829872d2607?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    tanggal_publish: '2026-08-15T10:30:00Z',
-    kategori: 'Investasi & Kawasan',
-    excerpt: 'Bedahan semakin dilirik sebagai kawasan hunian favorit. Berikut adalah alasan mengapa investasi properti di Bedahan sangat menguntungkan.'
-  },
-  {
-    id: 3,
-    judul: 'Inspirasi Desain Interior Minimalis Modern',
-    slug: 'inspirasi-desain-interior-minimalis',
-    gambar_utama_url: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
-    tanggal_publish: '2026-08-20T09:15:00Z',
-    kategori: 'Desain & Tips',
-    excerpt: 'Maksimalkan ruang di rumah Anda dengan gaya interior minimalis modern. Cantik, fungsional, dan mudah perawatannya.'
-  }
-];
+const articles = await getPublishedArtikelList();
 
 const formatDate = (dateString: string) => {
   const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };

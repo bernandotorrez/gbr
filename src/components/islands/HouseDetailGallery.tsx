@@ -72,26 +72,28 @@ export default function HouseDetailGallery({ photos, title }: HouseDetailGallery
         </div>
 
         {/* Thumbnails */}
-        <div className="grid grid-cols-4 gap-3 sm:gap-4">
-          {photos.map((photo, idx) => (
-            <button
-              key={idx}
-              onClick={() => setActiveIndex(idx)}
-              className={`relative aspect-[4/3] rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${
-                activeIndex === idx
-                  ? 'border-[#0E3B2E] ring-2 ring-[#0E3B2E]/30 scale-[1.02]'
-                  : 'border-transparent opacity-70 hover:opacity-100'
-              }`}
-              aria-label={`Lihat foto ${idx + 1}`}
-            >
-              <img
-                src={photo}
-                alt={`Thumbnail ${idx + 1}`}
-                className="w-full h-full object-cover"
-              />
-            </button>
-          ))}
-        </div>
+        {photos.length > 1 && (
+          <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 gap-3 sm:gap-4">
+            {photos.map((photo, idx) => (
+              <button
+                key={idx}
+                onClick={() => setActiveIndex(idx)}
+                className={`relative aspect-[4/3] rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${
+                  activeIndex === idx
+                    ? 'border-[#0E3B2E] ring-2 ring-[#0E3B2E]/30 scale-[1.02]'
+                    : 'border-transparent opacity-70 hover:opacity-100'
+                }`}
+                aria-label={`Lihat foto ${idx + 1}`}
+              >
+                <img
+                  src={photo}
+                  alt={`Thumbnail ${idx + 1}`}
+                  className="w-full h-full object-cover"
+                />
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
       {/* Lightbox Overlay */}

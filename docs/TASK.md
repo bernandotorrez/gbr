@@ -52,52 +52,50 @@ Dokumen ini melacak status pengerjaan fitur dan sistem untuk website Grand Bedah
 
 ---
 
-## ⏳ FASE 2: Backend & Database Supabase (Pending)
+## ✅ FASE 2: Backend & Database Supabase (Selesai)
 
-- [ ] **Setup Client & Environment:**
-  - [ ] Install `@supabase/supabase-js`.
-  - [ ] Setup file koneksi `src/lib/supabase.ts`.
-  - [ ] Konfigurasi `.env` (`PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`).
-- [ ] **Migration SQL Database (`supabase/migrations/`):**
-  - [ ] Tabel `tipe_rumah` (`id`, `nama_tipe`, `slug`, `ukuran_tanah`, `ukuran_bangunan`, `jumlah_kamar_tidur`, `jumlah_kamar_mandi`, `harga`, `deskripsi`, `foto_url`, `galeri`, `denah_url`, `urutan_tampil`, `created_at`).
-  - [ ] Tabel `promosi` (`id`, `judul`, `deskripsi`, `gambar_url`, `tanggal_mulai`, `tanggal_selesai`, `status: aktif/nonaktif`, `created_at`).
-  - [ ] Tabel `artikel` (`id`, `judul`, `slug`, `isi_konten`, `gambar_utama_url`, `kata_kunci_seo`, `status: draft/publish`, `tanggal_publish`, `created_at`).
-  - [ ] Tabel `leads` (`id`, `nama`, `no_hp`, `tipe_rumah_diminati`, `pesan`, `created_at`).
-- [ ] **Row Level Security (RLS) Policies:**
-  - [ ] Anon/Public: `SELECT` hanya untuk data bertanda aktif/publish.
-  - [ ] Anon/Public: `INSERT` ke tabel `leads` (tanpa izin baca/ubah/hapus).
-  - [ ] Authenticated Admin: Full `CRUD` pada semua tabel.
-- [ ] **Integrasi Data Live ke Frontend:**
-  - [ ] Hubungkan `ContactForm.tsx` untuk menyimpan data langsung ke tabel `leads`.
-  - [ ] Pengambilan data live untuk tipe rumah, promo, dan artikel dari Supabase.
-
----
-
-## ⏳ FASE 3: AI Chatbot Integration (Pending)
-
-- [ ] **Backend Chat API Endpoint:**
-  - [ ] Endpoint `/api/chat` di Astro (SSR/Hybrid endpoint).
-  - [ ] Integrasi SDK LLM (DeepSeek V3 / OpenAI).
-- [ ] **Knowledge Base Prompting:**
-  - [ ] System prompt resmi Grand Bedahan Residence (lokasi di Sawangan Depok, keunggulan bebas banjir, tipe unit, kisaran harga, fasilitas, skema KPR).
-  - [ ] Fallback handling otomatis untuk mengarahkan ke WhatsApp **`0812-1577-6218`**.
-- [ ] **Monitoring & Rate Limiting:**
-  - [ ] Proteksi abuse / rate limit per IP.
-  - [ ] Pencatatan counter penggunaan (kuota awal 1.000 chat).
+- [x] **Setup Client & Environment:**
+  - [x] Install `@supabase/supabase-js`.
+  - [x] Setup file koneksi `src/lib/supabase.ts`.
+  - [x] Konfigurasi `.env` (`PUBLIC_SUPABASE_URL`, `PUBLIC_SUPABASE_ANON_KEY`, `SUPABASE_SERVICE_ROLE_KEY`).
+  - [x] Setup template `.env.example` dan perlindungan `.gitignore`.
+- [x] **Migration SQL Database (`supabase/migrations/`):**
+  - [x] Tabel `tipe_rumah` (`id`, `nama_tipe`, `slug`, `ukuran_tanah`, `ukuran_bangunan`, `jumlah_kamar_tidur`, `jumlah_kamar_mandi`, `harga`, `deskripsi`, `foto_url`, `galeri`, `denah_url`, `urutan_tampil`, `created_at`).
+  - [x] Tabel `promosi` (`id`, `judul`, `deskripsi`, `gambar_url`, `tanggal_mulai`, `tanggal_selesai`, `status: aktif/nonaktif`, `created_at`).
+  - [x] Tabel `artikel` (`id`, `judul`, `slug`, `isi_konten`, `gambar_utama_url`, `kata_kunci_seo`, `status: draft/publish`, `tanggal_publish`, `created_at`).
+  - [x] Tabel `leads` (`id`, `nama`, `no_hp`, `email`, `tipe_rumah_diminati`, `pesan`, `created_at`).
+  - [x] Initial seed data migration (`20260824000001_seed_data.sql`).
+- [x] **Row Level Security (RLS) Policies:**
+  - [x] Anon/Public: `SELECT` hanya untuk data bertanda aktif/publish.
+  - [x] Anon/Public: `INSERT` ke tabel `leads` (tanpa izin baca/ubah/hapus).
+  - [x] Authenticated Admin: Full `CRUD` pada semua tabel.
+- [x] **Integrasi Data Live ke Frontend:**
+  - [x] Hubungkan `ContactForm.tsx` untuk menyimpan data langsung ke tabel `leads`.
+  - [x] API layer `src/lib/api.ts` dengan fallback data statis.
 
 ---
 
-## ⏳ FASE 4: Dashboard Admin Panel (Pending)
+## ✅ FASE 3: AI Chatbot Integration (Selesai via BenixCS)
 
-- [ ] **Autentikasi Admin:**
-  - [ ] Halaman Login Admin (`/admin/login`) menggunakan Supabase Auth.
-  - [ ] Middleware Auth Guard untuk memproteksi seluruh rute `/admin/*`.
-- [ ] **Menu Manajemen Konten (CMS):**
-  - [ ] Dashboard Utama (`/admin`): Statistik ringkas total leads masuk, tipe unit, promo aktif.
-  - [ ] Manajemen Tipe Rumah (`/admin/tipe-rumah`): Form tambah/edit/hapus tipe rumah & upload foto ke Supabase Storage.
-  - [ ] Manajemen Promosi (`/admin/promosi`): Form tambah/edit promo, tanggal berlaku, dan toggle aktif/nonaktif.
-  - [ ] Manajemen Artikel (`/admin/artikel`): Markdown / Rich Text editor untuk posting berita dan tips properti.
-  - [ ] Manajemen Leads (`/admin/leads`): Tabel data calon pembeli masuk, filter tanggal, dan tombol cepat *Chat via WhatsApp*.
+- [x] **Integrasi AI Chatbot Widget:**
+  - [x] Pemasangan BenixCS Widget AI terintegrasi di `MainLayout.astro`.
+  - [x] Konfigurasi token via Environment Variable (`PUBLIC_BENIX_CS_TOKEN`).
+  - [x] Subresource Integrity (SRI) hash security hardening.
+  - [x] Floating Chat UI selaras dengan tombol WhatsApp.
+
+---
+
+## ✅ FASE 4: Dashboard Admin Panel (Selesai)
+
+- [x] **Autentikasi Admin:**
+  - [x] Halaman Login Admin (`/admin/login` & session guard) menggunakan Supabase Auth.
+  - [x] Logout & session state management di `AdminLayout.tsx`.
+- [x] **Menu Manajemen Konten (CMS):**
+  - [x] Dashboard Utama (`/admin`): Ringkasan statistik leads, unit rumah, promo aktif, dan artikel.
+  - [x] Manajemen Tipe Rumah (`/admin/tipe-rumah`): List tabel + modal form CRUD tipe rumah.
+  - [x] Manajemen Promosi (`/admin/promosi`): List tabel + modal form CRUD promosi.
+  - [x] Manajemen Artikel (`/admin/artikel`): List tabel + modal form CRUD artikel dengan auto slug & status draft/publish.
+  - [x] Data Leads (`/admin/leads`): Tabel calon pembeli dengan search query, tombol cepat *Chat WhatsApp*, ekspor CSV, dan hapus lead.
 
 ---
 

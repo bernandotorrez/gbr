@@ -32,7 +32,7 @@ export default defineConfig({
       priority: 0.7,
       lastmod: new Date(),
       // Filter halaman yang tidak perlu diindeks
-      filter: (page) => !page.includes('/404'),
+      filter: (page) => !page.includes('/404') && !page.includes('/admin'),
       // Kustomisasi priority per halaman
       customPages: [],
       serialize(item) {

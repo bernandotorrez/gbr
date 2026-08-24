@@ -1,0 +1,24 @@
+---
+import AdminLayout from '../../components/admin/AdminLayout';
+import AdminDashboard from '../../components/admin/AdminDashboard';
+import '../../styles/global.css';
+---
+
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Dashboard Admin | Grand Bedahan Residence</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <AdminLayout client:only="react" currentPath="/admin" title="Ringkasan Dashboard" subtitle="Pantau aktivitas pemasaran, calon pembeli, dan status konten secara real-time.">
+      <AdminDashboard client:only="react" />
+    </AdminLayout>
+  </body>
+</html>

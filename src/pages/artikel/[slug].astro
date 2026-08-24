@@ -1,88 +1,41 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
+import { getPublishedArtikelList, getArtikelBySlug } from '../../lib/api';
+import { renderMarkdownAndHtml } from '../../lib/markdown';
 
-export function getStaticPaths() {
-  // Dummy data for MVP Phase 1
-  return [
-    { params: { slug: 'tips-memilih-rumah-pertama' } },
-    { params: { slug: 'keuntungan-tinggal-di-bedahan-depok' } },
-    { params: { slug: 'inspirasi-desain-interior-minimalis' } },
-  ];
+export async function getStaticPaths() {
+  const articles = await getPublishedArtikelList();
+  return articles.map((art) => ({
+    params: { slug: art.slug },
+    props: { articleItem: art }
+  }));
 }
 
 const { slug } = Astro.params;
+const { articleItem } = Astro.props;
 
-// Dummy article content based on slug
-const getArticleData = (slug: string) => {
-  const dummyArticles: Record<string, any> = {
-    'tips-memilih-rumah-pertama': {
-      judul: '5 Tips Memilih Rumah Pertama untuk Keluarga Muda',
-      tanggal: '10 Agustus 2026',
-      gambar_utama_url: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      konten: `
-        <p>Memilih rumah pertama merupakan keputusan besar, terutama bagi keluarga muda. Banyak faktor yang perlu dipertimbangkan agar rumah yang dibeli sesuai dengan kebutuhan, anggaran, dan visi masa depan keluarga. Berikut 5 tips penting yang dapat membantu Anda:</p>
-        
-        <h3>1. Tentukan Anggaran Realistis</h3>
-        <p>Hal pertama yang harus dilakukan adalah menghitung kemampuan finansial. Perhitungkan penghasilan bulanan, pengeluaran rutin, dan ketersediaan dana untuk Down Payment (DP). Jangan paksakan diri untuk membeli rumah di luar kemampuan, karena cicilan KPR akan menjadi komitmen jangka panjang.</p>
-        
-        <h3>2. Perhatikan Lokasi dan Akses</h3>
-        <p>Lokasi sangat menentukan kenyamanan dan nilai investasi rumah. Pilih lokasi yang strategis, dekat dengan fasilitas publik seperti sekolah, rumah sakit, dan pusat perbelanjaan. Pertimbangkan juga akses transportasi dan jarak ke tempat kerja.</p>
-        
-        <h3>3. Cek Kredibilitas Developer</h3>
-        <p>Pastikan Anda membeli rumah dari developer (pengembang) yang terpercaya dan memiliki rekam jejak yang baik. Cari informasi mengenai proyek-proyek sebelumnya, status legalitas tanah, dan perizinan proyek.</p>
-        
-        <h3>4. Sesuaikan Tipe Rumah dengan Kebutuhan</h3>
-        <p>Pilih tipe rumah yang sesuai dengan jumlah anggota keluarga dan gaya hidup. Untuk keluarga kecil, tipe 36 atau 45 mungkin sudah cukup. Namun, jika Anda berencana memiliki banyak anak, pertimbangkan rumah dengan ukuran yang lebih besar.</p>
-        
-        <h3>5. Lakukan Survei Langsung</h3>
-        <p>Jangan hanya melihat brosur atau gambar di internet. Luangkan waktu untuk datang langsung ke lokasi perumahan. Perhatikan kondisi lingkungan, kualitas bangunan (jika ada unit contoh), dan fasilitas yang tersedia di sekitar perumahan.</p>
-      `
-    },
-    'keuntungan-tinggal-di-bedahan-depok': {
-      judul: 'Keuntungan Tinggal di Kawasan Bedahan Depok',
-      tanggal: '15 Agustus 2026',
-      gambar_utama_url: 'https://images.unsplash.com/photo-1449844908441-8829872d2607?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      konten: `
-        <p>Bedahan, sebuah kelurahan di Kecamatan Sawangan, Kota Depok, saat ini tengah berkembang pesat menjadi salah satu kawasan hunian favorit. Lokasinya yang strategis dan harga properti yang masih terjangkau membuat Bedahan semakin diminati oleh para pencari rumah, khususnya keluarga muda.</p>
-        
-        <p>Berikut adalah beberapa keuntungan tinggal dan berinvestasi properti di kawasan Bedahan:</p>
-        
-        <ul>
-          <li><strong>Infrastruktur yang Semakin Berkembang:</strong> Akses jalan menuju dan dari Bedahan terus mengalami perbaikan dan pelebaran, memudahkan mobilitas penghuni.</li>
-          <li><strong>Dekat dengan Rencana Tol:</strong> Kawasan ini memiliki kedekatan dengan akses Tol Desari (Depok-Antasari) dan Tol Cijago, yang memberikan kemudahan perjalanan menuju Jakarta dan wilayah sekitarnya.</li>
-          <li><strong>Fasilitas Publik Lengkap:</strong> Kehadiran pusat perbelanjaan baru, rumah sakit, dan sekolah-sekolah berkualitas di sekitar Bedahan memenuhi kebutuhan harian penghuni tanpa harus bepergian jauh.</li>
-          <li><strong>Lingkungan Masih Asri:</strong> Dibandingkan dengan pusat kota Depok atau Jakarta, Bedahan masih menawarkan kualitas udara yang lebih baik dan lingkungan yang lebih hijau.</li>
-        </ul>
-      `
-    },
-    'inspirasi-desain-interior-minimalis': {
-      judul: 'Inspirasi Desain Interior Minimalis Modern',
-      tanggal: '20 Agustus 2026',
-      gambar_utama_url: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      konten: `
-        <p>Gaya desain interior minimalis modern terus menjadi tren dan banyak digemari. Konsepnya yang mengedepankan kesederhanaan, fungsionalitas, dan estetika "less is more" sangat cocok diterapkan pada berbagai tipe rumah, baik rumah mungil maupun luas.</p>
-        
-        <p>Kunci utama dari desain minimalis adalah:</p>
-        
-        <ol>
-          <li><strong>Warna Netral:</strong> Penggunaan warna seperti putih, abu-abu, atau beige memberikan kesan luas, bersih, dan terang pada ruangan.</li>
-          <li><strong>Pencahayaan Alami:</strong> Jendela besar membiarkan cahaya matahari masuk secara maksimal, membuat ruangan terasa lebih hidup.</li>
-          <li><strong>Furnitur Multifungsi:</strong> Pilih furnitur yang memiliki lebih dari satu fungsi (misal: tempat tidur dengan laci penyimpanan di bawahnya) untuk menghemat ruang.</li>
-          <li><strong>Minim Ornamen:</strong> Hindari dekorasi yang berlebihan. Cukup gunakan beberapa aksen seperti tanaman hias atau satu lukisan besar sebagai *focal point*.</li>
-        </ol>
-      `
-    }
-  };
+const fetched = articleItem || (await getArtikelBySlug(slug as string));
 
-  return dummyArticles[slug] || {
-    judul: 'Artikel Tidak Ditemukan',
-    tanggal: '',
-    gambar_utama_url: '',
-    konten: '<p>Maaf, konten artikel yang Anda cari tidak tersedia.</p>'
-  };
+const formatDate = (dateString?: string) => {
+  if (!dateString) return '';
+  const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+  return new Date(dateString).toLocaleDateString('id-ID', options);
 };
 
-const article = getArticleData(slug as string);
+const rawContent = fetched?.isi_konten || '<p>Maaf, konten artikel yang Anda cari tidak tersedia.</p>';
+const formattedHtml = renderMarkdownAndHtml(rawContent);
+
+const article = fetched ? {
+  judul: fetched.judul,
+  tanggal: formatDate(fetched.tanggal_publish),
+  gambar_utama_url: fetched.gambar_utama_url,
+  konten: formattedHtml
+} : {
+  judul: 'Artikel Tidak Ditemukan',
+  tanggal: '',
+  gambar_utama_url: '',
+  konten: '<p>Maaf, konten artikel yang Anda cari tidak tersedia.</p>'
+};
 ---
 
 <MainLayout title={article.judul}>
@@ -153,27 +106,90 @@ const article = getArticleData(slug as string);
 </MainLayout>
 
 <style is:global>
-  /* Base styles for prose content injected via set:html */
+  /* Rich styles for prose content rendered from Markdown / HTML */
+  .prose h1 {
+    margin-top: 1.8em;
+    margin-bottom: 0.6em;
+    font-weight: 800;
+    font-size: 2em;
+    color: #17201C;
+    line-height: 1.25;
+    font-family: serif;
+  }
+  .prose h2 {
+    margin-top: 1.8em;
+    margin-bottom: 0.6em;
+    font-weight: 700;
+    font-size: 1.6em;
+    color: #0E3B2E;
+    line-height: 1.3;
+    font-family: serif;
+  }
   .prose h3 {
-    margin-top: 2em;
+    margin-top: 1.5em;
     margin-bottom: 0.5em;
     font-weight: 700;
-    font-size: 1.5em;
+    font-size: 1.3em;
+    color: #17201C;
+    line-height: 1.35;
   }
   .prose p {
-    margin-top: 1.25em;
-    margin-bottom: 1.25em;
-    color: var(--color-text-secondary);
-    line-height: 1.75;
+    margin-top: 1.2em;
+    margin-bottom: 1.2em;
+    color: #4A5568;
+    line-height: 1.8;
+    font-size: 1.0625rem;
+  }
+  .prose blockquote {
+    margin-top: 1.6em;
+    margin-bottom: 1.6em;
+    padding: 1rem 1.5rem;
+    border-left: 4px solid #0E3B2E;
+    background-color: #F4F7F5;
+    border-radius: 0 1rem 1rem 0;
+    font-style: italic;
+    color: #0E3B2E;
+    font-weight: 500;
   }
   .prose ul, .prose ol {
-    margin-top: 1.25em;
-    margin-bottom: 1.25em;
-    padding-left: 1.625em;
+    margin-top: 1.2em;
+    margin-bottom: 1.2em;
+    padding-left: 1.5em;
+    color: #4A5568;
+  }
+  .prose ul {
+    list-style-type: disc;
+  }
+  .prose ol {
+    list-style-type: decimal;
   }
   .prose li {
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-    color: var(--color-text-secondary);
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;
+    line-height: 1.7;
+  }
+  .prose strong {
+    font-weight: 700;
+    color: #17201C;
+  }
+  .prose img {
+    margin-top: 2em;
+    margin-bottom: 2em;
+    border-radius: 1.25rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+  }
+  .prose a {
+    color: #0E3B2E;
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .prose a:hover {
+    color: #07241C;
+  }
+  .prose hr {
+    margin-top: 2.5em;
+    margin-bottom: 2.5em;
+    border-color: #E2E8F0;
   }
 </style>

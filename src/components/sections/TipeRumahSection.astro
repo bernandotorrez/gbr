@@ -1,6 +1,9 @@
 ---
-import { daftarTipeRumah, formatRupiah } from '../../data/tipeRumah';
+import { formatRupiah } from '../../data/tipeRumah';
+import { getTipeRumahList } from '../../lib/api';
 import { Bed, Bath, Car, ArrowRight, LayoutGrid, MessageSquare } from 'lucide-react';
+
+const daftarTipeRumah = await getTipeRumahList();
 ---
 
 <section id="tipe-rumah" class="py-20 bg-white scroll-mt-20">

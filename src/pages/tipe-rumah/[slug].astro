@@ -1,6 +1,7 @@
 ---
 import MainLayout from '../../layouts/MainLayout.astro';
-import { daftarTipeRumah, formatRupiah, type TipeRumah } from '../../data/tipeRumah';
+import { formatRupiah, type TipeRumah } from '../../data/tipeRumah';
+import { getTipeRumahList } from '../../lib/api';
 import HouseDetailGallery from '../../components/islands/HouseDetailGallery';
 import FloatingWhatsApp from '../../components/islands/FloatingWhatsApp';
 
@@ -22,24 +23,61 @@ import {
   MessageSquare
 } from 'lucide-react';
 
-export function getStaticPaths() {
-  return daftarTipeRumah.map((tipe) => ({
+export async function getStaticPaths() {
+  const list = await getTipeRumahList();
+  return list.map((tipe) => ({
     params: { slug: tipe.slug },
-    props: { tipe }
+    props: { tipe, allTypes: list }
   }));
 }
 
 interface Props {
   tipe: TipeRumah;
+  allTypes?: TipeRumah[];
 }
 
-const { tipe } = Astro.props;
+const { tipe, allTypes } = Astro.props;
 
 if (!tipe) {
   return Astro.redirect('/#tipe-rumah');
 }
 
-const otherTypes = daftarTipeRumah.filter((t) => t.slug !== tipe.slug);
+const fullList = allTypes || (await getTipeRumahList());
+const otherTypes = fullList.filter((t) => t.slug !== tipe.slug);
+
+// 1. Fallback Galeri: Gunakan foto utama jika galeri kosong
+const galleryPhotos = (tipe.galeri && tipe.galeri.length > 0)
+  ? tipe.galeri
+  : (tipe.foto_url ? [tipe.foto_url] : []);
+
+// 2. Fallback Deskripsi Lengkap
+const deskripsiLengkap = (Array.isArray(tipe.deskripsi_lengkap) && tipe.deskripsi_lengkap.length > 0)
+  ? tipe.deskripsi_lengkap
+  : [tipe.deskripsi || 'Hunian modern bernuansa asri dan bebas banjir di kawasan strategis Sawangan Depok.'];
+
+// 3. Fallback Fitur Unggulan
+const fiturList = (Array.isArray(tipe.fitur) && tipe.fitur.length > 0)
+  ? tipe.fitur
+  : [
+    'Sertifikat Hak Milik (SHM) & IMB/PBG Sudah Pecah',
+    'Row Jalan Perumahan Lebar 6-7 Meter Paving Block',
+    'One Gate System dengan Keamanan CCTV 24 Jam',
+    'Taman Terbuka Hijau & Area Bermain Ramah Anak',
+    'Lokasi Strategis Dekat Pintu Tol & Pusat Kota Depok'
+  ];
+
+// 4. Fallback Spesifikasi Teknis Material
+const spesifikasi = {
+  pondasi: tipe.spesifikasi?.pondasi || 'Batu Kali',
+  struktur: tipe.spesifikasi?.struktur || 'Beton Bertulang',
+  dinding: tipe.spesifikasi?.dinding || 'Bata Ringan (Hebel) Plester Aci + Cat Weatherproof',
+  lantai: tipe.spesifikasi?.lantai || 'Granit Tile 60x60 cm',
+  atap: tipe.spesifikasi?.atap || 'Rangka Baja Ringan + Genteng Beton Flat',
+  kusen_pintu: tipe.spesifikasi?.kusen_pintu || 'Kusen Aluminium & Pintu Solid Engineering',
+  sanitair: tipe.spesifikasi?.sanitair || 'Kloset Duduk Standar + Hand Shower',
+  listrik_air: tipe.spesifikasi?.listrik_air || `${tipe.daya_listrik || '1.300 VA'} / ${tipe.sumber_air || 'Sumur Bor + Pompa Listrik'}`
+};
+
 const waText = encodeURIComponent(
   `Halo Tim Marketing Grand Bedahan Residence, saya tertarik dan ingin konsultasi lebih lanjut mengenai ${tipe.nama_tipe}. Boleh info promo & jadwal survei lokasi?`
 );
@@ -107,7 +145,7 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
         <div class="lg:col-span-8 space-y-10">
           
           <!-- Interactive Photo Gallery Island -->
-          <HouseDetailGallery client:load photos={tipe.galeri} title={tipe.nama_tipe} />
+          <HouseDetailGallery client:load photos={galleryPhotos} title={tipe.nama_tipe} />
 
           <!-- Key Highlights Specs Grid -->
           <div class="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm">
@@ -170,7 +208,7 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
                 </div>
                 <div>
                   <p class="text-xs sm:text-sm text-gray-500 font-medium">Daya Listrik</p>
-                  <p class="text-base sm:text-lg font-bold text-[#17201C]">{tipe.daya_listrik}</p>
+                  <p class="text-base sm:text-lg font-bold text-[#17201C]">{tipe.daya_listrik || '1.300 VA'}</p>
                 </div>
               </div>
 
@@ -180,7 +218,7 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
                 </div>
                 <div>
                   <p class="text-xs sm:text-sm text-gray-500 font-medium">Sumber Air</p>
-                  <p class="text-base sm:text-lg font-bold text-[#17201C]">Jetpump</p>
+                  <p class="text-base sm:text-lg font-bold text-[#17201C]">{tipe.sumber_air || 'Jetpump'}</p>
                 </div>
               </div>
 
@@ -200,7 +238,7 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
           <div class="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm space-y-5">
             <h2 class="text-2xl font-bold text-[#17201C] font-serif">Tentang {tipe.nama_tipe}</h2>
             <div class="prose max-w-none text-[#4A5568] space-y-3 leading-relaxed text-base sm:text-lg">
-              {tipe.deskripsi_lengkap.map((paragraf) => (
+              {deskripsiLengkap.map((paragraf) => (
                 <p>{paragraf}</p>
               ))}
             </div>
@@ -209,7 +247,7 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
             <div class="pt-6 border-t border-gray-100">
               <h3 class="text-xl font-bold text-[#17201C] mb-4 font-serif">Keunggulan & Fitur Unit:</h3>
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
-                {tipe.fitur.map((item) => (
+                {fiturList.map((item) => (
                   <div class="flex items-start gap-3 p-3 rounded-xl bg-gray-50/70 border border-gray-100">
                     <CheckCircle2 className="w-5 h-5 text-[#0E3B2E] shrink-0 mt-0.5" />
                     <span class="text-sm sm:text-base font-bold text-[#17201C]">{item}</span>
@@ -220,63 +258,67 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
           </div>
 
           <!-- Denah Layout (Floor Plan) -->
-          <div class="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm">
-            <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-2">
-              <div>
-                <h2 class="text-2xl font-bold text-[#17201C] font-serif">Denah &amp; Tata Ruang 2D</h2>
-                <p class="text-sm sm:text-base text-[#4A5568] mt-1">Layout arsitektur optimal dengan sirkulasi pencahayaan dan udara alami.</p>
+          {tipe.denah_url && (
+            <div class="bg-white rounded-3xl p-6 sm:p-8 border border-gray-100 shadow-sm">
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-2">
+                <div>
+                  <h2 class="text-2xl font-bold text-[#17201C] font-serif">Denah &amp; Tata Ruang 2D</h2>
+                  <p class="text-sm sm:text-base text-[#4A5568] mt-1">Layout arsitektur optimal dengan sirkulasi pencahayaan dan udara alami.</p>
+                </div>
+                <a
+                  href={waUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="inline-flex items-center text-sm font-bold text-[#0E3B2E] hover:text-[#07241C] transition-colors"
+                >
+                  <FileText className="w-4 h-4 mr-1.5" />
+                  Minta Denah High-Res (PDF)
+                </a>
               </div>
-              <a
-                href={waUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="inline-flex items-center text-sm font-bold text-[#0E3B2E] hover:text-[#07241C] transition-colors"
-              >
-                <FileText className="w-4 h-4 mr-1.5" />
-                Minta Denah High-Res (PDF)
-              </a>
-            </div>
 
-            <!-- Clickable floor plan with zoom hint -->
-            <div
-              id="denah-trigger"
-              class="relative rounded-2xl overflow-hidden bg-gray-50 border border-gray-200 aspect-[16/10] flex items-center justify-center p-4 sm:p-6 cursor-zoom-in group"
-            >
-              <img
-                src={tipe.denah_url}
-                alt={`Denah Arsitektur ${tipe.nama_tipe}`}
-                class="max-h-full max-w-full object-contain rounded-xl shadow-sm transition-transform duration-300 group-hover:scale-105"
-              />
-              <!-- Zoom hint badge -->
-              <div class="absolute bottom-3 right-3 bg-[#0E3B2E]/80 text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
-                Klik untuk perbesar
+              <!-- Clickable floor plan with zoom hint -->
+              <div
+                id="denah-trigger"
+                class="relative rounded-2xl overflow-hidden bg-gray-50 border border-gray-200 aspect-[16/10] flex items-center justify-center p-4 sm:p-6 cursor-zoom-in group"
+              >
+                <img
+                  src={tipe.denah_url}
+                  alt={`Denah Arsitektur ${tipe.nama_tipe}`}
+                  class="max-h-full max-w-full object-contain rounded-xl shadow-sm transition-transform duration-300 group-hover:scale-105"
+                />
+                <!-- Zoom hint badge -->
+                <div class="absolute bottom-3 right-3 bg-[#0E3B2E]/80 text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+                  Klik untuk perbesar
+                </div>
               </div>
             </div>
-          </div>
+          )}
 
           <!-- Lightbox Overlay -->
-          <div
-            id="denah-lightbox"
-            class="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-6 sm:p-10"
-          >
-            <div id="denah-modal-content" class="relative max-w-4xl w-full max-h-[90vh] flex flex-col animate-zoom-in">
-              <!-- Close button -->
-              <button
-                id="denah-close-btn"
-                class="absolute -top-4 -right-4 z-10 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-gray-100 transition-colors"
-                aria-label="Tutup"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#17201C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-              </button>
-              <img
-                src={tipe.denah_url}
-                alt={`Denah Arsitektur ${tipe.nama_tipe} - Full Size`}
-                class="w-full object-contain rounded-2xl shadow-2xl max-h-[78vh]"
-              />
-              <p class="text-center text-white/60 text-sm mt-3">Klik di luar gambar atau tekan <kbd class="bg-white/20 px-1.5 py-0.5 rounded text-xs font-mono">Esc</kbd> untuk menutup</p>
+          {tipe.denah_url && (
+            <div
+              id="denah-lightbox"
+              class="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-6 sm:p-10"
+            >
+              <div id="denah-modal-content" class="relative max-w-4xl w-full max-h-[90vh] flex flex-col animate-zoom-in">
+                <!-- Close button -->
+                <button
+                  id="denah-close-btn"
+                  class="absolute -top-4 -right-4 z-10 w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-lg hover:bg-gray-100 transition-colors"
+                  aria-label="Tutup"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#17201C" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                </button>
+                <img
+                  src={tipe.denah_url}
+                  alt={`Denah Arsitektur ${tipe.nama_tipe} - Full Size`}
+                  class="w-full object-contain rounded-2xl shadow-2xl max-h-[78vh]"
+                />
+                <p class="text-center text-white/60 text-sm mt-3">Klik di luar gambar atau tekan <kbd class="bg-white/20 px-1.5 py-0.5 rounded text-xs font-mono">Esc</kbd> untuk menutup</p>
+              </div>
             </div>
-          </div>
+          )}
 
           <style>
             @keyframes zoom-in {
@@ -328,31 +370,31 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
             <div class="divide-y divide-gray-100 text-base">
               <div class="py-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <span class="font-bold text-[#17201C]">Pondasi & Struktur</span>
-                <span class="sm:col-span-2 text-[#4A5568]">{tipe.spesifikasi.pondasi} / {tipe.spesifikasi.struktur}</span>
+                <span class="sm:col-span-2 text-[#4A5568]">{spesifikasi.pondasi} / {spesifikasi.struktur}</span>
               </div>
               <div class="py-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <span class="font-bold text-[#17201C]">Dinding</span>
-                <span class="sm:col-span-2 text-[#4A5568]">{tipe.spesifikasi.dinding}</span>
+                <span class="sm:col-span-2 text-[#4A5568]">{spesifikasi.dinding}</span>
               </div>
               <div class="py-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <span class="font-bold text-[#17201C]">Lantai</span>
-                <span class="sm:col-span-2 text-[#4A5568]">{tipe.spesifikasi.lantai}</span>
+                <span class="sm:col-span-2 text-[#4A5568]">{spesifikasi.lantai}</span>
               </div>
               <div class="py-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <span class="font-bold text-[#17201C]">Atap & Rangka</span>
-                <span class="sm:col-span-2 text-[#4A5568]">{tipe.spesifikasi.atap}</span>
+                <span class="sm:col-span-2 text-[#4A5568]">{spesifikasi.atap}</span>
               </div>
               <div class="py-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <span class="font-bold text-[#17201C]">Kusen & Pintu</span>
-                <span class="sm:col-span-2 text-[#4A5568]">{tipe.spesifikasi.kusen_pintu}</span>
+                <span class="sm:col-span-2 text-[#4A5568]">{spesifikasi.kusen_pintu}</span>
               </div>
               <div class="py-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <span class="font-bold text-[#17201C]">Sanitair</span>
-                <span class="sm:col-span-2 text-[#4A5568]">{tipe.spesifikasi.sanitair}</span>
+                <span class="sm:col-span-2 text-[#4A5568]">{spesifikasi.sanitair}</span>
               </div>
               <div class="py-4 grid grid-cols-1 sm:grid-cols-3 gap-2">
                 <span class="font-bold text-[#17201C]">Instalasi Listrik & Air</span>
-                <span class="sm:col-span-2 text-[#4A5568]">{tipe.spesifikasi.listrik_air}</span>
+                <span class="sm:col-span-2 text-[#4A5568]">{spesifikasi.listrik_air}</span>
               </div>
             </div>
           </div>

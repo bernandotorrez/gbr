@@ -1,83 +1,99 @@
 ---
 import { CheckCircle2, Sparkles, ArrowRight, Gift, Flame } from 'lucide-react';
+import { getActivePromosiList } from '../../lib/api';
 
-const promoBenefits = [
-  {
-    title: "Subsidi Cicilan KPR selama 2 TAHUN",
-    desc: "Meringankan cicilan bulanan Anda (promo sebelumnya hanya 1 tahun).",
-    highlight: true,
-  },
-  {
-    title: "Free Exhaust Fan",
-    desc: "Sirkulasi udara dapur & ruangan tetap bersih, nyaman, dan sejuk.",
-    highlight: false,
-  },
-  {
-    title: "Free Lampu Taman",
-    desc: "Pencahayaan luar rumah yang asri, estetik, dan elegan.",
-    highlight: false,
-  },
-  {
-    title: "Free Mesin Air & Toren 500 Liter",
-    desc: "Suplai air bersih siap pakai langsung dari hari pertama Anda menempati rumah.",
-    highlight: false,
-  },
-  {
-    title: "Free Instalasi AC di 2 Kamar Tidur",
-    desc: "Jalur instalasi pipa & kelistrikan AC siap pasang tanpa perlu membobok dinding.",
-    highlight: false,
-  },
-];
+const activePromos = await getActivePromosiList();
+const promo = activePromos.length > 0 ? activePromos[0] : null;
+
+if (!promo) {
+  // If no promo is active, don't render section
+}
+
+const promoBenefits = promo?.rincian_keuntungan && promo.rincian_keuntungan.length > 0 
+  ? promo.rincian_keuntungan 
+  : [
+    {
+      title: "Subsidi Cicilan KPR selama 2 TAHUN",
+      desc: "Meringankan cicilan bulanan Anda (promo sebelumnya hanya 1 tahun).",
+      highlight: true,
+    },
+    {
+      title: "Free Exhaust Fan",
+      desc: "Sirkulasi udara dapur & ruangan tetap bersih, nyaman, dan sejuk.",
+      highlight: false,
+    },
+    {
+      title: "Free Lampu Taman",
+      desc: "Pencahayaan luar rumah yang asri, estetik, dan elegan.",
+      highlight: false,
+    },
+    {
+      title: "Free Mesin Air & Toren 500 Liter",
+      desc: "Suplai air bersih siap pakai langsung dari hari pertama Anda menempati rumah.",
+      highlight: false,
+    },
+    {
+      title: "Free Instalasi AC di 2 Kamar Tidur",
+      desc: "Jalur instalasi pipa & kelistrikan AC siap pasang tanpa perlu membobok dinding.",
+      highlight: false,
+    },
+  ];
+
+const waPromoText = encodeURIComponent(
+  `Halo Marketing Grand Bedahan Residence, saya tertarik dengan ${promo?.judul || 'Promo Spesial'} (${promo?.sub_judul || 'Paket Berkah'}) dan bonus unitnya. Boleh minta info lebih lanjut?`
+);
+const waPromoUrl = `https://wa.me/6281215776218?text=${waPromoText}`;
 ---
 
-<section id="promo" class="py-16 sm:py-20 bg-[#FAF9F6] scroll-mt-20 border-y border-gray-200/60">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    
-    <!-- Section Header -->
-    <div class="max-w-3xl mb-12">
-      <div class="inline-flex items-center gap-2 text-sm font-bold text-[#0E3B2E] uppercase tracking-wider mb-2">
-        <Sparkles className="w-4 h-4 text-[#E5C695]" />
-        <span>PROMO SPESIAL BULAN INI</span>
-      </div>
-      <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-[#17201C] font-serif">
-        Promo Eksklusif Grand Bedahan
-      </h2>
-      <p class="text-base sm:text-lg text-[#4A5568] mt-2">
-        Dapatkan paket penawaran terbatas dan berbagai bonus istimewa langsung saat Anda booking unit impian hari ini.
-      </p>
-    </div>
-
-    <!-- Single Luxury Promo Banner Card -->
-    <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-emerald-900/10 grid grid-cols-1 lg:grid-cols-12 relative group">
+{promo && (
+  <section id="promo" class="py-16 sm:py-20 bg-[#FAF9F6] scroll-mt-20 border-y border-gray-200/60">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <!-- Left Visual / Image (5 cols) -->
-      <div class="lg:col-span-5 relative min-h-[320px] lg:min-h-full overflow-hidden bg-[#07241C]">
-        <img 
-          src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1200&q=85" 
-          alt="Promo Spesial Grand Bedahan Residence" 
-          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95"
-        />
-        <!-- Gradient Overlay -->
-        <div class="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#07241C]/90 via-[#07241C]/40 to-transparent"></div>
+      <!-- Section Header -->
+      <div class="max-w-3xl mb-12">
+        <div class="inline-flex items-center gap-2 text-sm font-bold text-[#0E3B2E] uppercase tracking-wider mb-2">
+          <Sparkles className="w-4 h-4 text-[#E5C695]" />
+          <span>PROMO SPESIAL BULAN INI</span>
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-[#17201C] font-serif">
+          {promo.judul}
+        </h2>
+        <p class="text-base sm:text-lg text-[#4A5568] mt-2">
+          {promo.deskripsi}
+        </p>
+      </div>
+
+      <!-- Single Luxury Promo Banner Card -->
+      <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-emerald-900/10 grid grid-cols-1 lg:grid-cols-12 relative group">
         
-        <!-- Floating Badges on Image -->
-        <div class="absolute top-6 left-6 flex flex-col gap-2">
-          <div class="inline-flex items-center gap-1.5 bg-[#E5C695] text-[#0B2E24] px-4 py-1.5 rounded-full text-xs sm:text-sm font-extrabold shadow-lg">
-            <Flame className="w-4 h-4 fill-current text-red-600" />
-            <span>PERIODE TERBATAS</span>
+        <!-- Left Visual / Image (5 cols) -->
+        <div class="lg:col-span-5 relative min-h-[320px] lg:min-h-full overflow-hidden bg-[#07241C]">
+          <img 
+            src={promo.gambar_url || "https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1200&q=85"} 
+            alt={promo.judul} 
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95"
+          />
+          <!-- Gradient Overlay -->
+          <div class="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#07241C]/90 via-[#07241C]/40 to-transparent"></div>
+          
+          <!-- Floating Badges on Image -->
+          <div class="absolute top-6 left-6 flex flex-col gap-2">
+            <div class="inline-flex items-center gap-1.5 bg-[#E5C695] text-[#0B2E24] px-4 py-1.5 rounded-full text-xs sm:text-sm font-extrabold shadow-lg">
+              <Flame className="w-4 h-4 fill-current text-red-600" />
+              <span>{promo.tagline_badge || 'PERIODE TERBATAS'}</span>
+            </div>
+          </div>
+
+          <div class="absolute bottom-6 left-6 right-6 text-white">
+            <p class="text-xs sm:text-sm uppercase tracking-widest text-[#E5C695] font-bold mb-1">PROGRAM UNGGULAN</p>
+            <h3 class="text-xl sm:text-2xl font-bold font-serif leading-tight">
+              {promo.sub_judul || 'Paket Berkah Hunian Idaman'}
+            </h3>
           </div>
         </div>
 
-        <div class="absolute bottom-6 left-6 right-6 text-white">
-          <p class="text-xs sm:text-sm uppercase tracking-widest text-[#E5C695] font-bold mb-1">PROGRAM UNGGULAN</p>
-          <h3 class="text-xl sm:text-2xl font-bold font-serif leading-tight">
-            Paket Berkah Hunian Idaman
-          </h3>
-        </div>
-      </div>
-
-      <!-- Right Content / List of Benefits (7 cols) -->
-      <div class="lg:col-span-7 p-6 sm:p-10 lg:p-12 flex flex-col justify-between bg-white">
+        <!-- Right Content / List of Benefits (7 cols) -->
+        <div class="lg:col-span-7 p-6 sm:p-10 lg:p-12 flex flex-col justify-between bg-white">
         
         <div>
           <!-- Header Inside Card -->
@@ -132,7 +148,7 @@ const promoBenefits = [
         <!-- CTA Buttons -->
         <div class="pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
           <a 
-            href="https://wa.me/6281215776218?text=Halo%20Marketing%20Grand%20Bedahan%20Residence%2C%20saya%20tertarik%20dengan%20Promo%20Subsidi%20KPR%202%20Tahun%20dan%20bonus%20unitnya.%20Boleh%20minta%20info%20lebih%20lanjut%3F" 
+            href={waPromoUrl} 
             target="_blank"
             rel="noopener noreferrer"
             class="inline-flex items-center justify-center px-8 py-4 rounded-full text-base font-bold text-white bg-[#0E3B2E] hover:bg-[#07241C] shadow-lg hover:shadow-xl transition-all group/btn"
@@ -155,5 +171,6 @@ const promoBenefits = [
 
   </div>
 </section>
+)}
 
 
