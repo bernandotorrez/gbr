@@ -32,7 +32,7 @@ export default function HouseDetailGallery({ photos, title }: HouseDetailGallery
             onClick={() => setActiveIndex(idx)}
             className={`relative aspect-[4/3] rounded-xl overflow-hidden border-2 transition-all cursor-pointer ${
               activeIndex === idx
-                ? 'border-[#047857] ring-2 ring-[#047857]/30 scale-[1.02]'
+                ? 'border-[#0E3B2E] ring-2 ring-[#0E3B2E]/30 scale-[1.02]'
                 : 'border-transparent opacity-70 hover:opacity-100'
             }`}
             aria-label={`Lihat foto ${idx + 1}`}
