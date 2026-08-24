@@ -1,0 +1,14 @@
+# robots.txt — Grand Bedahan Residence
+# https://grandbedahanresidence.com
+
+# Izinkan semua search engine crawler
+User-agent: *
+Allow: /
+
+# Larang halaman yang tidak perlu diindeks
+Disallow: /404
+Disallow: /_astro/
+Disallow: /api/
+
+# Sitemap
+Sitemap: https://grandbedahanresidence.com/sitemap-index.xml
