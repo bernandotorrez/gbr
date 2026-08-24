@@ -1,0 +1,113 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import { Calendar, ArrowRight, BookOpen, ChevronRight } from 'lucide-react';
+
+const articles = [
+  {
+    id: 1,
+    judul: '5 Tips Memilih Rumah Pertama untuk Keluarga Muda',
+    slug: 'tips-memilih-rumah-pertama',
+    gambar_utama_url: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    tanggal_publish: '2026-08-10T08:00:00Z',
+    kategori: 'Panduan Properti',
+    excerpt: 'Memilih rumah pertama bisa jadi tantangan tersendiri. Simak 5 hal penting yang harus Anda perhatikan sebelum membeli rumah idaman.'
+  },
+  {
+    id: 2,
+    judul: 'Keuntungan Tinggal di Kawasan Bedahan Depok',
+    slug: 'keuntungan-tinggal-di-bedahan-depok',
+    gambar_utama_url: 'https://images.unsplash.com/photo-1449844908441-8829872d2607?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    tanggal_publish: '2026-08-15T10:30:00Z',
+    kategori: 'Investasi & Kawasan',
+    excerpt: 'Bedahan semakin dilirik sebagai kawasan hunian favorit. Berikut adalah alasan mengapa investasi properti di Bedahan sangat menguntungkan.'
+  },
+  {
+    id: 3,
+    judul: 'Inspirasi Desain Interior Minimalis Modern',
+    slug: 'inspirasi-desain-interior-minimalis',
+    gambar_utama_url: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
+    tanggal_publish: '2026-08-20T09:15:00Z',
+    kategori: 'Desain & Tips',
+    excerpt: 'Maksimalkan ruang di rumah Anda dengan gaya interior minimalis modern. Cantik, fungsional, dan mudah perawatannya.'
+  }
+];
+
+const formatDate = (dateString: string) => {
+  const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+  return new Date(dateString).toLocaleDateString('id-ID', options);
+};
+---
+
+<MainLayout title="Artikel & Edukasi Properti | Grand Bedahan Residence">
+  <!-- Breadcrumb -->
+  <div class="bg-[#F5F3EE] border-b border-gray-200/70 py-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="flex items-center text-xs sm:text-sm text-[#595959]" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-[#047857] transition-colors">Beranda</a>
+        <ChevronRight className="w-4 h-4 mx-2 text-gray-400" />
+        <span class="text-[#17201C] font-semibold">Artikel & Info</span>
+      </nav>
+    </div>
+  </div>
+
+  <section class="py-12 sm:py-16 lg:py-20 bg-[#FAF9F6]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto mb-16">
+        <div class="inline-flex items-center px-3.5 py-1 rounded-full bg-emerald-50 text-[#047857] text-xs font-semibold uppercase tracking-wider mb-3 border border-emerald-200">
+          <BookOpen className="w-3.5 h-3.5 mr-1.5" />
+          Blog & Wawasan Properti
+        </div>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#17201C] font-serif tracking-tight">
+          Artikel, Tips & Kabar Terbaru
+        </h1>
+        <p class="mt-4 text-base sm:text-lg text-[#34413B]">
+          Kumpulan panduan properti, tren desain arsitektur, simulasi KPR, dan wawasan perkembangan kawasan Sawangan Depok.
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {articles.map((artikel) => (
+          <article class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full group">
+            <a href={`/artikel/${artikel.slug}`} class="block relative h-56 overflow-hidden">
+              <img
+                src={artikel.gambar_utama_url}
+                alt={artikel.judul}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div class="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-white text-xs font-medium px-3 py-1 rounded-full">
+                {artikel.kategori}
+              </div>
+            </a>
+
+            <div class="p-6 flex-grow flex flex-col">
+              <div class="flex items-center text-xs font-semibold text-[#595959] mb-3">
+                <Calendar className="w-3.5 h-3.5 mr-1.5 text-[#047857]" />
+                {formatDate(artikel.tanggal_publish)}
+              </div>
+
+              <a href={`/artikel/${artikel.slug}`} class="block mb-3">
+                <h2 class="text-xl font-bold text-[#17201C] font-serif group-hover:text-[#047857] transition-colors leading-snug">
+                  {artikel.judul}
+                </h2>
+              </a>
+
+              <p class="text-[#595959] text-sm mb-6 line-clamp-3 flex-grow leading-relaxed">
+                {artikel.excerpt}
+              </p>
+
+              <div class="mt-auto pt-4 border-t border-gray-100">
+                <a
+                  href={`/artikel/${artikel.slug}`}
+                  class="text-[#047857] hover:text-[#065F46] font-semibold text-sm flex items-center transition-colors group/link"
+                >
+                  <span>Baca Selengkapnya</span>
+                  <ArrowRight className="ml-1.5 w-4 h-4 transition-transform group-hover/link:translate-x-1" />
+                </a>
+              </div>
+            </div>
+          </article>
+        ))}
+      </div>
+    </div>
+  </section>
+</MainLayout>

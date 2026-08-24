@@ -1,0 +1,107 @@
+---
+import { Play, RotateCw } from 'lucide-react';
+---
+
+<section id="virtual-tour" class="py-12 sm:py-16 bg-white scroll-mt-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="relative rounded-3xl overflow-hidden shadow-2xl min-h-[360px] sm:min-h-[420px] flex items-center bg-[#07241C]">
+      
+      <!-- Background Luxury Interior Photo -->
+      <div class="absolute inset-0 z-0">
+        <img 
+          src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1600&q=80" 
+          alt="Virtual Tour Grand Bedahan Residence"
+          class="w-full h-full object-cover object-center scale-105 filter brightness-75"
+        />
+        <div class="absolute inset-0 bg-gradient-to-r from-[#07241C]/95 via-[#07241C]/80 to-[#07241C]/40"></div>
+      </div>
+
+      <!-- Content Container -->
+      <div class="relative z-10 p-8 sm:p-12 lg:p-16 max-w-2xl text-white">
+        
+        <!-- 360 Badge Icon & Tag -->
+        <div class="flex items-center gap-4 mb-4">
+          <div class="w-14 h-14 rounded-full border-2 border-dashed border-[#E5C695] flex items-center justify-center bg-black/30 backdrop-blur-md shadow-lg text-[#E5C695] flex-shrink-0 animate-spin-slow">
+            <span class="text-sm font-bold tracking-tighter">360°</span>
+          </div>
+          <div>
+            <p class="text-sm font-bold tracking-widest uppercase text-[#E5C695]">JELAJAHI RUMAH IMPIAN</p>
+            <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-white font-serif">
+              Melihat Lebih Dekat
+            </h2>
+          </div>
+        </div>
+
+        <p class="text-base sm:text-lg text-emerald-50/95 mb-8 leading-relaxed font-sans max-w-lg">
+          Jelajahi keindahan dan kenyamanan Grand Bedahan Residence melalui tur virtual dan video profil kawasan.
+        </p>
+
+        <!-- Action Button -->
+        <div>
+          <button 
+            id="open-video-modal"
+            class="inline-flex items-center gap-3 px-8 py-4 rounded-full text-base font-bold text-white bg-black/40 hover:bg-black/60 border border-white/40 hover:border-white transition-all shadow-md group cursor-pointer backdrop-blur-sm"
+          >
+            <div class="w-7 h-7 rounded-full bg-white text-[#07241C] flex items-center justify-center shadow-sm group-hover:scale-110 transition-transform">
+              <Play className="w-4 h-4 fill-current ml-0.5" />
+            </div>
+            <span>Tonton Virtual Tour</span>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Video Modal Player (Supabase Storage Video) -->
+  <div id="video-modal" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 opacity-0 pointer-events-none transition-opacity duration-300">
+    <div class="relative bg-black rounded-2xl sm:rounded-3xl overflow-hidden shadow-2xl border-2 border-white/20 max-h-[80vh] aspect-[9/16] w-auto max-w-[90vw] sm:max-w-md flex flex-col items-center justify-center">
+      <button 
+        id="close-video-modal"
+        class="absolute top-3 right-3 z-30 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/70 hover:bg-black text-white flex items-center justify-center border border-white/20 transition-all cursor-pointer shadow-lg hover:scale-110"
+        aria-label="Tutup Video"
+      >
+        ✕
+      </button>
+      <video 
+        id="modal-video"
+        class="w-full h-full max-h-[80vh] object-contain rounded-2xl"
+        controls
+        playsinline
+        preload="auto"
+        src="https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/video/video.mp4"
+      >
+      </video>
+    </div>
+  </div>
+</section>
+
+<script>
+  const openBtn = document.getElementById('open-video-modal');
+  const closeBtn = document.getElementById('close-video-modal');
+  const modal = document.getElementById('video-modal');
+  const video = document.getElementById('modal-video') as HTMLVideoElement | null;
+
+  if (openBtn && modal && video) {
+    openBtn.addEventListener('click', () => {
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      video.play();
+    });
+  }
+
+  if (closeBtn && modal && video) {
+    closeBtn.addEventListener('click', () => {
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      video.pause();
+    });
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        modal.classList.add('opacity-0', 'pointer-events-none');
+        video.pause();
+      }
+    });
+  }
+</script>
+
+

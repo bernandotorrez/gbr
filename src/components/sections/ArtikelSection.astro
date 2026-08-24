@@ -1,0 +1,105 @@
+---
+import { Calendar, ArrowRight, BookOpen } from 'lucide-react';
+
+// Dummy data for MVP Phase 1
+const dummyArtikel = [
+  {
+    id: 1,
+    judul: '5 Tips Memilih Rumah Pertama untuk Keluarga Muda',
+    slug: 'tips-memilih-rumah-pertama',
+    gambar_utama_url: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?auto=format&fit=crop&w=800&q=80',
+    tanggal_publish: '2026-08-10T08:00:00Z',
+    excerpt: 'Memilih rumah pertama bisa jadi tantangan tersendiri. Simak 5 hal penting yang harus Anda perhatikan sebelum membeli rumah idaman.'
+  },
+  {
+    id: 2,
+    judul: 'Keuntungan Tinggal di Kawasan Bedahan Depok',
+    slug: 'keuntungan-tinggal-di-bedahan-depok',
+    gambar_utama_url: 'https://images.unsplash.com/photo-1449844908441-8829872d2607?auto=format&fit=crop&w=800&q=80',
+    tanggal_publish: '2026-08-15T10:30:00Z',
+    excerpt: 'Bedahan semakin dilirik sebagai kawasan hunian favorit. Berikut adalah alasan mengapa investasi properti di Bedahan sangat menguntungkan.'
+  },
+  {
+    id: 3,
+    judul: 'Inspirasi Desain Interior Minimalis Modern',
+    slug: 'inspirasi-desain-interior-minimalis',
+    gambar_utama_url: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=800&q=80',
+    tanggal_publish: '2026-08-20T09:15:00Z',
+    excerpt: 'Maksimalkan ruang di rumah Anda dengan gaya interior minimalis modern. Cantik, fungsional, dan mudah perawatannya.'
+  }
+];
+
+const formatDate = (dateString: string) => {
+  const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
+  return new Date(dateString).toLocaleDateString('id-ID', options);
+};
+---
+
+<section id="artikel" class="py-20 bg-[#FAF9F6] scroll-mt-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Header -->
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-12">
+      <div>
+        <div class="inline-flex items-center text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">
+          <BookOpen className="w-4 h-4 mr-2 text-gray-400" />
+          ARTIKEL & BERITA PROPERTI
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-[#17201C] font-serif">
+          Kabar & Tips Terbaru
+        </h2>
+      </div>
+
+      <div class="mt-4 md:mt-0">
+        <a 
+          href="/artikel" 
+          class="inline-flex items-center text-base font-bold text-[#0E3B2E] hover:text-[#07241C] group"
+        >
+          <span>Lihat Semua Artikel</span>
+          <ArrowRight className="w-4 h-4 ml-1.5 transition-transform group-hover:translate-x-1" />
+        </a>
+      </div>
+    </div>
+
+    <!-- 3 Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {dummyArtikel.map((artikel) => (
+        <article class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col h-full group">
+          <a href={`/artikel/${artikel.slug}`} class="block relative h-56 overflow-hidden">
+            <img 
+              src={artikel.gambar_utama_url} 
+              alt={artikel.judul} 
+              class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+            />
+          </a>
+          
+          <div class="p-6 sm:p-7 flex-grow flex flex-col">
+            <div class="flex items-center text-sm font-semibold text-[#4A5568] mb-3">
+              <Calendar className="w-4 h-4 mr-2 text-[#0E3B2E]" />
+              {formatDate(artikel.tanggal_publish)}
+            </div>
+            
+            <a href={`/artikel/${artikel.slug}`} class="block mb-3">
+              <h3 class="text-xl font-bold text-[#17201C] font-serif group-hover:text-[#0E3B2E] transition-colors leading-snug">
+                {artikel.judul}
+              </h3>
+            </a>
+            
+            <p class="text-sm sm:text-base text-[#4A5568] mb-6 line-clamp-3 flex-grow leading-relaxed">
+              {artikel.excerpt}
+            </p>
+            
+            <div class="mt-auto pt-4 border-t border-gray-100">
+              <a href={`/artikel/${artikel.slug}`} class="text-[#0E3B2E] hover:text-[#07241C] font-bold text-sm sm:text-base flex items-center transition-colors group/link">
+                <span>Baca Selengkapnya</span>
+                <ArrowRight className="ml-1.5 w-4 h-4 transition-transform group-hover/link:translate-x-1" />
+              </a>
+            </div>
+          </div>
+        </article>
+      ))}
+    </div>
+    
+  </div>
+</section>
+

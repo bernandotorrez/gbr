@@ -1,0 +1,155 @@
+---
+import { Home, Sparkles } from 'lucide-react';
+
+const navLinks = [
+  { name: 'Beranda', href: '/#beranda' },
+  { name: 'Tipe Rumah', href: '/#tipe-rumah' },
+  { name: 'Fasilitas', href: '/#fasilitas' },
+  { name: 'Virtual Tour', href: '/#virtual-tour' },
+  { name: 'Promo', href: '/#promo' },
+  { name: 'Artikel', href: '/#artikel' },
+  { name: 'Testimoni', href: '/#testimoni' },
+  { name: 'FAQ', href: '/#faq' },
+  { name: 'Kontak', href: '/#kontak' },
+];
+---
+
+<nav class="fixed top-0 left-0 right-0 z-50 bg-[#0B2E24]/95 backdrop-blur-md border-b border-[#144739] shadow-lg transition-all">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex justify-between h-20 items-center">
+      
+      <!-- Brand Logo (Typography) -->
+      <div class="flex-shrink-0 flex items-center">
+        <a href="/" class="flex flex-col group py-1">
+          <span class="text-xl sm:text-2xl font-bold text-white tracking-tight leading-none font-serif group-hover:text-[#E5C695] transition-colors">
+            Grand Bedahan
+          </span>
+          <span class="text-[11px] sm:text-xs text-[#E5C695] font-semibold tracking-[0.25em] uppercase mt-1">
+            Residence
+          </span>
+        </a>
+      </div>
+
+      <!-- Desktop Navigation Menu -->
+      <div id="desktop-nav-menu" class="hidden lg:flex space-x-5 xl:space-x-7 items-center">
+        {navLinks.map((link, idx) => {
+          const sectionId = link.href.replace('/#', '');
+          return (
+            <a 
+              href={link.href}
+              data-section={sectionId}
+              class={`nav-link relative py-1 text-sm xl:text-[15px] font-semibold transition-all duration-200 hover:text-[#E5C695] ${
+                idx === 0 
+                  ? 'text-white border-b-2 border-[#E5C695] active-nav' 
+                  : 'text-emerald-100/80 border-b-2 border-transparent'
+              }`}
+            >
+              {link.name}
+            </a>
+          );
+        })}
+        
+        <!-- CTA Button (Gold / Sand Pill) -->
+        <a 
+          href="/#kontak" 
+          class="bg-[#E5C695] hover:bg-[#D8B47E] text-[#0B2E24] px-6 py-2.5 rounded-full font-bold text-sm transition-all shadow-md hover:shadow-lg hover:scale-105 active:scale-95 whitespace-nowrap ml-2"
+        >
+          Hubungi Kami
+        </a>
+      </div>
+
+      <!-- Mobile Menu Toggle Button -->
+      <div class="lg:hidden flex items-center">
+        <button id="mobile-menu-btn" class="text-white hover:text-[#E5C695] p-2 focus:outline-none" aria-label="Menu">
+          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Dropdown Menu -->
+  <div id="mobile-menu" class="hidden lg:hidden bg-[#07241C] border-t border-[#144739] shadow-2xl">
+    <div class="px-4 pt-3 pb-6 space-y-2">
+      {navLinks.map((link) => (
+        <a 
+          href={link.href} 
+          class="block px-3 py-2 rounded-lg text-sm font-medium text-emerald-100 hover:text-white hover:bg-[#0B2E24] transition-colors"
+        >
+          {link.name}
+        </a>
+      ))}
+      <a 
+        href="/#kontak" 
+        class="block w-full text-center mt-4 bg-[#E5C695] text-[#0B2E24] px-5 py-3 rounded-full font-bold shadow-md"
+      >
+        Hubungi Kami
+      </a>
+    </div>
+  </div>
+</nav>
+
+<script>
+  // Mobile menu toggle
+  const btn = document.getElementById('mobile-menu-btn');
+  const menu = document.getElementById('mobile-menu');
+
+  if (btn && menu) {
+    btn.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+    });
+  }
+
+  // Dynamic active navbar underline indicator on click & scroll
+  const navLinks = document.querySelectorAll<HTMLAnchorElement>('.nav-link');
+
+  function setActiveLink(targetLink: HTMLAnchorElement | null) {
+    if (!targetLink) return;
+    navLinks.forEach((link) => {
+      link.classList.remove('text-white', 'border-[#E5C695]', 'active-nav');
+      link.classList.add('text-emerald-100/80', 'border-transparent');
+    });
+    targetLink.classList.remove('text-emerald-100/80', 'border-transparent');
+    targetLink.classList.add('text-white', 'border-[#E5C695]', 'active-nav');
+  }
+
+  // Click handler
+  navLinks.forEach((link) => {
+    link.addEventListener('click', () => {
+      setActiveLink(link);
+    });
+  });
+
+  // Scroll spy with IntersectionObserver
+  const sections: HTMLElement[] = [];
+  navLinks.forEach((link) => {
+    const secId = link.getAttribute('data-section');
+    if (secId) {
+      const el = document.getElementById(secId);
+      if (el) sections.push(el);
+    }
+  });
+
+  if ('IntersectionObserver' in window && sections.length > 0) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const id = entry.target.getAttribute('id');
+            const matchingLink = document.querySelector<HTMLAnchorElement>(`.nav-link[data-section="${id}"]`);
+            if (matchingLink) {
+              setActiveLink(matchingLink);
+            }
+          }
+        });
+      },
+      {
+        rootMargin: '-20% 0px -60% 0px',
+        threshold: 0
+      }
+    );
+
+    sections.forEach((sec) => observer.observe(sec));
+  }
+</script>

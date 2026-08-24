@@ -1,0 +1,179 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+
+export function getStaticPaths() {
+  // Dummy data for MVP Phase 1
+  return [
+    { params: { slug: 'tips-memilih-rumah-pertama' } },
+    { params: { slug: 'keuntungan-tinggal-di-bedahan-depok' } },
+    { params: { slug: 'inspirasi-desain-interior-minimalis' } },
+  ];
+}
+
+const { slug } = Astro.params;
+
+// Dummy article content based on slug
+const getArticleData = (slug: string) => {
+  const dummyArticles: Record<string, any> = {
+    'tips-memilih-rumah-pertama': {
+      judul: '5 Tips Memilih Rumah Pertama untuk Keluarga Muda',
+      tanggal: '10 Agustus 2026',
+      gambar_utama_url: 'https://images.unsplash.com/photo-1518780664697-55e3ad937233?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+      konten: `
+        <p>Memilih rumah pertama merupakan keputusan besar, terutama bagi keluarga muda. Banyak faktor yang perlu dipertimbangkan agar rumah yang dibeli sesuai dengan kebutuhan, anggaran, dan visi masa depan keluarga. Berikut 5 tips penting yang dapat membantu Anda:</p>
+        
+        <h3>1. Tentukan Anggaran Realistis</h3>
+        <p>Hal pertama yang harus dilakukan adalah menghitung kemampuan finansial. Perhitungkan penghasilan bulanan, pengeluaran rutin, dan ketersediaan dana untuk Down Payment (DP). Jangan paksakan diri untuk membeli rumah di luar kemampuan, karena cicilan KPR akan menjadi komitmen jangka panjang.</p>
+        
+        <h3>2. Perhatikan Lokasi dan Akses</h3>
+        <p>Lokasi sangat menentukan kenyamanan dan nilai investasi rumah. Pilih lokasi yang strategis, dekat dengan fasilitas publik seperti sekolah, rumah sakit, dan pusat perbelanjaan. Pertimbangkan juga akses transportasi dan jarak ke tempat kerja.</p>
+        
+        <h3>3. Cek Kredibilitas Developer</h3>
+        <p>Pastikan Anda membeli rumah dari developer (pengembang) yang terpercaya dan memiliki rekam jejak yang baik. Cari informasi mengenai proyek-proyek sebelumnya, status legalitas tanah, dan perizinan proyek.</p>
+        
+        <h3>4. Sesuaikan Tipe Rumah dengan Kebutuhan</h3>
+        <p>Pilih tipe rumah yang sesuai dengan jumlah anggota keluarga dan gaya hidup. Untuk keluarga kecil, tipe 36 atau 45 mungkin sudah cukup. Namun, jika Anda berencana memiliki banyak anak, pertimbangkan rumah dengan ukuran yang lebih besar.</p>
+        
+        <h3>5. Lakukan Survei Langsung</h3>
+        <p>Jangan hanya melihat brosur atau gambar di internet. Luangkan waktu untuk datang langsung ke lokasi perumahan. Perhatikan kondisi lingkungan, kualitas bangunan (jika ada unit contoh), dan fasilitas yang tersedia di sekitar perumahan.</p>
+      `
+    },
+    'keuntungan-tinggal-di-bedahan-depok': {
+      judul: 'Keuntungan Tinggal di Kawasan Bedahan Depok',
+      tanggal: '15 Agustus 2026',
+      gambar_utama_url: 'https://images.unsplash.com/photo-1449844908441-8829872d2607?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+      konten: `
+        <p>Bedahan, sebuah kelurahan di Kecamatan Sawangan, Kota Depok, saat ini tengah berkembang pesat menjadi salah satu kawasan hunian favorit. Lokasinya yang strategis dan harga properti yang masih terjangkau membuat Bedahan semakin diminati oleh para pencari rumah, khususnya keluarga muda.</p>
+        
+        <p>Berikut adalah beberapa keuntungan tinggal dan berinvestasi properti di kawasan Bedahan:</p>
+        
+        <ul>
+          <li><strong>Infrastruktur yang Semakin Berkembang:</strong> Akses jalan menuju dan dari Bedahan terus mengalami perbaikan dan pelebaran, memudahkan mobilitas penghuni.</li>
+          <li><strong>Dekat dengan Rencana Tol:</strong> Kawasan ini memiliki kedekatan dengan akses Tol Desari (Depok-Antasari) dan Tol Cijago, yang memberikan kemudahan perjalanan menuju Jakarta dan wilayah sekitarnya.</li>
+          <li><strong>Fasilitas Publik Lengkap:</strong> Kehadiran pusat perbelanjaan baru, rumah sakit, dan sekolah-sekolah berkualitas di sekitar Bedahan memenuhi kebutuhan harian penghuni tanpa harus bepergian jauh.</li>
+          <li><strong>Lingkungan Masih Asri:</strong> Dibandingkan dengan pusat kota Depok atau Jakarta, Bedahan masih menawarkan kualitas udara yang lebih baik dan lingkungan yang lebih hijau.</li>
+        </ul>
+      `
+    },
+    'inspirasi-desain-interior-minimalis': {
+      judul: 'Inspirasi Desain Interior Minimalis Modern',
+      tanggal: '20 Agustus 2026',
+      gambar_utama_url: 'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+      konten: `
+        <p>Gaya desain interior minimalis modern terus menjadi tren dan banyak digemari. Konsepnya yang mengedepankan kesederhanaan, fungsionalitas, dan estetika "less is more" sangat cocok diterapkan pada berbagai tipe rumah, baik rumah mungil maupun luas.</p>
+        
+        <p>Kunci utama dari desain minimalis adalah:</p>
+        
+        <ol>
+          <li><strong>Warna Netral:</strong> Penggunaan warna seperti putih, abu-abu, atau beige memberikan kesan luas, bersih, dan terang pada ruangan.</li>
+          <li><strong>Pencahayaan Alami:</strong> Jendela besar membiarkan cahaya matahari masuk secara maksimal, membuat ruangan terasa lebih hidup.</li>
+          <li><strong>Furnitur Multifungsi:</strong> Pilih furnitur yang memiliki lebih dari satu fungsi (misal: tempat tidur dengan laci penyimpanan di bawahnya) untuk menghemat ruang.</li>
+          <li><strong>Minim Ornamen:</strong> Hindari dekorasi yang berlebihan. Cukup gunakan beberapa aksen seperti tanaman hias atau satu lukisan besar sebagai *focal point*.</li>
+        </ol>
+      `
+    }
+  };
+
+  return dummyArticles[slug] || {
+    judul: 'Artikel Tidak Ditemukan',
+    tanggal: '',
+    gambar_utama_url: '',
+    konten: '<p>Maaf, konten artikel yang Anda cari tidak tersedia.</p>'
+  };
+};
+
+const article = getArticleData(slug as string);
+---
+
+<MainLayout title={article.judul}>
+  <div class="bg-[--color-background-alt] py-10 lg:py-20">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Breadcrumb -->
+      <nav class="flex text-sm text-[--color-text-secondary] mb-8" aria-label="Breadcrumb">
+        <ol class="inline-flex items-center space-x-1 md:space-x-3">
+          <li class="inline-flex items-center">
+            <a href="/" class="hover:text-[--color-primary] transition-colors">Beranda</a>
+          </li>
+          <li>
+            <div class="flex items-center">
+              <svg class="w-4 h-4 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+              <a href="/#artikel" class="hover:text-[--color-primary] transition-colors">Artikel</a>
+            </div>
+          </li>
+          <li aria-current="page">
+            <div class="flex items-center">
+              <svg class="w-4 h-4 text-gray-400 mx-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+              <span class="text-gray-400 truncate max-w-[150px] sm:max-w-xs">{article.judul}</span>
+            </div>
+          </li>
+        </ol>
+      </nav>
+
+      <!-- Article Header -->
+      <header class="mb-10 text-center">
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-[--color-text-main] tracking-tight leading-tight mb-4">
+          {article.judul}
+        </h1>
+        {article.tanggal && (
+          <div class="flex items-center justify-center text-[--color-text-secondary] text-sm">
+            <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+            <time>{article.tanggal}</time>
+          </div>
+        )}
+      </header>
+      
+      <!-- Article Image -->
+      {article.gambar_utama_url && (
+        <div class="rounded-2xl overflow-hidden shadow-lg mb-12 max-h-[500px]">
+          <img 
+            src={article.gambar_utama_url} 
+            alt={article.judul} 
+            class="w-full h-full object-cover"
+          />
+        </div>
+      )}
+
+      <!-- Article Content -->
+      <div 
+        class="prose prose-lg max-w-none prose-headings:text-[--color-text-main] prose-a:text-[--color-primary] hover:prose-a:text-[--color-primary-light] prose-img:rounded-xl"
+        set:html={article.konten}
+      />
+      
+      <!-- Footer / Back button -->
+      <div class="mt-16 pt-8 border-t border-gray-200">
+        <a href="/#artikel" class="inline-flex items-center text-[--color-primary] font-medium hover:text-[--color-primary-light] transition-colors">
+          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+          Kembali ke Artikel
+        </a>
+      </div>
+      
+    </div>
+  </div>
+</MainLayout>
+
+<style is:global>
+  /* Base styles for prose content injected via set:html */
+  .prose h3 {
+    margin-top: 2em;
+    margin-bottom: 0.5em;
+    font-weight: 700;
+    font-size: 1.5em;
+  }
+  .prose p {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+    color: var(--color-text-secondary);
+    line-height: 1.75;
+  }
+  .prose ul, .prose ol {
+    margin-top: 1.25em;
+    margin-bottom: 1.25em;
+    padding-left: 1.625em;
+  }
+  .prose li {
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    color: var(--color-text-secondary);
+  }
+</style>

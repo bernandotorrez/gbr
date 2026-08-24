@@ -1,0 +1,30 @@
+---
+import MainLayout from '../layouts/MainLayout.astro';
+import HeroSection from '../components/sections/HeroSection.astro';
+import TipeRumahSection from '../components/sections/TipeRumahSection.astro';
+import LokasiSection from '../components/sections/LokasiSection.astro';
+import VideoSection from '../components/sections/VideoSection.astro';
+import PromosiSection from '../components/sections/PromosiSection.astro';
+import ArtikelSection from '../components/sections/ArtikelSection.astro';
+import TestimoniSection from '../components/sections/TestimoniSection.astro';
+import FaqSection from '../components/sections/FaqSection.astro';
+import KontakSection from '../components/sections/KontakSection.astro';
+
+import FloatingWhatsApp from '../components/islands/FloatingWhatsApp';
+import ChatbotWidget from '../components/islands/ChatbotWidget';
+---
+
+<MainLayout title="Beranda">
+  <HeroSection />
+  <TipeRumahSection />
+  <LokasiSection />
+  <VideoSection />
+  <PromosiSection />
+  <ArtikelSection />
+  <TestimoniSection />
+  <FaqSection />
+  <KontakSection />
+  
+  <FloatingWhatsApp client:load />
+  <ChatbotWidget client:load />
+</MainLayout>

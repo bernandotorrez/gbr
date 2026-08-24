@@ -1,0 +1,102 @@
+---
+import { daftarTipeRumah, formatRupiah } from '../../data/tipeRumah';
+import { Bed, Bath, Car, ArrowRight, LayoutGrid } from 'lucide-react';
+---
+
+<section id="tipe-rumah" class="py-20 bg-white scroll-mt-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Header with Top Tag & Right Link -->
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-12">
+      <div>
+        <div class="inline-flex items-center text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">
+          <LayoutGrid class="w-4 h-4 mr-2 text-gray-400" />
+          PILIHAN TERBAIK UNTUK ANDA
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-[#17201C] font-serif">
+          Temukan Rumah Impian Anda
+        </h2>
+      </div>
+
+      <div class="mt-4 md:mt-0">
+        <a 
+          href="#kontak" 
+          class="inline-flex items-center text-base font-bold text-[#0E3B2E] hover:text-[#07241C] group"
+        >
+          <span>Lihat Semua Rumah</span>
+          <ArrowRight className="w-4 h-4 ml-1.5 transition-transform group-hover:translate-x-1" />
+        </a>
+      </div>
+    </div>
+
+    <!-- 3 Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {daftarTipeRumah.map((tipe, index) => {
+        const badgeLabel = index === 0 ? 'Tipe 36/60' : index === 1 ? 'Tipe 45/72' : 'Tipe 70/84';
+        const displayTitle = index === 0 ? 'Tipe Kanaka Garden' : index === 1 ? 'Tipe Kanaka Landed' : 'Tipe Kanaka Extension';
+        return (
+          <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col group">
+            <!-- Card Image with Pill Badge -->
+            <div class="relative h-64 overflow-hidden">
+              <img 
+                src={tipe.foto_url} 
+                alt={displayTitle} 
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+              />
+              <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-bold text-[#17201C] shadow-md">
+                {badgeLabel}
+              </div>
+            </div>
+            
+            <!-- Card Body -->
+            <div class="p-6 flex flex-col flex-grow">
+              <h3 class="text-xl font-bold text-[#17201C] font-serif mb-1 group-hover:text-[#0E3B2E] transition-colors">
+                {displayTitle}
+              </h3>
+              <p class="text-2xl font-bold text-[#0E3B2E] mb-5 font-sans">
+                {formatRupiah(tipe.harga)}
+              </p>
+              
+              <!-- Specs Row (Bed, Bath, Carport) -->
+              <div class="flex items-center justify-between text-sm text-[#4A5568] py-3.5 border-t border-gray-100 mb-6 font-semibold">
+                <div class="flex items-center gap-1.5">
+                  <Bed className="w-4.5 h-4.5 text-gray-500" />
+                  <span>{tipe.jumlah_kamar_tidur} K. Tidur</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <Bath className="w-4.5 h-4.5 text-gray-500" />
+                  <span>{tipe.jumlah_kamar_mandi} K. Mandi</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <Car className="w-4.5 h-4.5 text-gray-500" />
+                  <span>Carport</span>
+                </div>
+              </div>
+
+              <!-- Full-width Action Button -->
+              <div class="mt-auto">
+                <a 
+                  href={`/tipe-rumah/${tipe.slug}`}
+                  class="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-bold text-base text-white bg-[#0E3B2E] hover:bg-[#07241C] shadow-md hover:shadow-lg transition-all"
+                >
+                  <span>Lihat Detail</span>
+                  <ArrowRight className="w-5 h-5" />
+                </a>
+              </div>
+
+            </div>
+          </div>
+        );
+      })}
+    </div>
+
+    <!-- Pagination Dots (Exact from Reference) -->
+    <div class="flex items-center justify-center gap-2 mt-10">
+      <span class="w-2.5 h-2.5 rounded-full bg-[#0E3B2E]"></span>
+      <span class="w-2.5 h-2.5 rounded-full bg-gray-300"></span>
+      <span class="w-2.5 h-2.5 rounded-full bg-gray-300"></span>
+    </div>
+
+  </div>
+</section>
+

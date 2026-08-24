@@ -1,0 +1,71 @@
+---
+import ContactForm from '../islands/ContactForm';
+import { MapPin, Phone, MessageSquare, Headphones } from 'lucide-react';
+---
+
+<section id="kontak" class="py-20 bg-white relative overflow-hidden scroll-mt-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="lg:grid lg:grid-cols-12 lg:gap-16 items-start">
+      
+      <!-- Left Column: Contact Info (6 Cols) -->
+      <div class="lg:col-span-6 mb-12 lg:mb-0">
+        <div class="inline-flex items-center text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">
+          <Headphones className="w-4 h-4 mr-2 text-gray-400" />
+          HUBUNGI KAMI
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-[#17201C] font-serif mb-4">
+          Miliki Rumah Impian Anda Sekarang
+        </h2>
+        <p class="text-base sm:text-lg text-[#4A5568] mb-10 leading-relaxed max-w-lg">
+          Jangan ragu untuk menghubungi kami untuk informasi lebih lanjut atau jadwalkan kunjungan ke lokasi kami.
+        </p>
+        
+        <div class="space-y-6">
+          
+          <!-- Item 1: Lokasi -->
+          <div class="flex items-start">
+            <div class="w-14 h-14 rounded-2xl bg-[#E8F3EE] text-[#0E3B2E] flex items-center justify-center flex-shrink-0 mt-0.5 shadow-xs">
+              <MapPin className="w-6 h-6" />
+            </div>
+            <div class="ml-4">
+              <h3 class="text-base sm:text-lg font-bold text-[#17201C] leading-snug mb-1">Lokasi Kami</h3>
+              <p class="text-sm sm:text-base text-[#4A5568] leading-relaxed">Jl. Masjid Al-Mukhlisin No.006, RT.002, Bedahan, Kec. Sawangan, Kota Depok, Jawa Barat 16519</p>
+            </div>
+          </div>
+
+          <!-- Item 2: Telepon / WhatsApp -->
+          <div class="flex items-start">
+            <div class="w-14 h-14 rounded-2xl bg-[#E8F3EE] text-[#0E3B2E] flex items-center justify-center flex-shrink-0 mt-0.5 shadow-xs">
+              <Phone className="w-6 h-6" />
+            </div>
+            <div class="ml-4">
+              <h3 class="text-base sm:text-lg font-bold text-[#17201C] leading-snug mb-1">Telepon / WhatsApp</h3>
+              <a href="https://wa.me/6281215776218" target="_blank" rel="noopener noreferrer" class="text-sm sm:text-base text-[#0E3B2E] font-bold hover:underline">
+                0812-1577-6218
+              </a>
+            </div>
+          </div>
+
+          <!-- Item 3: Layanan Konsultasi -->
+          <div class="flex items-start">
+            <div class="w-14 h-14 rounded-2xl bg-[#E8F3EE] text-[#0E3B2E] flex items-center justify-center flex-shrink-0 mt-0.5 shadow-xs">
+              <MessageSquare className="w-6 h-6" />
+            </div>
+            <div class="ml-4">
+              <h3 class="text-base sm:text-lg font-bold text-[#17201C] leading-snug mb-1">Layanan Konsultasi & Survei</h3>
+              <p class="text-sm sm:text-base text-[#4A5568]">Buka Setiap Hari (Senin - Minggu: 08.00 - 17.00 WIB)</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      
+      <!-- Right Column: Contact Form (6 Cols) -->
+      <div class="lg:col-span-6">
+        <ContactForm client:visible />
+      </div>
+      
+    </div>
+  </div>
+</section>
+

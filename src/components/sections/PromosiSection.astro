@@ -1,0 +1,102 @@
+---
+import { ArrowRight, Sparkles } from 'lucide-react';
+---
+
+<section id="promo" class="py-20 bg-white scroll-mt-20">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    
+    <!-- Section Header -->
+    <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-12">
+      <div>
+        <div class="inline-flex items-center text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">
+          PROMO & BERITA TERKINI
+        </div>
+        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-[#17201C] font-serif">
+          Promo Menarik & Kabar Terbaru
+        </h2>
+      </div>
+
+      <div class="mt-4 md:mt-0">
+        <a 
+          href="/#artikel" 
+          class="inline-flex items-center text-base font-bold text-[#0E3B2E] hover:text-[#07241C] group"
+        >
+          <span>Lihat Semua Promo & Berita</span>
+          <ArrowRight className="w-4 h-4 ml-1.5 transition-transform group-hover:translate-x-1" />
+        </a>
+      </div>
+    </div>
+
+    <!-- 2 Horizontal Cards Grid (Exact from Reference UI) -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+      
+      <!-- Card 1: Promo -->
+      <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col sm:flex-row group">
+        <div class="sm:w-1/2 h-56 sm:h-auto relative overflow-hidden flex-shrink-0">
+          <img 
+            src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80" 
+            alt="Promo DP 0% Grand Bedahan Residence" 
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+        </div>
+        <div class="p-6 sm:p-7 sm:w-1/2 flex flex-col justify-between">
+          <div>
+            <div class="inline-block bg-[#F5EBDD] text-[#8C6D3F] text-sm font-bold px-3 py-1 rounded-md mb-3">
+              Promo
+            </div>
+            <h3 class="text-xl font-bold text-[#17201C] font-serif mb-2 leading-snug group-hover:text-[#0E3B2E] transition-colors">
+              Promo DP 0% & Bebas Biaya-Biaya
+            </h3>
+            <p class="text-sm sm:text-base text-[#4A5568] leading-relaxed line-clamp-3 mb-4">
+              Miliki rumah impian tanpa beban dengan promo terbatas bulan ini.
+            </p>
+          </div>
+          <div>
+            <a 
+              href="/#kontak" 
+              class="inline-flex items-center text-sm sm:text-base font-bold text-[#0E3B2E] hover:text-[#07241C] group/link"
+            >
+              <span>Selengkapnya</span>
+              <ArrowRight className="w-4 h-4 ml-1.5 transition-transform group-hover/link:translate-x-1" />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card 2: Berita / Progres Pembangunan -->
+      <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col sm:flex-row group">
+        <div class="sm:w-1/2 h-56 sm:h-auto relative overflow-hidden flex-shrink-0">
+          <img 
+            src="https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=800&q=80" 
+            alt="Progres Pembangunan Cluster Grand Bedahan" 
+            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          />
+        </div>
+        <div class="p-6 sm:p-7 sm:w-1/2 flex flex-col justify-between">
+          <div>
+            <div class="inline-block bg-[#E8F5E9] text-[#0E3B2E] text-sm font-bold px-3 py-1 rounded-md mb-3">
+              Berita
+            </div>
+            <h3 class="text-xl font-bold text-[#17201C] font-serif mb-2 leading-snug group-hover:text-[#0E3B2E] transition-colors">
+              Progres Pembangunan Cluster Grand Bedahan
+            </h3>
+            <p class="text-sm sm:text-base text-[#4A5568] leading-relaxed line-clamp-3 mb-4">
+              Update terbaru pembangunan untuk hunian terbaik Anda.
+            </p>
+          </div>
+          <div>
+            <a 
+              href="/artikel/keuntungan-tinggal-di-bedahan-depok" 
+              class="inline-flex items-center text-sm sm:text-base font-bold text-[#0E3B2E] hover:text-[#07241C] group/link"
+            >
+              <span>Selengkapnya</span>
+              <ArrowRight className="w-4 h-4 ml-1.5 transition-transform group-hover/link:translate-x-1" />
+            </a>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
