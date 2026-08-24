@@ -1,5 +1,5 @@
 ---
-import { Train, ShoppingBag, HeartPulse, GraduationCap, MapPin, Compass, ExternalLink } from 'lucide-react';
+import { Train, ShoppingBag, HeartPulse, GraduationCap, MapPin, Compass, ExternalLink, Bus } from 'lucide-react';
 ---
 
 <section id="fasilitas" class="py-20 bg-white scroll-mt-20">
@@ -19,9 +19,20 @@ import { Train, ShoppingBag, HeartPulse, GraduationCap, MapPin, Compass, Externa
           Lokasi strategis memudahkan aktivitas sehari-hari Anda dengan dekatnya akses ke berbagai fasilitas penting di sekitar kawasan.
         </p>
         
-        <!-- 4 Access Points -->
-        <div class="space-y-4 mb-8">
-          <!-- 1. Stasiun -->
+        <!-- Access Points -->
+        <div class="space-y-3.5 mb-8">
+          <!-- 1. Halte Busway Sawangan Direct MRT -->
+          <div class="flex items-center p-3.5 sm:p-4 rounded-2xl bg-gray-50/80 hover:bg-[#E8F3EE]/60 border border-gray-100/80 transition-colors">
+            <div class="w-14 h-14 rounded-2xl bg-[#E8F3EE] flex items-center justify-center text-[#0E3B2E] flex-shrink-0 shadow-xs">
+              <Bus className="w-6 h-6" />
+            </div>
+            <div class="ml-4">
+              <h3 class="text-lg sm:text-xl font-bold text-[#17201C] leading-snug">5 Menit</h3>
+              <p class="text-sm sm:text-base text-[#4A5568] font-medium mt-0.5">Ke Halte Busway Sawangan (Direct MRT Lebak Bulus)</p>
+            </div>
+          </div>
+
+          <!-- 2. Stasiun Citayam -->
           <div class="flex items-center p-3.5 sm:p-4 rounded-2xl bg-gray-50/80 hover:bg-[#E8F3EE]/60 border border-gray-100/80 transition-colors">
             <div class="w-14 h-14 rounded-2xl bg-[#E8F3EE] flex items-center justify-center text-[#0E3B2E] flex-shrink-0 shadow-xs">
               <Train className="w-6 h-6" />
@@ -32,7 +43,7 @@ import { Train, ShoppingBag, HeartPulse, GraduationCap, MapPin, Compass, Externa
             </div>
           </div>
 
-          <!-- 2. Perbelanjaan -->
+          <!-- 3. Perbelanjaan -->
           <div class="flex items-center p-3.5 sm:p-4 rounded-2xl bg-gray-50/80 hover:bg-[#E8F3EE]/60 border border-gray-100/80 transition-colors">
             <div class="w-14 h-14 rounded-2xl bg-[#E8F3EE] flex items-center justify-center text-[#0E3B2E] flex-shrink-0 shadow-xs">
               <ShoppingBag className="w-6 h-6" />
@@ -43,7 +54,7 @@ import { Train, ShoppingBag, HeartPulse, GraduationCap, MapPin, Compass, Externa
             </div>
           </div>
 
-          <!-- 3. Rumah Sakit -->
+          <!-- 4. Rumah Sakit -->
           <div class="flex items-center p-3.5 sm:p-4 rounded-2xl bg-gray-50/80 hover:bg-[#E8F3EE]/60 border border-gray-100/80 transition-colors">
             <div class="w-14 h-14 rounded-2xl bg-[#E8F3EE] flex items-center justify-center text-[#0E3B2E] flex-shrink-0 shadow-xs">
               <HeartPulse className="w-6 h-6" />
@@ -54,7 +65,7 @@ import { Train, ShoppingBag, HeartPulse, GraduationCap, MapPin, Compass, Externa
             </div>
           </div>
 
-          <!-- 4. Pendidikan -->
+          <!-- 5. Pendidikan -->
           <div class="flex items-center p-3.5 sm:p-4 rounded-2xl bg-gray-50/80 hover:bg-[#E8F3EE]/60 border border-gray-100/80 transition-colors">
             <div class="w-14 h-14 rounded-2xl bg-[#E8F3EE] flex items-center justify-center text-[#0E3B2E] flex-shrink-0 shadow-xs">
               <GraduationCap className="w-6 h-6" />
