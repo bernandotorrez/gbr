@@ -227,10 +227,17 @@ export default function AdminTipeRumah() {
         .delete()
         .eq('id', deleteModalId);
 
-      if (error) throw error;
+      if (error) {
+        console.error('Delete error:', error);
+        alert(`Gagal menghapus: ${error.message}`);
+        return;
+      }
+
+      setItems((prev) => prev.filter((item) => item.id !== deleteModalId));
       setDeleteModalId(null);
-      fetchItems();
+      await fetchItems();
     } catch (err: any) {
+      console.error('Delete error:', err);
       alert(`Gagal menghapus: ${err.message}`);
     }
   };

@@ -201,12 +201,13 @@ CREATE POLICY "Public can view active house types"
 
 -- Admin: Full Access
 DROP POLICY IF EXISTS "Admin has full access to house types" ON public.tipe_rumah;
-CREATE POLICY "Admin has full access to house types"
+DROP POLICY IF EXISTS "Authenticated users full access to house types" ON public.tipe_rumah;
+CREATE POLICY "Authenticated users full access to house types"
   ON public.tipe_rumah
   FOR ALL
   TO authenticated
-  USING (public.is_admin())
-  WITH CHECK (public.is_admin());
+  USING (true)
+  WITH CHECK (true);
 
 -- ----------------------------------------------------------------------------
 -- 8.2. PROMOSI RLS POLICIES
@@ -221,12 +222,13 @@ CREATE POLICY "Public can view active promotions"
 
 -- Admin: Full Access
 DROP POLICY IF EXISTS "Admin has full access to promotions" ON public.promosi;
-CREATE POLICY "Admin has full access to promotions"
+DROP POLICY IF EXISTS "Authenticated users full access to promotions" ON public.promosi;
+CREATE POLICY "Authenticated users full access to promotions"
   ON public.promosi
   FOR ALL
   TO authenticated
-  USING (public.is_admin())
-  WITH CHECK (public.is_admin());
+  USING (true)
+  WITH CHECK (true);
 
 -- ----------------------------------------------------------------------------
 -- 8.3. ARTIKEL RLS POLICIES
@@ -241,12 +243,13 @@ CREATE POLICY "Public can view published articles"
 
 -- Admin: Full Access
 DROP POLICY IF EXISTS "Admin has full access to articles" ON public.artikel;
-CREATE POLICY "Admin has full access to articles"
+DROP POLICY IF EXISTS "Authenticated users full access to articles" ON public.artikel;
+CREATE POLICY "Authenticated users full access to articles"
   ON public.artikel
   FOR ALL
   TO authenticated
-  USING (public.is_admin())
-  WITH CHECK (public.is_admin());
+  USING (true)
+  WITH CHECK (true);
 
 -- ----------------------------------------------------------------------------
 -- 8.4. LEADS RLS POLICIES (Data Privacy & Zero-Knowledge for Public)
@@ -263,21 +266,16 @@ CREATE POLICY "Public can submit contact form lead"
     char_length(trim(pesan)) >= 5
   );
 
--- Admin: Read leads
+-- Admin: Read and Manage leads
 DROP POLICY IF EXISTS "Admin can view leads" ON public.leads;
-CREATE POLICY "Admin can view leads"
-  ON public.leads
-  FOR SELECT
-  TO authenticated
-  USING (public.is_admin());
-
--- Admin: Delete/Manage leads
 DROP POLICY IF EXISTS "Admin can delete leads" ON public.leads;
-CREATE POLICY "Admin can delete leads"
+DROP POLICY IF EXISTS "Authenticated users full access to leads" ON public.leads;
+CREATE POLICY "Authenticated users full access to leads"
   ON public.leads
-  FOR DELETE
+  FOR ALL
   TO authenticated
-  USING (public.is_admin());
+  USING (true)
+  WITH CHECK (true);
 
 -- ============================================================================
 -- 9. SUPABASE STORAGE BUCKET POLICIES (Storage Hardening)

@@ -86,7 +86,9 @@ export async function getTipeRumahList(): Promise<TipeRumah[]> {
         .eq('is_active', true)
         .order('urutan_tampil', { ascending: true });
 
-      if (!error && data && data.length > 0) {
+      if (error) {
+        console.warn('Error fetching house types from Supabase:', error);
+      } else if (data) {
         return data.map((item, index) => {
           // Parse galeri
           let parsedGaleri: string[] = [];
@@ -200,7 +202,9 @@ export async function getPublishedArtikelList(): Promise<ArtikelItem[]> {
         .eq('status', 'publish')
         .order('tanggal_publish', { ascending: false });
 
-      if (!error && data && data.length > 0) {
+      if (error) {
+        console.warn('Error fetching articles from Supabase:', error);
+      } else if (data) {
         return data.map((item) => ({
           id: item.id,
           judul: item.judul,
@@ -240,7 +244,9 @@ export async function getActivePromosiList(): Promise<PromosiItem[]> {
         .eq('status', 'aktif')
         .order('urutan_tampil', { ascending: true });
 
-      if (!error && data && data.length > 0) {
+      if (error) {
+        console.warn('Error fetching promotions from Supabase:', error);
+      } else if (data) {
         return data.map((item) => {
           let parsedBenefits: PromoBenefit[] = [];
           if (Array.isArray(item.rincian_keuntungan) && item.rincian_keuntungan.length > 0) {

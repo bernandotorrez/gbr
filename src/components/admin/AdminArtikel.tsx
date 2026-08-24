@@ -132,10 +132,18 @@ export default function AdminArtikel() {
         .from('artikel')
         .delete()
         .eq('id', deleteModalId);
-      if (error) throw error;
+
+      if (error) {
+        console.error('Delete article error:', error);
+        alert(`Gagal menghapus artikel: ${error.message}`);
+        return;
+      }
+
+      setItems((prev) => prev.filter((item) => item.id !== deleteModalId));
       setDeleteModalId(null);
-      fetchItems();
+      await fetchItems();
     } catch (err: any) {
+      console.error('Delete article error:', err);
       alert(`Gagal menghapus: ${err.message}`);
     }
   };

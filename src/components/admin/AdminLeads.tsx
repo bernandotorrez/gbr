@@ -49,10 +49,18 @@ export default function AdminLeads() {
         .from('leads')
         .delete()
         .eq('id', deleteModalId);
-      if (error) throw error;
+
+      if (error) {
+        console.error('Delete lead error:', error);
+        alert(`Gagal menghapus lead: ${error.message}`);
+        return;
+      }
+
+      setLeads((prev) => prev.filter((item) => item.id !== deleteModalId));
       setDeleteModalId(null);
-      fetchLeads();
+      await fetchLeads();
     } catch (err: any) {
+      console.error('Delete lead error:', err);
       alert(`Gagal menghapus lead: ${err.message}`);
     }
   };
