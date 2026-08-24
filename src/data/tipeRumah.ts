@@ -45,8 +45,8 @@ export const daftarTipeRumah: TipeRumah[] = [
     jumlah_lantai: 1,
     daya_listrik: '1.300 VA',
     sumber_air: 'Sumur Bor + Pompa Listrik',
-    harga: 450000000,
-    cicilan_mulai: 'Rp 2,8 Juta / bulan',
+    harga: 544000000,
+    cicilan_mulai: 'Rp 3,4 Juta / bulan',
     deskripsi: 'Desain minimalis modern cocok untuk keluarga muda dengan 2 kamar tidur, 1 kamar mandi, luas tanah 72 m², dan carport 1 mobil.',
     deskripsi_lengkap: [
       'Tipe 36/72 dirancang khusus untuk memenuhi kebutuhan pasangan muda atau keluarga baru yang mendambakan kepemilikan rumah pertama yang nyaman, fungsional, dan bernilai investasi tinggi.',
@@ -93,8 +93,8 @@ export const daftarTipeRumah: TipeRumah[] = [
     jumlah_lantai: 1,
     daya_listrik: '2.200 VA',
     sumber_air: 'Sumur Bor + Pompa Listrik',
-    harga: 600000000,
-    cicilan_mulai: 'Rp 3,7 Juta / bulan',
+    harga: 613000000,
+    cicilan_mulai: 'Rp 3,8 Juta / bulan',
     deskripsi: 'Bangunan lebih luas 45 m² di atas tanah 72 m² dengan 2 kamar tidur nyaman, 1 kamar mandi, dan carport 1 mobil.',
     deskripsi_lengkap: [
       'Tipe 45/72 memberikan kenyamanan superior dengan konfigurasi 2 kamar tidur yang lebih lapang, ideal untuk keluarga yang menginginkan ruang gerak optimal di dalam rumah.',
