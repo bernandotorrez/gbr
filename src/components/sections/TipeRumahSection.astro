@@ -33,7 +33,7 @@ import { Bed, Bath, Car, ArrowRight, LayoutGrid, MessageSquare } from 'lucide-re
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
       {daftarTipeRumah.map((tipe) => {
         const waText = encodeURIComponent(
-          `Halo Marketing Grand Bedahan Residence, saya tertarik dengan ${tipe.nama_tipe} (${formatRupiah(tipe.harga)}). Boleh minta info promo, pricelist, dan jadwal survei lokasi?`
+          `Halo Marketing Grand Bedahan Residence, saya tertarik dengan ${tipe.nama_tipe}. Boleh minta info promo, pricelist, dan jadwal survei lokasi?`
         );
         const waUrl = `https://wa.me/6281215776218?text=${waText}`;
 
