@@ -56,11 +56,11 @@ export const daftarTipeRumah: TipeRumah[] = [
     foto_url: 'https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/image/thumbnail_rumah.webp',
     galeri: [
       'https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/image/thumbnail_rumah.webp',
-      'https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1584622650111-993a426fbf0a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'
+      'https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/image/denh_type_36.webp',
+      'https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/image/detail_interior.webp',
+      'https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/image/detail_interior.webp'
     ],
-    denah_url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+    denah_url: 'https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/image/denh_type_36.webp',
     fitur: [
       'Luas Tanah 72 m²',
       '2 Kamar Tidur & 1 Kamar Mandi',
@@ -103,12 +103,12 @@ export const daftarTipeRumah: TipeRumah[] = [
     ],
     foto_url: 'https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/image/thumbnail_rumah.webp',
     galeri: [
-      'https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/image/thumbnail_rumah.webp',
-      'https://images.unsplash.com/photo-1600566753376-12c8ab7fb75b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-160058515526-990dced4db0d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
-      'https://images.unsplash.com/photo-1600573472591-ee6b68d14c68?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80'
+      'https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/image/denah_type_45.webp',
+      'https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/image/denh_type_36.webp',
+      'https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/image/detail_interior.webp',
+      'https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/image/detail_interior.webp'
     ],
-    denah_url: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80',
+    denah_url: 'https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/image/denah_type_45.webp',
     fitur: [
       'Luas Bangunan 45 m² Lebih Lapang',
       'Luas Tanah 72 m²',
