@@ -1,102 +1,159 @@
 ---
-import { ArrowRight, Sparkles } from 'lucide-react';
+import { CheckCircle2, Sparkles, ArrowRight, Gift, Flame } from 'lucide-react';
+
+const promoBenefits = [
+  {
+    title: "Subsidi Cicilan KPR selama 2 TAHUN 500.000/bln",
+    desc: "Meringankan cicilan bulanan Anda (promo sebelumnya hanya 1 tahun).",
+    highlight: true,
+  },
+  {
+    title: "Free Exhaust Fan",
+    desc: "Sirkulasi udara dapur & ruangan tetap bersih, nyaman, dan sejuk.",
+    highlight: false,
+  },
+  {
+    title: "Free Lampu Taman",
+    desc: "Pencahayaan luar rumah yang asri, estetik, dan elegan.",
+    highlight: false,
+  },
+  {
+    title: "Free Mesin Air & Toren 500 Liter",
+    desc: "Suplai air bersih siap pakai langsung dari hari pertama Anda menempati rumah.",
+    highlight: false,
+  },
+  {
+    title: "Free Instalasi AC di 2 Kamar Tidur",
+    desc: "Jalur instalasi pipa & kelistrikan AC siap pasang tanpa perlu membobok dinding.",
+    highlight: false,
+  },
+];
 ---
 
-<section id="promo" class="py-20 bg-white scroll-mt-20">
+<section id="promo" class="py-16 sm:py-20 bg-[#FAF9F6] scroll-mt-20 border-y border-gray-200/60">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     
     <!-- Section Header -->
-    <div class="flex flex-col md:flex-row md:items-end md:justify-between mb-12">
-      <div>
-        <div class="inline-flex items-center text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">
-          PROMO & BERITA TERKINI
-        </div>
-        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-[#17201C] font-serif">
-          Promo Menarik & Kabar Terbaru
-        </h2>
+    <div class="max-w-3xl mb-12">
+      <div class="inline-flex items-center gap-2 text-sm font-bold text-[#0E3B2E] uppercase tracking-wider mb-2">
+        <Sparkles className="w-4 h-4 text-[#E5C695]" />
+        <span>PROMO SPESIAL BULAN INI</span>
       </div>
-
-      <div class="mt-4 md:mt-0">
-        <a 
-          href="/#artikel" 
-          class="inline-flex items-center text-base font-bold text-[#0E3B2E] hover:text-[#07241C] group"
-        >
-          <span>Lihat Semua Promo & Berita</span>
-          <ArrowRight className="w-4 h-4 ml-1.5 transition-transform group-hover:translate-x-1" />
-        </a>
-      </div>
+      <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-[#17201C] font-serif">
+        Promo Eksklusif Grand Bedahan
+      </h2>
+      <p class="text-base sm:text-lg text-[#4A5568] mt-2">
+        Dapatkan paket penawaran terbatas dan berbagai bonus istimewa langsung saat Anda booking unit impian hari ini.
+      </p>
     </div>
 
-    <!-- 2 Horizontal Cards Grid (Exact from Reference UI) -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <!-- Single Luxury Promo Banner Card -->
+    <div class="bg-white rounded-3xl shadow-xl overflow-hidden border border-emerald-900/10 grid grid-cols-1 lg:grid-cols-12 relative group">
       
-      <!-- Card 1: Promo -->
-      <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col sm:flex-row group">
-        <div class="sm:w-1/2 h-56 sm:h-auto relative overflow-hidden flex-shrink-0">
-          <img 
-            src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=800&q=80" 
-            alt="Promo DP 0% Grand Bedahan Residence" 
-            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
+      <!-- Left Visual / Image (5 cols) -->
+      <div class="lg:col-span-5 relative min-h-[320px] lg:min-h-full overflow-hidden bg-[#07241C]">
+        <img 
+          src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&fit=crop&w=1200&q=85" 
+          alt="Promo Spesial Grand Bedahan Residence" 
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95"
+        />
+        <!-- Gradient Overlay -->
+        <div class="absolute inset-0 bg-gradient-to-t lg:bg-gradient-to-r from-[#07241C]/90 via-[#07241C]/40 to-transparent"></div>
+        
+        <!-- Floating Badges on Image -->
+        <div class="absolute top-6 left-6 flex flex-col gap-2">
+          <div class="inline-flex items-center gap-1.5 bg-[#E5C695] text-[#0B2E24] px-4 py-1.5 rounded-full text-xs sm:text-sm font-extrabold shadow-lg">
+            <Flame className="w-4 h-4 fill-current text-red-600" />
+            <span>PERIODE TERBATAS</span>
+          </div>
         </div>
-        <div class="p-6 sm:p-7 sm:w-1/2 flex flex-col justify-between">
-          <div>
-            <div class="inline-block bg-[#F5EBDD] text-[#8C6D3F] text-sm font-bold px-3 py-1 rounded-md mb-3">
-              Promo
-            </div>
-            <h3 class="text-xl font-bold text-[#17201C] font-serif mb-2 leading-snug group-hover:text-[#0E3B2E] transition-colors">
-              Promo DP 0% & Bebas Biaya-Biaya
-            </h3>
-            <p class="text-sm sm:text-base text-[#4A5568] leading-relaxed line-clamp-3 mb-4">
-              Miliki rumah impian tanpa beban dengan promo terbatas bulan ini.
-            </p>
-          </div>
-          <div>
-            <a 
-              href="/#kontak" 
-              class="inline-flex items-center text-sm sm:text-base font-bold text-[#0E3B2E] hover:text-[#07241C] group/link"
-            >
-              <span>Selengkapnya</span>
-              <ArrowRight className="w-4 h-4 ml-1.5 transition-transform group-hover/link:translate-x-1" />
-            </a>
-          </div>
+
+        <div class="absolute bottom-6 left-6 right-6 text-white">
+          <p class="text-xs sm:text-sm uppercase tracking-widest text-[#E5C695] font-bold mb-1">PROGRAM UNGGULAN</p>
+          <h3 class="text-xl sm:text-2xl font-bold font-serif leading-tight">
+            Paket Berkah Hunian Idaman
+          </h3>
         </div>
       </div>
 
-      <!-- Card 2: Berita / Progres Pembangunan -->
-      <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col sm:flex-row group">
-        <div class="sm:w-1/2 h-56 sm:h-auto relative overflow-hidden flex-shrink-0">
-          <img 
-            src="https://images.unsplash.com/photo-1590381105924-c72589b9ef3f?auto=format&fit=crop&w=800&q=80" 
-            alt="Progres Pembangunan Cluster Grand Bedahan" 
-            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
-          />
-        </div>
-        <div class="p-6 sm:p-7 sm:w-1/2 flex flex-col justify-between">
-          <div>
-            <div class="inline-block bg-[#E8F5E9] text-[#0E3B2E] text-sm font-bold px-3 py-1 rounded-md mb-3">
-              Berita
+      <!-- Right Content / List of Benefits (7 cols) -->
+      <div class="lg:col-span-7 p-6 sm:p-10 lg:p-12 flex flex-col justify-between bg-white">
+        
+        <div>
+          <!-- Header Inside Card -->
+          <div class="flex items-center justify-between gap-4 pb-6 border-b border-gray-100 mb-6">
+            <div class="flex items-center gap-3">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-50 border border-emerald-100 flex items-center justify-center text-[#0E3B2E] shadow-sm">
+                <Gift className="w-6 h-6 text-[#0E3B2E]" />
+              </div>
+              <div>
+                <span class="text-xs font-bold uppercase tracking-wider text-[#0E3B2E] bg-emerald-50 px-2.5 py-0.5 rounded-md">
+                  Semua Termasuk Gratis
+                </span>
+                <h4 class="text-lg sm:text-xl font-bold text-[#17201C] font-serif mt-0.5">
+                  Rincian Keuntungan Promo
+                </h4>
+              </div>
             </div>
-            <h3 class="text-xl font-bold text-[#17201C] font-serif mb-2 leading-snug group-hover:text-[#0E3B2E] transition-colors">
-              Progres Pembangunan Cluster Grand Bedahan
-            </h3>
-            <p class="text-sm sm:text-base text-[#4A5568] leading-relaxed line-clamp-3 mb-4">
-              Update terbaru pembangunan untuk hunian terbaik Anda.
-            </p>
           </div>
-          <div>
-            <a 
-              href="/artikel/keuntungan-tinggal-di-bedahan-depok" 
-              class="inline-flex items-center text-sm sm:text-base font-bold text-[#0E3B2E] hover:text-[#07241C] group/link"
-            >
-              <span>Selengkapnya</span>
-              <ArrowRight className="w-4 h-4 ml-1.5 transition-transform group-hover/link:translate-x-1" />
-            </a>
-          </div>
+
+          <!-- Benefits List -->
+          <ul class="space-y-4 mb-8">
+            {promoBenefits.map((item) => (
+              <li class={`p-3.5 sm:p-4 rounded-2xl transition-all border ${
+                item.highlight 
+                  ? 'bg-emerald-50/70 border-emerald-200 shadow-xs' 
+                  : 'bg-gray-50/60 border-gray-100 hover:bg-gray-50'
+              }`}>
+                <div class="flex items-start gap-3">
+                  <div class={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5 ${
+                    item.highlight 
+                      ? 'bg-[#0E3B2E] text-[#E5C695]' 
+                      : 'bg-emerald-100 text-[#0E3B2E]'
+                  }`}>
+                    <CheckCircle2 className="w-4 h-4 fill-current" />
+                  </div>
+                  <div>
+                    <p class={`text-sm sm:text-base font-bold leading-snug ${
+                      item.highlight ? 'text-[#0E3B2E]' : 'text-[#17201C]'
+                    }`}>
+                      {item.title}
+                    </p>
+                    <p class="text-xs sm:text-sm text-[#4A5568] mt-0.5 leading-relaxed">
+                      {item.desc}
+                    </p>
+                  </div>
+                </div>
+              </li>
+            ))}
+          </ul>
         </div>
+
+        <!-- CTA Buttons -->
+        <div class="pt-6 border-t border-gray-100 flex flex-col sm:flex-row items-stretch sm:items-center gap-4">
+          <a 
+            href="https://wa.me/6281215776218?text=Halo%20Marketing%20Grand%20Bedahan%20Residence%2C%20saya%20tertarik%20dengan%20Promo%20Subsidi%20KPR%202%20Tahun%20dan%20bonus%20unitnya.%20Boleh%20minta%20info%20lebih%20lanjut%3F" 
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center px-8 py-4 rounded-full text-base font-bold text-white bg-[#0E3B2E] hover:bg-[#07241C] shadow-lg hover:shadow-xl transition-all group/btn"
+          >
+            <span>Klaim Promo via WhatsApp</span>
+            <ArrowRight className="w-5 h-5 ml-2 transition-transform group-hover/btn:translate-x-1" />
+          </a>
+
+          <a 
+            href="/#kontak" 
+            class="inline-flex items-center justify-center px-6 py-4 rounded-full text-base font-bold text-[#17201C] bg-gray-100 hover:bg-gray-200 transition-colors"
+          >
+            Jadwalkan Survei
+          </a>
+        </div>
+
       </div>
 
     </div>
+
   </div>
 </section>
+
 
