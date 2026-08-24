@@ -26,7 +26,7 @@ const {
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png?v=2" />
     <link rel="manifest" href="/site.webmanifest" />
     <meta name="theme-color" content="#047857" />
-    <meta name="generator" content={Astro.generator} />
+    <!-- generator meta dihapus untuk mencegah version disclosure -->
     <title>{title} | Grand Bedahan Residence</title>
     
     <!-- Google Fonts -->
@@ -44,13 +44,21 @@ const {
     <Footer />
 
     <!-- BenixCS AI Chatbot Widget -->
-    <script is:inline src="https://benixai.web.id/benix-cs-widget.js"></script>
-    <script is:inline>
-      BenixCSWidget.init({
-        token: 'bkn_cs_widget_84299a911fae45dbb27e5d7d6717c1e3c5613000957f450dbae60e2be33fdeb3',
-        position: 'bottom-right',
-        primaryColor: '#14b8a6'
-      });
+    <!-- SRI hash memastikan script tidak dimanipulasi jika CDN dikompromis -->
+    <script 
+      is:inline 
+      src="https://benixai.web.id/benix-cs-widget.js"
+      integrity="sha384-C48jwvNytIzRCcwxhYlfx3pRUNvboJYYavdRQmCpsJlJHshAlFE8qRCQoxqfbHUW"
+      crossorigin="anonymous"
+    ></script>
+    <script is:inline define:vars={{ token: import.meta.env.PUBLIC_BENIX_CS_TOKEN }}>
+      if (typeof BenixCSWidget !== 'undefined' && token) {
+        BenixCSWidget.init({
+          token: token,
+          position: 'bottom-right',
+          primaryColor: '#14b8a6'
+        });
+      }
     </script>
     <style is:global>
       /* Align BenixCS widget with FloatingWhatsApp button */

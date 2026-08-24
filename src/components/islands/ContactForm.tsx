@@ -15,6 +15,7 @@ export default function ContactForm() {
     pesan: ''
   });
 
+  const [honeypot, setHoneypot] = useState('');
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -86,6 +87,11 @@ export default function ContactForm() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    // Anti-bot honeypot check: If filled, quietly discard
+    if (honeypot.trim().length > 0) {
+      return;
+    }
+
     if (!validateAll()) return;
 
     setIsSubmitting(true);
@@ -115,6 +121,19 @@ export default function ContactForm() {
       )}
 
       <form onSubmit={handleSubmit} className="space-y-5" noValidate>
+        {/* Anti-spam Bot Honeypot Field (Hidden from real users) */}
+        <div className="hidden" aria-hidden="true" tabIndex={-1}>
+          <label htmlFor="website_url">Website</label>
+          <input
+            type="text"
+            id="website_url"
+            name="website_url"
+            value={honeypot}
+            onChange={(e) => setHoneypot(e.target.value)}
+            tabIndex={-1}
+            autoComplete="off"
+          />
+        </div>
         {/* Nama */}
         <div>
           <label htmlFor="nama" className="block text-sm font-bold text-[#17201C] mb-2">Nama Lengkap</label>
