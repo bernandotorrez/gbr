@@ -42,5 +42,22 @@ const {
     </main>
 
     <Footer />
+
+    <!-- BenixCS AI Chatbot Widget -->
+    <script is:inline src="https://benixai.web.id/benix-cs-widget.js"></script>
+    <script is:inline>
+      BenixCSWidget.init({
+        token: 'bkn_cs_widget_84299a911fae45dbb27e5d7d6717c1e3c5613000957f450dbae60e2be33fdeb3',
+        position: 'bottom-right',
+        primaryColor: '#14b8a6'
+      });
+    </script>
+    <style is:global>
+      /* Align BenixCS widget with FloatingWhatsApp button */
+      #benix-cs-widget-container {
+        right: 88px !important;
+        bottom: 24px !important;
+      }
+    </style>
   </body>
 </html>

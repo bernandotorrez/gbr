@@ -3,7 +3,7 @@ import MainLayout from '../../layouts/MainLayout.astro';
 import { daftarTipeRumah, formatRupiah, type TipeRumah } from '../../data/tipeRumah';
 import HouseDetailGallery from '../../components/islands/HouseDetailGallery';
 import FloatingWhatsApp from '../../components/islands/FloatingWhatsApp';
-import ChatbotWidget from '../../components/islands/ChatbotWidget';
+
 import {
   Bed,
   Bath,
@@ -100,7 +100,7 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
         </div>
       </div>
 
-      <!-- 2-Column Grid: Left (Media & Details) / Right (Spacer for fixed sidebar) -->
+      <!-- 2-Column Grid: Left (Media & Details) / Right (Sidebar) -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
         
         <!-- Left Content (8 cols) -->
@@ -333,124 +333,99 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
           </div>
 
         </div>
-        <!-- Right spacer (4 cols) — holds space for the fixed sidebar overlay -->
-        <div id="sidebar-spacer" class="hidden lg:block lg:col-span-4" aria-hidden="true"></div>
+
+        <!-- Right Column (4 cols) -->
+        <div class="hidden lg:block lg:col-span-4 space-y-6">
+          <!-- Booking & Consultation Card -->
+          <div class="bg-white rounded-3xl p-6 sm:p-8 border border-emerald-900/10 shadow-xl relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-36 h-36 bg-emerald-50 rounded-full blur-3xl -z-10"></div>
+            
+            <h3 class="text-2xl sm:text-3xl font-bold text-[#17201C] font-serif mb-3 leading-snug">
+              Tertarik dengan Unit Ini?
+            </h3>
+            <p class="text-sm sm:text-base text-[#4A5568] mb-6 leading-relaxed">
+              Hubungi Marketing Executive kami untuk mendapatkan e-brosur, pricelist terbaru, simulasi KPR bank, dan jadwalkan survei lokasi.
+            </p>
+
+            <!-- Promo Highlights -->
+            <div class="mb-6 p-4 sm:p-5 bg-emerald-50/80 rounded-2xl border border-emerald-200/70 space-y-3">
+              <div class="flex items-start text-sm sm:text-base font-bold text-[#0E3B2E] gap-2.5">
+                <CheckCircle2 className="w-5 h-5 text-[#0E3B2E] shrink-0 mt-0.5" />
+                <span>Promo DP 0% &amp; Bebas Biaya KPR</span>
+              </div>
+              <div class="flex items-start text-sm sm:text-base font-bold text-[#0E3B2E] gap-2.5">
+                <CheckCircle2 className="w-5 h-5 text-[#0E3B2E] shrink-0 mt-0.5" />
+                <span>Gratis Biaya Surat-Surat (BPHTB, AJB, SHM)</span>
+              </div>
+              <div class="flex items-start text-sm sm:text-base font-bold text-[#0E3B2E] gap-2.5">
+                <CheckCircle2 className="w-5 h-5 text-[#0E3B2E] shrink-0 mt-0.5" />
+                <span>Hadiah Langsung Smart Door Lock</span>
+              </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="space-y-3.5">
+              <a
+                href={waUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="w-full flex items-center justify-center py-4 px-6 bg-[#0E3B2E] hover:bg-[#07241C] text-white font-bold text-base rounded-2xl shadow-lg hover:shadow-xl transition-all hover:scale-[1.01]"
+              >
+                <PhoneCall className="w-5 h-5 mr-2.5" />
+                <span>Konsultasi WhatsApp &amp; Survei</span>
+              </a>
+
+              <a
+                href="/#kontak"
+                class="w-full flex items-center justify-center py-3.5 px-6 bg-emerald-50 hover:bg-emerald-100 text-[#0E3B2E] border border-emerald-200 font-bold text-base rounded-2xl transition-colors"
+              >
+                <MessageSquare className="w-5 h-5 mr-2.5" />
+                <span>Tinggalkan Pesan di Form</span>
+              </a>
+            </div>
+
+            <div class="mt-6 pt-4 border-t border-gray-100 text-center">
+              <p class="text-xs sm:text-sm text-gray-500 font-medium">
+                Respon cepat 24/7 • Tanpa biaya konsultasi &amp; perantara
+              </p>
+            </div>
+          </div>
+
+          <!-- Other Types Teaser Card -->
+          <div class="bg-white rounded-3xl p-6 sm:p-7 border border-gray-100 shadow-sm">
+            <h4 class="font-bold text-[#17201C] text-xl mb-4 font-serif">Pilihan Tipe Rumah Lainnya</h4>
+            <div class="space-y-3">
+              {otherTypes.map((item) => (
+                <a
+                  href={`/tipe-rumah/${item.slug}`}
+                  class="flex items-center gap-4 p-3 rounded-2xl hover:bg-emerald-50/60 border border-transparent hover:border-emerald-100 transition-all group"
+                >
+                  <img
+                    src={item.foto_url}
+                    alt={item.nama_tipe}
+                    class="w-16 h-16 rounded-xl object-cover shrink-0 shadow-sm"
+                  />
+                  <div class="flex-grow min-w-0">
+                    <p class="text-base font-bold text-[#17201C] group-hover:text-[#0E3B2E] transition-colors truncate">
+                      {item.nama_tipe}
+                    </p>
+                    <p class="text-sm font-bold text-[#0E3B2E] mt-0.5">
+                      {formatRupiah(item.harga)}
+                    </p>
+                    <p class="text-xs sm:text-sm text-[#595959] mt-0.5 font-medium">
+                      LB: {item.ukuran_bangunan} m² • LT: {item.ukuran_tanah} m²
+                    </p>
+                  </div>
+                  <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-[#0E3B2E] shrink-0 transition-transform group-hover:translate-x-1" />
+                </a>
+              ))}
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
 
-  <!-- Fixed Floating Sidebar — positioned via JS to align with spacer -->
-  <aside
-    id="detail-sidebar"
-    class="hidden lg:block fixed z-40 top-24 space-y-6 overflow-y-auto pr-0.5"
-    style="width:0"
-  >
-    <!-- Booking & Consultation Card -->
-    <div class="bg-white rounded-3xl p-6 sm:p-8 border border-emerald-900/10 shadow-xl relative overflow-hidden">
-      <div class="absolute top-0 right-0 w-36 h-36 bg-emerald-50 rounded-full blur-3xl -z-10"></div>
-      
-      <h3 class="text-2xl sm:text-3xl font-bold text-[#17201C] font-serif mb-3 leading-snug">
-        Tertarik dengan Unit Ini?
-      </h3>
-      <p class="text-sm sm:text-base text-[#4A5568] mb-6 leading-relaxed">
-        Hubungi Marketing Executive kami untuk mendapatkan e-brosur, pricelist terbaru, simulasi KPR bank, dan jadwalkan survei lokasi.
-      </p>
-
-      <!-- Promo Highlights -->
-      <div class="mb-6 p-4 sm:p-5 bg-emerald-50/80 rounded-2xl border border-emerald-200/70 space-y-3">
-        <div class="flex items-start text-sm sm:text-base font-bold text-[#0E3B2E] gap-2.5">
-          <CheckCircle2 className="w-5 h-5 text-[#0E3B2E] shrink-0 mt-0.5" />
-          <span>Promo DP 0% &amp; Bebas Biaya KPR</span>
-        </div>
-        <div class="flex items-start text-sm sm:text-base font-bold text-[#0E3B2E] gap-2.5">
-          <CheckCircle2 className="w-5 h-5 text-[#0E3B2E] shrink-0 mt-0.5" />
-          <span>Gratis Biaya Surat-Surat (BPHTB, AJB, SHM)</span>
-        </div>
-        <div class="flex items-start text-sm sm:text-base font-bold text-[#0E3B2E] gap-2.5">
-          <CheckCircle2 className="w-5 h-5 text-[#0E3B2E] shrink-0 mt-0.5" />
-          <span>Hadiah Langsung Smart Door Lock</span>
-        </div>
-      </div>
-
-      <!-- Action Buttons -->
-      <div class="space-y-3.5">
-        <a
-          href={waUrl}
-          target="_blank"
-          rel="noopener noreferrer"
-          class="w-full flex items-center justify-center py-4 px-6 bg-[#0E3B2E] hover:bg-[#07241C] text-white font-bold text-base rounded-2xl shadow-lg hover:shadow-xl transition-all hover:scale-[1.01]"
-        >
-          <PhoneCall className="w-5 h-5 mr-2.5" />
-          <span>Konsultasi WhatsApp &amp; Survei</span>
-        </a>
-
-        <a
-          href="/#kontak"
-          class="w-full flex items-center justify-center py-3.5 px-6 bg-emerald-50 hover:bg-emerald-100 text-[#0E3B2E] border border-emerald-200 font-bold text-base rounded-2xl transition-colors"
-        >
-          <MessageSquare className="w-5 h-5 mr-2.5" />
-          <span>Tinggalkan Pesan di Form</span>
-        </a>
-      </div>
-
-      <div class="mt-6 pt-4 border-t border-gray-100 text-center">
-        <p class="text-xs sm:text-sm text-gray-500 font-medium">
-          Respon cepat 24/7 • Tanpa biaya konsultasi &amp; perantara
-        </p>
-      </div>
-    </div>
-
-    <!-- Other Types Teaser Card -->
-    <div class="bg-white rounded-3xl p-6 sm:p-7 border border-gray-100 shadow-sm">
-      <h4 class="font-bold text-[#17201C] text-xl mb-4 font-serif">Pilihan Tipe Rumah Lainnya</h4>
-      <div class="space-y-3">
-        {otherTypes.map((item) => (
-          <a
-            href={`/tipe-rumah/${item.slug}`}
-            class="flex items-center gap-4 p-3 rounded-2xl hover:bg-emerald-50/60 border border-transparent hover:border-emerald-100 transition-all group"
-          >
-            <img
-              src={item.foto_url}
-              alt={item.nama_tipe}
-              class="w-16 h-16 rounded-xl object-cover shrink-0 shadow-sm"
-            />
-            <div class="flex-grow min-w-0">
-              <p class="text-base font-bold text-[#17201C] group-hover:text-[#0E3B2E] transition-colors truncate">
-                {item.nama_tipe}
-              </p>
-              <p class="text-sm font-bold text-[#0E3B2E] mt-0.5">
-                {formatRupiah(item.harga)}
-              </p>
-              <p class="text-xs sm:text-sm text-[#595959] mt-0.5 font-medium">
-                LB: {item.ukuran_bangunan} m² • LT: {item.ukuran_tanah} m²
-              </p>
-            </div>
-            <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-[#0E3B2E] shrink-0 transition-transform group-hover:translate-x-1" />
-          </a>
-        ))}
-      </div>
-    </div>
-  </aside>
-
-  <script>
-    function positionSidebar() {
-      const sidebar = document.getElementById('detail-sidebar');
-      const spacer  = document.getElementById('sidebar-spacer');
-      if (!sidebar || !spacer) return;
-      if (window.innerWidth < 1024) {
-        sidebar.style.display = 'none';
-        return;
-      }
-      const rect = spacer.getBoundingClientRect();
-      sidebar.style.display = 'block';
-      sidebar.style.left    = rect.left + 'px';
-      sidebar.style.width   = rect.width + 'px';
-      sidebar.style.maxHeight = 'calc(100vh - 7rem)';
-    }
-    positionSidebar();
-    window.addEventListener('resize', positionSidebar);
-  </script>
-
   <FloatingWhatsApp client:load />
-  <ChatbotWidget client:load />
 </MainLayout>
