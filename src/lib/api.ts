@@ -280,8 +280,10 @@ export async function getActivePromosiList(): Promise<PromosiItem[]> {
   return fallbackPromosiList;
 }
 
+import { sanitizeText, sanitizePhoneNumber, sanitizeEmail } from './sanitize';
+
 /**
- * Submit contact lead into Supabase
+ * Submit contact lead into Supabase with strict input sanitization
  */
 export async function submitLead(lead: {
   nama: string;
@@ -295,14 +297,31 @@ export async function submitLead(lead: {
     return { success: true };
   }
 
+  // Deep sanitization against XSS & script injection
+  const cleanNama = sanitizeText(lead.nama).slice(0, 100);
+  const cleanNoHp = sanitizePhoneNumber(lead.no_hp).slice(0, 20);
+  const cleanEmail = lead.email ? sanitizeEmail(lead.email) : null;
+  const cleanTipe = lead.tipe_rumah_diminati ? sanitizeText(lead.tipe_rumah_diminati).slice(0, 80) : null;
+  const cleanPesan = sanitizeText(lead.pesan).slice(0, 1000);
+
+  if (cleanNama.length < 3) {
+    return { success: false, error: 'Nama minimal 3 karakter' };
+  }
+  if (cleanNoHp.length < 10) {
+    return { success: false, error: 'Nomor WhatsApp minimal 10 digit' };
+  }
+  if (cleanPesan.length < 5) {
+    return { success: false, error: 'Pesan minimal 5 karakter' };
+  }
+
   try {
     const { error } = await supabase.from('leads').insert([
       {
-        nama: lead.nama.trim(),
-        no_hp: lead.no_hp.trim(),
-        email: lead.email ? lead.email.trim() : null,
-        tipe_rumah_diminati: lead.tipe_rumah_diminati || null,
-        pesan: lead.pesan.trim()
+        nama: cleanNama,
+        no_hp: cleanNoHp,
+        email: cleanEmail,
+        tipe_rumah_diminati: cleanTipe,
+        pesan: cleanPesan
       }
     ]);
 

@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react';
 import { submitLead } from '../../lib/api';
 import { supabase } from '../../lib/supabase';
+import { checkRateLimit, recordSubmission } from '../../lib/rateLimit';
+import { getRecaptchaToken, isRecaptchaConfigured, loadRecaptchaScript } from '../../lib/recaptcha';
+import { sanitizeText } from '../../lib/sanitize';
 
 interface FormErrors {
   nama?: string;
@@ -24,13 +27,22 @@ export default function ContactForm() {
     'Tipe 36/60'
   ]);
 
+  // Anti-bot Security State
   const [honeypot, setHoneypot] = useState('');
+  const [formMountedAt] = useState<number>(Date.now());
+  const [rateLimitError, setRateLimitError] = useState<string | null>(null);
+
   const [errors, setErrors] = useState<FormErrors>({});
   const [touched, setTouched] = useState<Record<string, boolean>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
 
   useEffect(() => {
+    // Preload reCAPTCHA v3 script in background if configured
+    if (isRecaptchaConfigured()) {
+      loadRecaptchaScript();
+    }
+
     const fetchTypes = async () => {
       try {
         const { data, error } = await supabase
@@ -56,9 +68,9 @@ export default function ContactForm() {
         return undefined;
       case 'no_hp':
         if (!value.trim()) return 'Nomor WhatsApp wajib diisi';
-        if (!/^[0-9]+$/.test(value.replace(/\s/g, ''))) return 'Nomor hanya boleh angka';
-        if (value.replace(/\s/g, '').length < 10) return 'Nomor minimal 10 digit';
-        if (value.replace(/\s/g, '').length > 15) return 'Nomor maksimal 15 digit';
+        if (!/^[0-9+]+$/.test(value.replace(/[\s-]/g, ''))) return 'Nomor hanya boleh angka';
+        if (value.replace(/[\s-]/g, '').length < 10) return 'Nomor minimal 10 digit';
+        if (value.replace(/[\s-]/g, '').length > 20) return 'Nomor maksimal 20 digit';
         return undefined;
       case 'email':
         if (value.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
@@ -67,7 +79,7 @@ export default function ContactForm() {
         return undefined;
       case 'pesan':
         if (!value.trim()) return 'Pesan wajib diisi';
-        if (value.trim().length < 10) return 'Pesan minimal 10 karakter';
+        if (value.trim().length < 5) return 'Pesan minimal 5 karakter';
         if (value.trim().length > 500) return 'Pesan maksimal 500 karakter';
         return undefined;
       default:
@@ -93,6 +105,9 @@ export default function ContactForm() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
+    // Clear rate limit message upon user typing
+    if (rateLimitError) setRateLimitError(null);
+
     setFormData(prev => ({ ...prev, [name]: value }));
     if (touched[name]) {
       setErrors(prev => ({ ...prev, [name]: validate(name, value) }));
@@ -113,16 +128,41 @@ export default function ContactForm() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Anti-bot honeypot check: If filled, quietly discard
+    setRateLimitError(null);
+
+    // 1. Anti-bot Honeypot Trap: If filled by automated crawler, silently discard
     if (honeypot.trim().length > 0) {
+      setIsSuccess(true);
       return;
     }
 
+    // 2. Anti-bot Speed Trap: Humans take at least 1.5 seconds to fill the form
+    const duration = Date.now() - formMountedAt;
+    if (duration < 1500) {
+      console.warn('Spam trap triggered: Submission too fast');
+      setIsSuccess(true);
+      return;
+    }
+
+    // 3. Client-side Rate Limit Check
+    const rateStatus = checkRateLimit();
+    if (!rateStatus.allowed) {
+      setRateLimitError(rateStatus.reason || 'Terlalu banyak percobaan. Silakan coba lagi nanti.');
+      return;
+    }
+
+    // 4. Form Validation
     if (!validateAll()) return;
 
     setIsSubmitting(true);
 
     try {
+      // 5. Invisible reCAPTCHA v3 Token
+      if (isRecaptchaConfigured()) {
+        await getRecaptchaToken('submit_lead');
+      }
+
+      // 6. Submit with sanitized payload
       const res = await submitLead({
         nama: formData.nama,
         no_hp: formData.no_hp,
@@ -132,16 +172,20 @@ export default function ContactForm() {
       });
 
       if (res.success) {
+        // Record successful submission in rate limiter
+        recordSubmission();
+
         setIsSuccess(true);
         setFormData({ nama: '', no_hp: '', email: '', tipe_rumah_diminati: '', pesan: '' });
         setErrors({});
         setTouched({});
-        setTimeout(() => setIsSuccess(false), 5000);
+        setTimeout(() => setIsSuccess(false), 7000);
       } else {
         alert(res.error || 'Terjadi kesalahan saat mengirim pesan. Silakan coba lagi.');
       }
     } catch (err) {
       console.error(err);
+      alert('Terjadi kendala jaringan saat mengirim pesan. Silakan coba lagi.');
     } finally {
       setIsSubmitting(false);
     }
@@ -299,6 +343,21 @@ export default function ContactForm() {
           )}
         </button>
 
+        {/* Rate Limit Alert Banner Under Button */}
+        {rateLimitError && (
+          <div className="p-4 bg-amber-50 border-2 border-amber-300 text-amber-900 rounded-2xl flex items-start gap-3.5 shadow-sm animate-fade-in">
+            <div className="w-7 h-7 rounded-full bg-amber-600 text-white flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+            </div>
+            <div className="flex-1">
+              <p className="font-bold text-sm text-amber-900">Perhatian Pengiriman Pesan</p>
+              <p className="text-xs text-amber-800/90 mt-1 leading-relaxed">
+                {rateLimitError}
+              </p>
+            </div>
+          </div>
+        )}
+
         {/* Success Alert Banner Under Button */}
         {isSuccess && (
           <div className="p-4 bg-emerald-50 border-2 border-emerald-300 text-[#0E3B2E] rounded-2xl flex items-start gap-3.5 shadow-sm animate-fade-in">
@@ -313,6 +372,12 @@ export default function ContactForm() {
             </div>
           </div>
         )}
+
+        {/* Security & Privacy Assurance */}
+        <div className="pt-2 text-center flex items-center justify-center gap-1.5 text-[11px] text-gray-400">
+          <svg className="w-3.5 h-3.5 text-emerald-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+          <span>Data privasi Anda terenkripsi aman & terlindungi dari spam.</span>
+        </div>
       </form>
     </div>
   );
