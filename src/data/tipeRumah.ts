@@ -103,7 +103,7 @@ export const daftarTipeRumah: TipeRumah[] = [
     ],
     foto_url: 'https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/image/thumbnail_rumah.webp',
     galeri: [
-      'https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/image/denah_type_45.webp',
+      'https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/image/thumbnail_rumah.webp',
       'https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/image/denh_type_36.webp',
       'https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/image/detail_interior.webp',
       'https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/image/detail_interior.webp'
