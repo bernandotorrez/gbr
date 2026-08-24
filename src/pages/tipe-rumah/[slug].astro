@@ -258,10 +258,10 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
           <!-- Lightbox Overlay -->
           <div
             id="denah-lightbox"
-            class="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-4"
+            class="fixed inset-0 z-[9999] bg-black/90 backdrop-blur-sm flex items-center justify-center opacity-0 pointer-events-none transition-opacity duration-300 p-6 sm:p-10"
             onclick="this.classList.add('opacity-0','pointer-events-none'); this.classList.remove('opacity-100');"
           >
-            <div class="relative max-w-5xl w-full animate-zoom-in" onclick="event.stopPropagation()">
+            <div class="relative max-w-4xl w-full max-h-[90vh] flex flex-col animate-zoom-in" onclick="event.stopPropagation()">
               <!-- Close button -->
               <button
                 onclick="document.getElementById('denah-lightbox').classList.add('opacity-0','pointer-events-none'); document.getElementById('denah-lightbox').classList.remove('opacity-100');"
@@ -273,7 +273,7 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
               <img
                 src={tipe.denah_url}
                 alt={`Denah Arsitektur ${tipe.nama_tipe} - Full Size`}
-                class="w-full h-auto object-contain rounded-2xl shadow-2xl"
+                class="w-full object-contain rounded-2xl shadow-2xl max-h-[78vh]"
               />
               <p class="text-center text-white/60 text-sm mt-3">Klik di luar gambar atau tekan <kbd class="bg-white/20 px-1.5 py-0.5 rounded text-xs font-mono">Esc</kbd> untuk menutup</p>
             </div>
