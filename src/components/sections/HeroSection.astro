@@ -17,15 +17,19 @@ import {
   class="relative md:min-h-screen md:min-h-dvh flex flex-col md:justify-between bg-gray-900 overflow-hidden"
 >
   <!-- Full-bleed Video Tour Background -->
-  <div class="absolute inset-0 z-0 overflow-hidden">
+  <div class="absolute inset-0 z-0 overflow-hidden pointer-events-none">
     <video
+      id="hero-banner-video"
       autoplay
       loop
       muted
       playsinline
+      webkit-playsinline
+      disablepictureinpicture
+      disableremoteplayback
       preload="auto"
       poster="https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/image/banner.webp"
-      class="w-full h-full object-cover object-center"
+      class="w-full h-full object-cover object-center pointer-events-none"
     >
       <source
         src="https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/video/video.mp4"
@@ -39,6 +43,47 @@ import {
     </div>
     <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20"></div>
   </div>
+
+  <!-- Safari iOS / macOS Autoplay Enforcer -->
+  <script is:inline>
+    (function () {
+      const video = document.getElementById("hero-banner-video");
+      if (!video) return;
+
+      video.muted = true;
+      video.defaultMuted = true;
+
+      const tryPlay = () => {
+        const promise = video.play();
+        if (promise !== undefined) {
+          promise.catch(() => {
+            // If Safari blocks initial autoplay due to power/low data mode, play on first user interaction
+            const unlockAutoplay = () => {
+              video.play().catch(() => {});
+              window.removeEventListener("touchstart", unlockAutoplay);
+              window.removeEventListener("scroll", unlockAutoplay);
+              window.removeEventListener("click", unlockAutoplay);
+            };
+            window.addEventListener("touchstart", unlockAutoplay, { passive: true, once: true });
+            window.addEventListener("scroll", unlockAutoplay, { passive: true, once: true });
+            window.addEventListener("click", unlockAutoplay, { passive: true, once: true });
+          });
+        }
+      };
+
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", tryPlay);
+      } else {
+        tryPlay();
+      }
+
+      // Re-trigger play when page becomes visible or loaded
+      window.addEventListener("pageshow", tryPlay);
+      document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") tryPlay();
+      });
+    })();
+  </script>
 
   <!-- Main Hero Content -->
   <div
