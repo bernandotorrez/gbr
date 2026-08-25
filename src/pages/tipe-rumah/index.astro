@@ -1,0 +1,172 @@
+---
+import MainLayout from '../../layouts/MainLayout.astro';
+import { formatRupiah } from '../../data/tipeRumah';
+import { getTipeRumahList } from '../../lib/api';
+import FloatingWhatsApp from '../../components/islands/FloatingWhatsApp';
+import { 
+  Bed, 
+  Bath, 
+  Car, 
+  ArrowRight, 
+  LayoutGrid, 
+  MessageSquare, 
+  ChevronRight,
+  ShieldCheck,
+  CheckCircle2,
+  Sparkles,
+  Home
+} from 'lucide-react';
+
+const daftarTipeRumah = await getTipeRumahList();
+---
+
+<MainLayout 
+  title="Pilihan Tipe Rumah" 
+  description="Daftar lengkap tipe rumah di Grand Bedahan Residence, Depok. Desain modern, lingkungan asri, legalitas SHM, dan bebas banjir."
+>
+  <!-- Breadcrumb -->
+  <div class="bg-[#F5F3EE] border-b border-gray-200/70 py-4">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <nav class="flex items-center text-xs sm:text-sm text-[#595959]" aria-label="Breadcrumb">
+        <a href="/" class="hover:text-[#047857] transition-colors flex items-center gap-1">
+          <Home className="w-3.5 h-3.5" />
+          <span>Beranda</span>
+        </a>
+        <ChevronRight className="w-4 h-4 mx-2 text-gray-400" />
+        <span class="text-[#17201C] font-semibold">Tipe Rumah</span>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Page Header -->
+  <section class="py-12 sm:py-16 bg-[#FAF9F6] border-b border-gray-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center max-w-3xl mx-auto">
+        <div class="inline-flex items-center px-3.5 py-1 rounded-full bg-emerald-50 text-[#047857] text-xs font-semibold uppercase tracking-wider mb-3 border border-emerald-200">
+          <LayoutGrid className="w-3.5 h-3.5 mr-1.5" />
+          Katalog Unit Hunian
+        </div>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#17201C] font-serif tracking-tight">
+          Pilihan Tipe Rumah Terbaik
+        </h1>
+        <p class="mt-4 text-base sm:text-lg text-[#34413B] leading-relaxed">
+          Temukan pilihan unit rumah modern berkonsep tropis asri di Sawangan, Depok. Dirancang dengan spesifikasi material berkualitas dan penataan ruang yang fungsional untuk kenyamanan keluarga Anda.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Units List Section -->
+  <section class="py-12 sm:py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 max-w-5xl mx-auto">
+        {daftarTipeRumah.map((tipe) => {
+          const waText = encodeURIComponent(
+            `Halo Marketing Grand Bedahan Residence, saya tertarik dengan ${tipe.nama_tipe}. Boleh minta info promo, pricelist, dan jadwal survei lokasi?`
+          );
+          const waUrl = `https://wa.me/6281215776218?text=${waText}`;
+
+          return (
+            <div class="bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col group">
+              <!-- Card Image with Pill Badge -->
+              <div class="relative h-64 sm:h-76 overflow-hidden">
+                <img 
+                  src={tipe.foto_url} 
+                  alt={tipe.nama_tipe} 
+                  class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                />
+                <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-bold text-[#17201C] shadow-md">
+                  {tipe.nama_tipe}
+                </div>
+                <div class="absolute bottom-4 left-4 bg-[#0E3B2E]/90 backdrop-blur-sm px-3.5 py-1 rounded-full text-xs font-semibold text-[#E5C695] border border-[#1C6B53]">
+                  ✨ Siap Huni & Indent
+                </div>
+              </div>
+              
+              <!-- Card Body -->
+              <div class="p-6 sm:p-8 flex flex-col flex-grow">
+                <h2 class="text-2xl sm:text-3xl font-bold text-[#17201C] font-serif mb-1 group-hover:text-[#0E3B2E] transition-colors">
+                  {tipe.nama_tipe}
+                </h2>
+                <p class="text-2xl sm:text-3xl font-bold text-[#0E3B2E] mb-2 font-sans">
+                  {formatRupiah(tipe.harga)}
+                </p>
+                <p class="text-xs sm:text-sm text-[#595959] mb-4">
+                  Luas Tanah: <span class="font-bold text-[#17201C]">{tipe.ukuran_tanah} m²</span> • Luas Bangunan: <span class="font-bold text-[#17201C]">{tipe.ukuran_bangunan} m²</span>
+                </p>
+                
+                <p class="text-sm text-[#4A5568] mb-6 leading-relaxed line-clamp-2">
+                  {tipe.deskripsi}
+                </p>
+
+                <!-- Specs Row (Bed, Bath, Carport) -->
+                <div class="flex items-center justify-between text-sm text-[#4A5568] py-3.5 border-y border-gray-100 mb-6 font-semibold bg-[#FAF9F6] px-4 rounded-xl">
+                  <div class="flex items-center gap-1.5">
+                    <Bed className="w-4.5 h-4.5 text-[#047857]" />
+                    <span>{tipe.jumlah_kamar_tidur} K. Tidur</span>
+                  </div>
+                  <div class="flex items-center gap-1.5">
+                    <Bath className="w-4.5 h-4.5 text-[#047857]" />
+                    <span>{tipe.jumlah_kamar_mandi} K. Mandi</span>
+                  </div>
+                  <div class="flex items-center gap-1.5">
+                    <Car className="w-4.5 h-4.5 text-[#047857]" />
+                    <span>{tipe.jumlah_carport} Carport</span>
+                  </div>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="mt-auto space-y-3">
+                  <a 
+                    href={`/tipe-rumah/${tipe.slug}`}
+                    class="w-full flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-xl font-bold text-base text-white bg-[#0E3B2E] hover:bg-[#07241C] shadow-md hover:shadow-lg transition-all"
+                  >
+                    <span>Lihat Detail Lengkap</span>
+                    <ArrowRight className="w-5 h-5" />
+                  </a>
+
+                  <a 
+                    href={waUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="w-full flex items-center justify-center gap-2 px-6 py-3 rounded-xl font-bold text-base text-[#0E3B2E] bg-emerald-50 hover:bg-emerald-100/90 border border-emerald-200 transition-all shadow-xs"
+                  >
+                    <MessageSquare className="w-4.5 h-4.5 text-[#0E3B2E]" />
+                    <span>Konsultasi / Survey Lokasi</span>
+                  </a>
+                </div>
+
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      <!-- Trust & Facilities Callout -->
+      <div class="mt-16 max-w-5xl mx-auto bg-[#07241C] rounded-2xl p-8 sm:p-10 text-white shadow-xl relative overflow-hidden">
+        <div class="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
+          <div class="space-y-2 text-center md:text-left">
+            <h3 class="text-2xl sm:text-3xl font-serif font-bold text-white">
+              Butuh Brosur & Pricelist Lengkap?
+            </h3>
+            <p class="text-emerald-100/90 text-sm sm:text-base max-w-xl">
+              Tim sales konsultan kami siap membantu simulasi KPR, ketersediaan unit, dan promo diskon spesial minggu ini.
+            </p>
+          </div>
+          <a
+            href="https://wa.me/6281215776218?text=Halo%20Marketing%20Grand%20Bedahan%20Residence,%20boleh%20minta%20e-brochure%20dan%20pricelist%20terbaru?"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="bg-[#E5C695] hover:bg-[#d8b47e] text-[#07241C] px-8 py-3.5 rounded-full font-bold text-base transition-all shadow-lg hover:shadow-xl hover:scale-105 active:scale-95 whitespace-nowrap shrink-0 flex items-center gap-2"
+          >
+            <MessageSquare className="w-5 h-5" />
+            <span>Chat WhatsApp Sekarang</span>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <FloatingWhatsApp client:load />
+</MainLayout>
