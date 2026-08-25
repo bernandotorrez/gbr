@@ -11,7 +11,8 @@ import {
   ShieldCheck,
   Menu,
   X,
-  Loader2
+  Loader2,
+  BarChart3
 } from 'lucide-react';
 
 interface AdminLayoutProps {
@@ -60,6 +61,7 @@ export default function AdminLayout({
 
   const navItems = [
     { label: 'Dashboard', href: '/admin', icon: LayoutDashboard },
+    { label: 'Analitik Pengunjung', href: '/admin/analitik', icon: BarChart3 },
     { label: 'Tipe Rumah', href: '/admin/tipe-rumah', icon: Home },
     { label: 'Promosi', href: '/admin/promosi', icon: Tag },
     { label: 'Artikel & Berita', href: '/admin/artikel', icon: FileText },

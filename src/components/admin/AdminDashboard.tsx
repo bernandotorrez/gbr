@@ -9,7 +9,9 @@ import {
   MessageSquare,
   Clock,
   PhoneCall,
-  Loader2
+  Loader2,
+  TrendingUp,
+  BarChart3
 } from 'lucide-react';
 
 export default function AdminDashboard() {
@@ -157,8 +159,15 @@ export default function AdminDashboard() {
         </div>
         <div className="flex flex-wrap items-center gap-3">
           <a
+            href="/admin/analitik"
+            className="px-5 py-2.5 bg-[#E5C695] text-[#0B2E24] hover:bg-[#edd8b6] text-xs font-bold rounded-xl transition-all shadow-md flex items-center gap-1.5"
+          >
+            <TrendingUp className="w-4 h-4" />
+            <span>Lihat Analitik Pengunjung</span>
+          </a>
+          <a
             href="/admin/tipe-rumah"
-            className="px-5 py-2.5 bg-white text-[#0B2E24] hover:bg-[#E5C695] text-xs font-bold rounded-xl transition-all shadow-md"
+            className="px-5 py-2.5 bg-white text-[#0B2E24] hover:bg-gray-100 text-xs font-bold rounded-xl transition-all shadow-md"
           >
             + Tambah Tipe Rumah
           </a>
@@ -175,6 +184,29 @@ export default function AdminDashboard() {
             + Tulis Artikel
           </a>
         </div>
+      </div>
+
+      {/* Analytics Quick Banner Card */}
+      <div className="bg-white rounded-3xl p-6 sm:p-7 border border-emerald-900/10 shadow-sm flex flex-col md:flex-row items-center justify-between gap-6">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-2xl bg-emerald-50 text-[#0E3B2E] border border-emerald-100 flex items-center justify-center shrink-0">
+            <TrendingUp className="w-6 h-6" />
+          </div>
+          <div>
+            <h4 className="text-lg font-bold text-[#17201C] font-serif">Analitik & Statistik Trafik Pengunjung</h4>
+            <p className="text-xs sm:text-sm text-gray-500 mt-0.5">
+              Pantau volume kunjungan harian, distribusi perangkat (Mobile / Desktop), tren klik WhatsApp marketing, dan penggunaan kalkulator KPR.
+            </p>
+          </div>
+        </div>
+
+        <a
+          href="/admin/analitik"
+          className="inline-flex items-center gap-2 px-5 py-3 rounded-xl bg-[#0E3B2E] hover:bg-[#07241C] text-white text-xs sm:text-sm font-bold shadow-md transition-all whitespace-nowrap shrink-0 group"
+        >
+          <span>Buka Dashboard Analitik</span>
+          <ArrowUpRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        </a>
       </div>
 
       {/* Recent Leads Table */}

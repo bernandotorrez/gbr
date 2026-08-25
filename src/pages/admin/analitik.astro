@@ -1,0 +1,29 @@
+---
+import AdminLayout from '../../components/admin/AdminLayout';
+import AdminAnalitik from '../../components/admin/AdminAnalitik';
+import '../../styles/global.css';
+---
+
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <title>Analitik & Statistik Pengunjung | Grand Bedahan Residence Admin</title>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico?v=2" />
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+  </head>
+  <body>
+    <AdminLayout 
+      client:only="react" 
+      currentPath="/admin/analitik" 
+      title="Analitik & Statistik Pengunjung" 
+      subtitle="Dashboard performa trafik, demografi perangkat, konversi simulasi KPR, dan klik WhatsApp."
+    >
+      <AdminAnalitik client:only="react" />
+    </AdminLayout>
+  </body>
+</html>

@@ -88,6 +88,24 @@ export interface Database {
         };
         Update: Partial<Database['public']['Tables']['leads']['Insert']>;
       };
+      page_views: {
+        Row: {
+          id: string;
+          path: string;
+          referrer: string | null;
+          device_type: 'mobile' | 'desktop' | 'tablet';
+          browser: string | null;
+          event_type: 'pageview' | 'whatsapp_click' | 'kpr_simulasi' | 'maps_click' | 'lead_form';
+          event_data: Record<string, any> | null;
+          session_id: string | null;
+          created_at: string;
+        };
+        Insert: Omit<Database['public']['Tables']['page_views']['Row'], 'id' | 'created_at'> & {
+          id?: string;
+          created_at?: string;
+        };
+        Update: Partial<Database['public']['Tables']['page_views']['Insert']>;
+      };
     };
   };
 }

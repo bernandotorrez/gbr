@@ -183,10 +183,28 @@ export default function KprCalculator({ hargaRumah, tipeNama }: KprCalculatorPro
             href={waUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl font-bold text-sm sm:text-base text-[#07241C] bg-[#E5C695] hover:bg-[#edd8b6] transition-all shadow-md hover:shadow-lg mt-2"
+            onClick={() => {
+              if (typeof window !== 'undefined') {
+                window.dispatchEvent(
+                  new CustomEvent('gbr:analytics', {
+                    detail: {
+                      eventType: 'kpr_simulasi',
+                      data: {
+                        tipe_rumah: tipeNama,
+                        harga: hargaRumah,
+                        dp_persen: dpPercent,
+                        tenor_tahun: tenorTahun,
+                        estimasi_cicilan: cicilanBulanan
+                      }
+                    }
+                  })
+                );
+              }
+            }}
+            className="w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl font-bold text-sm sm:text-base text-[#07241C] bg-[#E5C695] hover:bg-[#edd8b6] transition-all shadow-md hover:shadow-lg mt-2 cursor-pointer"
           >
             <PhoneCall className="w-4 h-4 text-[#07241C]" />
-            <span>Ajukan KPR & Konsultasi</span>
+            <span>Ajukan KPR &amp; Konsultasi</span>
           </a>
         </div>
       </div>
