@@ -2,6 +2,7 @@
 import '../styles/global.css';
 import Navbar from '../components/Navbar.astro';
 import Footer from '../components/Footer.astro';
+import Analytics from '@vercel/analytics/astro';
 
 interface Props {
   title: string;
@@ -28,6 +29,9 @@ const {
     <meta name="theme-color" content="#047857" />
     <!-- generator meta dihapus untuk mencegah version disclosure -->
     <title>{title} | Grand Bedahan Residence</title>
+    
+    <!-- Vercel Web Analytics -->
+    <Analytics />
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
