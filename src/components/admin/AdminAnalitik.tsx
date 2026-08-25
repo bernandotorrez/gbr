@@ -23,7 +23,8 @@ import {
   ArrowUpRight,
   ShieldCheck,
   CheckCircle2,
-  Activity
+  Activity,
+  ChevronDown
 } from 'lucide-react';
 
 interface ChartPoint {
@@ -65,6 +66,7 @@ export default function AdminAnalitik() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [hoveredPoint, setHoveredPoint] = useState<ChartPoint | null>(null);
+  const [activityLimit, setActivityLimit] = useState(20);
 
   const fetchStats = async (selectedRange: string) => {
     setLoading(true);
@@ -82,6 +84,7 @@ export default function AdminAnalitik() {
   };
 
   useEffect(() => {
+    setActivityLimit(20);
     fetchStats(range);
   }, [range]);
 
@@ -531,38 +534,59 @@ export default function AdminAnalitik() {
         </div>
 
         {/* Real-time Activity Stream (5 cols) */}
-        <div className="lg:col-span-5 bg-white p-6 sm:p-7 rounded-3xl border border-gray-100 shadow-sm space-y-5">
+        <div className="lg:col-span-5 bg-white p-6 sm:p-7 rounded-3xl border border-gray-100 shadow-sm space-y-4 flex flex-col">
           <div className="flex items-center justify-between pb-3 border-b border-gray-100">
             <div className="flex items-center gap-2">
               <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
               <h3 className="text-lg font-bold text-[#17201C] font-serif">Aktivitas Pengunjung Terkini</h3>
             </div>
-            <span className="text-xs text-gray-400 font-medium">Live Feed</span>
+            <span className="text-xs text-gray-400 font-medium">
+              {data?.recentActivities?.length ? `${Math.min(activityLimit, data.recentActivities.length)} dari ${data.recentActivities.length}` : 'Live Feed'}
+            </span>
           </div>
 
-          <div className="space-y-3">
-            {data?.recentActivities.map((act, idx) => (
-              <div
-                key={idx}
-                className="p-3 rounded-2xl bg-[#FAF9F6] border border-gray-100 space-y-1.5"
-              >
-                <div className="flex items-center justify-between text-xs">
-                  <span className="font-bold text-[#0E3B2E]">{act.title}</span>
-                  <span className="text-gray-400 text-[10px] flex items-center gap-1">
-                    <Clock className="w-2.5 h-2.5" />
-                    {act.time}
-                  </span>
+          <div className="space-y-3 max-h-[520px] overflow-y-auto pr-1">
+            {data?.recentActivities && data.recentActivities.length > 0 ? (
+              data.recentActivities.slice(0, activityLimit).map((act, idx) => (
+                <div
+                  key={idx}
+                  className="p-3 rounded-2xl bg-[#FAF9F6] border border-gray-100 space-y-1.5 hover:border-emerald-200 transition-colors"
+                >
+                  <div className="flex items-center justify-between text-xs">
+                    <span className="font-bold text-[#0E3B2E]">{act.title}</span>
+                    <span className="text-gray-400 text-[10px] flex items-center gap-1">
+                      <Clock className="w-2.5 h-2.5" />
+                      {act.time}
+                    </span>
+                  </div>
+                  <p className="text-[11px] font-semibold text-gray-700 bg-white p-1.5 rounded-lg border border-gray-100">
+                    ⚡ {act.eventText}
+                  </p>
+                  <div className="flex items-center justify-between text-[10px] text-gray-400 pt-0.5">
+                    <span>{act.device}</span>
+                    <span>📍 {act.location}</span>
+                  </div>
                 </div>
-                <p className="text-[11px] font-semibold text-gray-700 bg-white p-1.5 rounded-lg border border-gray-100">
-                  ⚡ {act.eventText}
-                </p>
-                <div className="flex items-center justify-between text-[10px] text-gray-400 pt-0.5">
-                  <span>{act.device}</span>
-                  <span>📍 {act.location}</span>
-                </div>
+              ))
+            ) : (
+              <div className="py-12 text-center text-xs text-gray-400">
+                Belum ada aktivitas tercatat
               </div>
-            ))}
+            )}
           </div>
+
+          {data?.recentActivities && data.recentActivities.length > activityLimit && (
+            <div className="pt-2 border-t border-gray-100">
+              <button
+                type="button"
+                onClick={() => setActivityLimit((prev) => prev + 20)}
+                className="w-full py-2.5 px-4 bg-emerald-50 hover:bg-emerald-100/80 text-[#0E3B2E] text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer border border-emerald-200/60 shadow-xs active:scale-[0.99]"
+              >
+                <ChevronDown className="w-4 h-4" />
+                <span>Muat Lebih Banyak (+20 data)</span>
+              </button>
+            </div>
+          )}
         </div>
       </div>
     </div>

@@ -172,7 +172,7 @@ export const GET: APIRoute = async ({ url }) => {
       }));
 
     // 6. Real Recent Live Activities
-    const recentActivities = allEvents.slice(0, 10).map((ev) => {
+    const recentActivities = allEvents.slice(0, 200).map((ev) => {
       let eventText = 'Membuka Halaman';
       if (ev.event_type === 'whatsapp_click') {
         eventText = `Klik WhatsApp (${ev.event_data?.button_text || 'Konsultasi'})`;
