@@ -1,4 +1,4 @@
-import React, { useState, useId } from 'react';
+import React, { useState, useId, useEffect, useRef } from 'react';
 import { Calculator, CheckCircle2, PhoneCall, HelpCircle } from 'lucide-react';
 
 interface KprCalculatorProps {
@@ -10,6 +10,7 @@ export default function KprCalculator({ hargaRumah, tipeNama }: KprCalculatorPro
   const [dpPercent, setDpPercent] = useState<number>(0);
   const [tenorTahun, setTenorTahun] = useState<number>(20);
   const [bungaPercent, setBungaPercent] = useState<number>(5.5);
+  const isFirstRender = useRef(true);
 
   const dpNominalInputId = useId();
   const tenorInputId = useId();
@@ -25,6 +26,51 @@ export default function KprCalculator({ hargaRumah, tipeNama }: KprCalculatorPro
   const cicilanBulanan = bulan > 0 && bungaBulanan > 0
     ? Math.round((pokokPinjaman * bungaBulanan) / (1 - Math.pow(1 + bungaBulanan, -bulan)))
     : 0;
+
+  const trackKprSimulation = (source: string = 'parameter_change') => {
+    try {
+      if (typeof window === 'undefined') return;
+      const isMobile = window.innerWidth < 768;
+      const isTablet = window.innerWidth >= 768 && window.innerWidth < 1024;
+      const payload = {
+        path: window.location.pathname,
+        referrer: document.referrer || '',
+        device_type: isTablet ? 'tablet' : isMobile ? 'mobile' : 'desktop',
+        browser: 'Browser',
+        event_type: 'kpr_simulasi',
+        event_data: {
+          tipe_rumah: tipeNama,
+          harga: hargaRumah,
+          dp_persen: dpPercent,
+          dp_nominal: dpNominal,
+          tenor_tahun: tenorTahun,
+          bunga_persen: bungaPercent,
+          estimasi_cicilan: cicilanBulanan,
+          source
+        },
+        session_id: sessionStorage.getItem('gbr_session_id') || 'sess_' + Math.random().toString(36).substring(2, 9)
+      };
+
+      fetch('/api/analytics/track', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        keepalive: true
+      }).catch(() => {});
+    } catch {}
+  };
+
+  // Debounced auto-track when user changes DP, Tenor, or Interest
+  useEffect(() => {
+    if (isFirstRender.current) {
+      isFirstRender.current = false;
+      return;
+    }
+    const timer = setTimeout(() => {
+      trackKprSimulation('calculator_adjustment');
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [dpPercent, tenorTahun, bungaPercent]);
 
   const formatRupiah = (num: number) => {
     return new Intl.NumberFormat('id-ID', {
@@ -184,22 +230,7 @@ export default function KprCalculator({ hargaRumah, tipeNama }: KprCalculatorPro
             target="_blank"
             rel="noopener noreferrer"
             onClick={() => {
-              if (typeof window !== 'undefined') {
-                window.dispatchEvent(
-                  new CustomEvent('gbr:analytics', {
-                    detail: {
-                      eventType: 'kpr_simulasi',
-                      data: {
-                        tipe_rumah: tipeNama,
-                        harga: hargaRumah,
-                        dp_persen: dpPercent,
-                        tenor_tahun: tenorTahun,
-                        estimasi_cicilan: cicilanBulanan
-                      }
-                    }
-                  })
-                );
-              }
+              trackKprSimulation('button_ajukan_kpr_click');
             }}
             className="w-full flex items-center justify-center gap-2 py-3.5 px-4 rounded-xl font-bold text-sm sm:text-base text-[#07241C] bg-[#E5C695] hover:bg-[#edd8b6] transition-all shadow-md hover:shadow-lg mt-2 cursor-pointer"
           >

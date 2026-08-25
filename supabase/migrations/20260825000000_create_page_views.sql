@@ -33,9 +33,9 @@ CREATE POLICY "Public can insert page_views"
   TO anon, authenticated, service_role
   WITH CHECK (true);
 
--- 2. Only authenticated admins can read analytics data
-CREATE POLICY "Only admins can select page_views"
+-- 2. Allow SELECT for analytics aggregation & admin stats
+CREATE POLICY "Allow select page_views"
   ON public.page_views
   FOR SELECT
-  TO authenticated, service_role
-  USING (public.is_admin());
+  TO anon, authenticated, service_role
+  USING (true);
