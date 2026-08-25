@@ -24,9 +24,14 @@ import {
       loop
       muted
       playsinline
-      webkit-playsinline
-      disablepictureinpicture
-      disableremoteplayback
+      webkit-playsinline="true"
+      x5-playsinline="true"
+      x5-video-player-type="h5"
+      x5-video-player-fullscreen="false"
+      x-webkit-airplay="allow"
+      disablepictureinpicture="true"
+      disableremoteplayback="true"
+      controlslist="nodownload nofullscreen noremoteplayback"
       preload="auto"
       poster="https://xlbxjeieoznucclltjco.supabase.co/storage/v1/object/public/image/banner.webp"
       class="w-full h-full object-cover object-center pointer-events-none"
@@ -44,44 +49,86 @@ import {
     <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-black/20"></div>
   </div>
 
-  <!-- Safari iOS / macOS Autoplay Enforcer -->
+  <!-- Universal Cross-Browser Autoplay Engine (Safari, Chrome, Firefox, Edge, Samsung Internet, WebViews) -->
   <script is:inline>
     (function () {
       const video = document.getElementById("hero-banner-video");
       if (!video) return;
 
+      // Force absolute mute & inline attributes across all browser engines
       video.muted = true;
       video.defaultMuted = true;
+      video.volume = 0;
+      video.playsInline = true;
 
-      const tryPlay = () => {
-        const promise = video.play();
-        if (promise !== undefined) {
-          promise.catch(() => {
-            // If Safari blocks initial autoplay due to power/low data mode, play on first user interaction
-            const unlockAutoplay = () => {
+      const executePlay = () => {
+        if (!video.paused) return;
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+          playPromise.catch(() => {
+            // Browser blocked zero-gesture autoplay (e.g. Low Power Mode / battery saver)
+            // Trigger seamless unlock on the very first user interaction anywhere on the screen
+            const interactionEvents = [
+              "touchstart",
+              "touchend",
+              "pointerdown",
+              "mousedown",
+              "scroll",
+              "wheel",
+              "keydown"
+            ];
+            const unlockHandler = () => {
+              video.muted = true;
               video.play().catch(() => {});
-              window.removeEventListener("touchstart", unlockAutoplay);
-              window.removeEventListener("scroll", unlockAutoplay);
-              window.removeEventListener("click", unlockAutoplay);
+              interactionEvents.forEach((evt) => {
+                window.removeEventListener(evt, unlockHandler, { capture: true });
+                document.removeEventListener(evt, unlockHandler, { capture: true });
+              });
             };
-            window.addEventListener("touchstart", unlockAutoplay, { passive: true, once: true });
-            window.addEventListener("scroll", unlockAutoplay, { passive: true, once: true });
-            window.addEventListener("click", unlockAutoplay, { passive: true, once: true });
+
+            interactionEvents.forEach((evt) => {
+              window.addEventListener(evt, unlockHandler, { passive: true, once: true, capture: true });
+              document.addEventListener(evt, unlockHandler, { passive: true, once: true, capture: true });
+            });
           });
         }
       };
 
-      if (document.readyState === "loading") {
-        document.addEventListener("DOMContentLoaded", tryPlay);
-      } else {
-        tryPlay();
-      }
+      // 1. Trigger immediately
+      executePlay();
 
-      // Re-trigger play when page becomes visible or loaded
-      window.addEventListener("pageshow", tryPlay);
+      // 2. Trigger on DOM Ready & Window Load
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", executePlay);
+      }
+      window.addEventListener("load", executePlay);
+
+      // 3. Trigger on video lifecycle load events
+      video.addEventListener("loadedmetadata", executePlay);
+      video.addEventListener("loadeddata", executePlay);
+      video.addEventListener("canplay", executePlay);
+      video.addEventListener("canplaythrough", executePlay);
+
+      // 4. Resume on Tab Switching / Page Visibility
+      window.addEventListener("pageshow", executePlay);
       document.addEventListener("visibilitychange", () => {
-        if (document.visibilityState === "visible") tryPlay();
+        if (document.visibilityState === "visible") executePlay();
       });
+
+      // 5. Intersection Observer: ensure playback when hero section is on screen
+      if ("IntersectionObserver" in window) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting && video.paused) {
+                executePlay();
+              }
+            });
+          },
+          { threshold: 0.1 }
+        );
+        observer.observe(video);
+      }
     })();
   </script>
 
