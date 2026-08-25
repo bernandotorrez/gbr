@@ -26,6 +26,11 @@ CREATE INDEX IF NOT EXISTS idx_page_views_session_id ON public.page_views (sessi
 -- Enable RLS
 ALTER TABLE public.page_views ENABLE ROW LEVEL SECURITY;
 
+-- Drop existing policies if any to prevent 42710 duplicate policy errors
+DROP POLICY IF EXISTS "Public can insert page_views" ON public.page_views;
+DROP POLICY IF EXISTS "Only admins can select page_views" ON public.page_views;
+DROP POLICY IF EXISTS "Allow select page_views" ON public.page_views;
+
 -- 1. Anyone (public anon) can insert tracking events
 CREATE POLICY "Public can insert page_views"
   ON public.page_views
