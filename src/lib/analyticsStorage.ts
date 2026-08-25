@@ -89,3 +89,105 @@ export const getRealAnalyticsEvents = async (daysLimit: number = 30): Promise<An
   // Fallback to local memory events filtered by date
   return inMemoryEvents.filter((e) => e.created_at >= startIso);
 };
+
+export interface ActivityItem {
+  path: string;
+  title: string;
+  device: string;
+  time: string;
+  location: string;
+  event: string;
+  eventText: string;
+}
+
+export const pageTitleMap: Record<string, string> = {
+  '/': 'Beranda (Landing Page)',
+  '/tipe-rumah': 'Katalog Semua Tipe Rumah',
+  '/tipe-rumah/tipe-36-72': 'Detail Unit Tipe 36/72',
+  '/tipe-rumah/tipe-45-72': 'Detail Unit Tipe 45/72',
+  '/artikel': 'Pusat Artikel & Berita Properti'
+};
+
+export const formatActivityEvent = (ev: AnalyticsEvent): ActivityItem => {
+  let eventText = 'Membuka Halaman';
+  if (ev.event_type === 'whatsapp_click') {
+    eventText = `Klik WhatsApp (${ev.event_data?.button_text || 'Konsultasi'})`;
+  } else if (ev.event_type === 'kpr_simulasi') {
+    eventText = `Simulasi KPR (${ev.event_data?.tipe_rumah || 'Unit'}, DP: ${ev.event_data?.dp_persen || 0}%)`;
+  } else if (ev.event_type === 'maps_click') {
+    eventText = 'Membuka Petunjuk Arah Google Maps';
+  } else if (ev.event_type === 'session_duration') {
+    eventText = `Sesi Aktif (${ev.event_data?.duration_seconds || 0} detik)`;
+  }
+
+  const diffSec = Math.max(1, Math.round((Date.now() - new Date(ev.created_at).getTime()) / 1000));
+  let timeStr = 'Baru saja';
+  if (diffSec >= 3600) timeStr = `${Math.floor(diffSec / 3600)} jam lalu`;
+  else if (diffSec >= 60) timeStr = `${Math.floor(diffSec / 60)} menit lalu`;
+  else timeStr = `${diffSec} detik lalu`;
+
+  return {
+    path: ev.path,
+    title: pageTitleMap[ev.path] || ev.path,
+    device: `${ev.device_type === 'mobile' ? 'Mobile' : ev.device_type === 'tablet' ? 'Tablet' : 'Desktop'} (${ev.os || 'OS'} ${ev.browser || 'Browser'})`,
+    time: timeStr,
+    location: 'Pengunjung Web',
+    event: ev.event_type,
+    eventText
+  };
+};
+
+export const getPaginatedActivities = async (
+  daysLimit: number = 30,
+  page: number = 1,
+  limit: number = 20
+): Promise<{
+  activities: ActivityItem[];
+  total: number;
+  page: number;
+  limit: number;
+  hasMore: boolean;
+}> => {
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - daysLimit);
+  const startIso = startDate.toISOString();
+  const offset = (page - 1) * limit;
+
+  // Try reading from Supabase first
+  if (isSupabaseConfigured()) {
+    try {
+      const { data, count, error } = await supabase
+        .from('page_views')
+        .select('*', { count: 'exact' })
+        .gte('created_at', startIso)
+        .order('created_at', { ascending: false })
+        .range(offset, offset + limit - 1);
+
+      if (!error && data) {
+        const total = count ?? data.length;
+        return {
+          activities: data.map(formatActivityEvent),
+          total,
+          page,
+          limit,
+          hasMore: offset + limit < total
+        };
+      }
+    } catch (err) {
+      // Fallback to local memory events
+    }
+  }
+
+  // Fallback to local memory events
+  const filtered = inMemoryEvents.filter((e) => e.created_at >= startIso);
+  const total = filtered.length;
+  const sliced = filtered.slice(offset, offset + limit);
+
+  return {
+    activities: sliced.map(formatActivityEvent),
+    total,
+    page,
+    limit,
+    hasMore: offset + limit < total
+  };
+};

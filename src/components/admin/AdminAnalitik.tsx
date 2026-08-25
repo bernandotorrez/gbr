@@ -36,6 +36,16 @@ interface ChartPoint {
   kpr: number;
 }
 
+interface ActivityItem {
+  path: string;
+  title: string;
+  device: string;
+  time: string;
+  location: string;
+  event: string;
+  eventText: string;
+}
+
 interface AnalyticsData {
   summary: {
     totalViews: number;
@@ -49,15 +59,9 @@ interface AnalyticsData {
   devices: { name: string; percentage: number; count: number; color: string }[];
   sources: { source: string; percentage: number; count: number; icon: string }[];
   topPages: { path: string; title: string; views: number; percentage: number }[];
-  recentActivities: {
-    path: string;
-    title: string;
-    device: string;
-    time: string;
-    location: string;
-    event: string;
-    eventText: string;
-  }[];
+  recentActivities: ActivityItem[];
+  totalActivities?: number;
+  hasMoreActivities?: boolean;
 }
 
 export default function AdminAnalitik() {
@@ -66,7 +70,13 @@ export default function AdminAnalitik() {
   const [data, setData] = useState<AnalyticsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [hoveredPoint, setHoveredPoint] = useState<ChartPoint | null>(null);
-  const [activityLimit, setActivityLimit] = useState(20);
+
+  // Paginated activities state
+  const [activities, setActivities] = useState<ActivityItem[]>([]);
+  const [activityPage, setActivityPage] = useState(1);
+  const [hasMoreActivities, setHasMoreActivities] = useState(false);
+  const [totalActivities, setTotalActivities] = useState(0);
+  const [loadingMoreActivities, setLoadingMoreActivities] = useState(false);
 
   const fetchStats = async (selectedRange: string) => {
     setLoading(true);
@@ -75,6 +85,10 @@ export default function AdminAnalitik() {
       const json = await res.json();
       if (json.success) {
         setData(json);
+        setActivities(json.recentActivities || []);
+        setActivityPage(1);
+        setTotalActivities(json.totalActivities || (json.recentActivities?.length || 0));
+        setHasMoreActivities(!!json.hasMoreActivities);
       }
     } catch (err) {
       console.error('Error fetching analytics stats:', err);
@@ -83,8 +97,27 @@ export default function AdminAnalitik() {
     }
   };
 
+  const handleLoadMoreActivities = async () => {
+    if (loadingMoreActivities || !hasMoreActivities) return;
+    setLoadingMoreActivities(true);
+    try {
+      const nextPage = activityPage + 1;
+      const res = await fetch(`/api/analytics/activities?range=${range}&page=${nextPage}&limit=20`);
+      const json = await res.json();
+      if (json.success && json.activities) {
+        setActivities((prev) => [...prev, ...json.activities]);
+        setActivityPage(nextPage);
+        setHasMoreActivities(json.hasMore);
+        setTotalActivities(json.total);
+      }
+    } catch (err) {
+      console.error('Error loading more activities:', err);
+    } finally {
+      setLoadingMoreActivities(false);
+    }
+  };
+
   useEffect(() => {
-    setActivityLimit(20);
     fetchStats(range);
   }, [range]);
 
@@ -541,13 +574,13 @@ export default function AdminAnalitik() {
               <h3 className="text-lg font-bold text-[#17201C] font-serif">Aktivitas Pengunjung Terkini</h3>
             </div>
             <span className="text-xs text-gray-400 font-medium">
-              {data?.recentActivities?.length ? `${Math.min(activityLimit, data.recentActivities.length)} dari ${data.recentActivities.length}` : 'Live Feed'}
+              {totalActivities > 0 ? `${activities.length} dari ${totalActivities}` : 'Live Feed'}
             </span>
           </div>
 
           <div className="space-y-3 max-h-[520px] overflow-y-auto pr-1">
-            {data?.recentActivities && data.recentActivities.length > 0 ? (
-              data.recentActivities.slice(0, activityLimit).map((act, idx) => (
+            {activities && activities.length > 0 ? (
+              activities.map((act, idx) => (
                 <div
                   key={idx}
                   className="p-3 rounded-2xl bg-[#FAF9F6] border border-gray-100 space-y-1.5 hover:border-emerald-200 transition-colors"
@@ -575,15 +608,25 @@ export default function AdminAnalitik() {
             )}
           </div>
 
-          {data?.recentActivities && data.recentActivities.length > activityLimit && (
+          {hasMoreActivities && (
             <div className="pt-2 border-t border-gray-100">
               <button
                 type="button"
-                onClick={() => setActivityLimit((prev) => prev + 20)}
-                className="w-full py-2.5 px-4 bg-emerald-50 hover:bg-emerald-100/80 text-[#0E3B2E] text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1.5 cursor-pointer border border-emerald-200/60 shadow-xs active:scale-[0.99]"
+                onClick={handleLoadMoreActivities}
+                disabled={loadingMoreActivities}
+                className="w-full py-2.5 px-4 bg-emerald-50 hover:bg-emerald-100/80 text-[#0E3B2E] text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer border border-emerald-200/60 shadow-xs active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed"
               >
-                <ChevronDown className="w-4 h-4" />
-                <span>Muat Lebih Banyak (+20 data)</span>
+                {loadingMoreActivities ? (
+                  <>
+                    <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                    <span>Memuat aktivitas...</span>
+                  </>
+                ) : (
+                  <>
+                    <ChevronDown className="w-4 h-4" />
+                    <span>Muat Lebih Banyak (+20 data)</span>
+                  </>
+                )}
               </button>
             </div>
           )}

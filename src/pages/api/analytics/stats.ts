@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { getRealAnalyticsEvents, type AnalyticsEvent } from '../../../lib/analyticsStorage';
+import { getRealAnalyticsEvents, formatActivityEvent, pageTitleMap, type AnalyticsEvent } from '../../../lib/analyticsStorage';
 
 export const GET: APIRoute = async ({ url }) => {
   try {
@@ -154,14 +154,6 @@ export const GET: APIRoute = async ({ url }) => {
     }
 
     // 5. Real Top Pages
-    const pageTitleMap: Record<string, string> = {
-      '/': 'Beranda (Landing Page)',
-      '/tipe-rumah': 'Katalog Semua Tipe Rumah',
-      '/tipe-rumah/tipe-36-72': 'Detail Unit Tipe 36/72',
-      '/tipe-rumah/tipe-45-72': 'Detail Unit Tipe 45/72',
-      '/artikel': 'Pusat Artikel & Berita Properti'
-    };
-
     const topPages = Array.from(pageMap.entries())
       .sort((a, b) => b[1] - a[1])
       .map(([p, views]) => ({
@@ -171,35 +163,8 @@ export const GET: APIRoute = async ({ url }) => {
         percentage: totalViews > 0 ? Math.round((views / totalViews) * 100) : 0
       }));
 
-    // 6. Real Recent Live Activities
-    const recentActivities = allEvents.slice(0, 200).map((ev) => {
-      let eventText = 'Membuka Halaman';
-      if (ev.event_type === 'whatsapp_click') {
-        eventText = `Klik WhatsApp (${ev.event_data?.button_text || 'Konsultasi'})`;
-      } else if (ev.event_type === 'kpr_simulasi') {
-        eventText = `Simulasi KPR (${ev.event_data?.tipe_rumah || 'Unit'}, DP: ${ev.event_data?.dp_persen || 0}%)`;
-      } else if (ev.event_type === 'maps_click') {
-        eventText = 'Membuka Petunjuk Arah Google Maps';
-      } else if (ev.event_type === 'session_duration') {
-        eventText = `Sesi Aktif (${ev.event_data?.duration_seconds || 0} detik)`;
-      }
-
-      const diffSec = Math.max(1, Math.round((Date.now() - new Date(ev.created_at).getTime()) / 1000));
-      let timeStr = 'Baru saja';
-      if (diffSec >= 3600) timeStr = `${Math.floor(diffSec / 3600)} jam lalu`;
-      else if (diffSec >= 60) timeStr = `${Math.floor(diffSec / 60)} menit lalu`;
-      else timeStr = `${diffSec} detik lalu`;
-
-      return {
-        path: ev.path,
-        title: pageTitleMap[ev.path] || ev.path,
-        device: `${ev.device_type === 'mobile' ? 'Mobile' : ev.device_type === 'tablet' ? 'Tablet' : 'Desktop'} (${ev.os || 'OS'} ${ev.browser || 'Browser'})`,
-        time: timeStr,
-        location: 'Pengunjung Web',
-        event: ev.event_type,
-        eventText
-      };
-    });
+    // 6. Real Recent Live Activities (First 20 items)
+    const recentActivities = allEvents.slice(0, 20).map(formatActivityEvent);
 
     return new Response(
       JSON.stringify({
@@ -216,7 +181,9 @@ export const GET: APIRoute = async ({ url }) => {
         devices,
         sources,
         topPages,
-        recentActivities
+        recentActivities,
+        totalActivities: allEvents.length,
+        hasMoreActivities: allEvents.length > 20
       }),
       {
         status: 200,
