@@ -33,7 +33,7 @@ const daftarTipeRumah = await getTipeRumahList();
     </div>
 
     <!-- 2 Cards Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 max-w-5xl mx-auto">
       {daftarTipeRumah.map((tipe) => {
         const waText = encodeURIComponent(
           `Halo Marketing Grand Bedahan Residence, saya tertarik dengan ${tipe.nama_tipe}. Boleh minta info promo, pricelist, dan jadwal survei lokasi?`
@@ -41,9 +41,9 @@ const daftarTipeRumah = await getTipeRumahList();
         const waUrl = `https://wa.me/6281215776218?text=${waText}`;
 
         return (
-          <div class="bg-white rounded-2xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col group">
+          <div class="bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col group">
             <!-- Card Image with Pill Badge -->
-            <div class="relative h-64 sm:h-72 overflow-hidden">
+            <div class="relative h-64 sm:h-76 overflow-hidden">
               <img 
                 src={tipe.foto_url} 
                 alt={tipe.nama_tipe} 
@@ -55,40 +55,44 @@ const daftarTipeRumah = await getTipeRumahList();
             </div>
             
             <!-- Card Body -->
-            <div class="p-6 sm:p-7 flex flex-col flex-grow">
-              <h3 class="text-2xl font-bold text-[#17201C] font-serif mb-1 group-hover:text-[#0E3B2E] transition-colors">
+            <div class="p-6 sm:p-8 flex flex-col flex-grow">
+              <h3 class="text-2xl sm:text-3xl font-bold text-[#17201C] font-serif mb-1 group-hover:text-[#0E3B2E] transition-colors">
                 {tipe.nama_tipe}
               </h3>
-              <p class="text-2xl font-bold text-[#0E3B2E] mb-2 font-sans">
+              <p class="text-2xl sm:text-3xl font-bold text-[#0E3B2E] mb-2 font-sans">
                 {formatRupiah(tipe.harga)}
               </p>
               <p class="text-xs sm:text-sm text-[#595959] mb-4">
                 Luas Tanah: <span class="font-bold text-[#17201C]">{tipe.ukuran_tanah} m²</span> • Luas Bangunan: <span class="font-bold text-[#17201C]">{tipe.ukuran_bangunan} m²</span>
               </p>
               
+              <p class="text-sm text-[#4A5568] mb-6 leading-relaxed line-clamp-2">
+                {tipe.deskripsi}
+              </p>
+
               <!-- Specs Row (Bed, Bath, Carport) -->
-              <div class="flex items-center justify-between text-sm text-[#4A5568] py-3.5 border-t border-gray-100 mb-6 font-semibold">
+              <div class="flex items-center justify-between text-sm text-[#4A5568] py-3.5 border-y border-gray-100 mb-6 font-semibold bg-[#FAF9F6] px-4 rounded-xl">
                 <div class="flex items-center gap-1.5">
-                  <Bed className="w-4.5 h-4.5 text-gray-500" />
+                  <Bed className="w-4.5 h-4.5 text-[#047857]" />
                   <span>{tipe.jumlah_kamar_tidur} K. Tidur</span>
                 </div>
                 <div class="flex items-center gap-1.5">
-                  <Bath className="w-4.5 h-4.5 text-gray-500" />
+                  <Bath className="w-4.5 h-4.5 text-[#047857]" />
                   <span>{tipe.jumlah_kamar_mandi} K. Mandi</span>
                 </div>
                 <div class="flex items-center gap-1.5">
-                  <Car className="w-4.5 h-4.5 text-gray-500" />
+                  <Car className="w-4.5 h-4.5 text-[#047857]" />
                   <span>{tipe.jumlah_carport} Carport</span>
                 </div>
               </div>
 
-              <!-- Action Buttons (Lihat Detail & Tanya Sales) -->
+              <!-- Action Buttons (Lihat Detail Lengkap & Konsultasi / Survey Lokasi) -->
               <div class="mt-auto space-y-3">
                 <a 
                   href={`/tipe-rumah/${tipe.slug}`}
-                  class="w-full flex items-center justify-center gap-2 px-6 py-4 rounded-xl font-bold text-base text-white bg-[#0E3B2E] hover:bg-[#07241C] shadow-md hover:shadow-lg transition-all"
+                  class="w-full flex items-center justify-center gap-2 px-6 py-3.5 sm:py-4 rounded-xl font-bold text-base text-white bg-[#0E3B2E] hover:bg-[#07241C] shadow-md hover:shadow-lg transition-all"
                 >
-                  <span>Lihat Detail</span>
+                  <span>Lihat Detail Lengkap</span>
                   <ArrowRight className="w-5 h-5" />
                 </a>
 
@@ -99,7 +103,7 @@ const daftarTipeRumah = await getTipeRumahList();
                   class="w-full flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-bold text-base text-[#0E3B2E] bg-emerald-50 hover:bg-emerald-100/90 border border-emerald-200 transition-all shadow-xs"
                 >
                   <MessageSquare className="w-4.5 h-4.5 text-[#0E3B2E]" />
-                  <span>Tanya Sales</span>
+                  <span>Konsultasi / Survey Lokasi</span>
                 </a>
               </div>
 
