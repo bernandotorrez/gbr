@@ -12,7 +12,8 @@ import {
   Save,
   Loader2,
   AlertTriangle,
-  Calendar
+  Calendar,
+  Gift
 } from 'lucide-react';
 
 export default function AdminPromosi() {
@@ -415,8 +416,9 @@ export default function AdminPromosi() {
               <div className="p-5 bg-gray-50/90 rounded-2xl border border-gray-200/80 space-y-3">
                 <div className="flex items-center justify-between">
                   <div>
-                    <h4 className="text-xs font-bold text-[#0E3B2E] uppercase tracking-wider">
-                      🎁 Rincian Keuntungan & Bonus Promo (Tampil di Kolom Kanan)
+                    <h4 className="text-xs font-bold text-[#0E3B2E] uppercase tracking-wider flex items-center gap-1.5">
+                      <Gift className="w-3.5 h-3.5" />
+                      <span>Rincian Keuntungan & Bonus Promo (Tampil di Kolom Kanan)</span>
                     </h4>
                     <p className="text-[11px] text-gray-500 mt-0.5">
                       Kelola daftar poin bonus yang didapatkan pembeli saat booking unit.

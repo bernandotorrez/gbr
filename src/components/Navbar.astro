@@ -1,5 +1,5 @@
 ---
-import { Home, Sparkles } from 'lucide-react';
+import { Home, Sparkles, Menu } from 'lucide-react';
 
 const navLinks = [
   { name: 'Beranda', href: '/#beranda' },
@@ -61,9 +61,7 @@ const navLinks = [
       <!-- Mobile Menu Toggle Button -->
       <div class="lg:hidden flex items-center">
         <button id="mobile-menu-btn" class="text-white hover:text-[#E5C695] p-2 focus:outline-none" aria-label="Menu">
-          <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-          </svg>
+          <Menu className="h-6 w-6" />
         </button>
       </div>
     </div>

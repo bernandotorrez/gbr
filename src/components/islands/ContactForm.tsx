@@ -4,6 +4,7 @@ import { supabase } from '../../lib/supabase';
 import { checkRateLimit, recordSubmission } from '../../lib/rateLimit';
 import { getRecaptchaToken, isRecaptchaConfigured, loadRecaptchaScript } from '../../lib/recaptcha';
 import { sanitizeText } from '../../lib/sanitize';
+import { ChevronDown, Send, AlertTriangle, Check, CheckCircle2, ShieldCheck } from 'lucide-react';
 
 interface FormErrors {
   nama?: string;
@@ -297,7 +298,7 @@ export default function ContactForm() {
               <option value="Belum Menentukan / Tanya-tanya Dulu">Belum Menentukan / Tanya-tanya Dulu</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-gray-500">
-              <svg className="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"/></svg>
+              <ChevronDown className="w-4 h-4" />
             </div>
           </div>
         </div>
@@ -340,7 +341,7 @@ export default function ContactForm() {
           ) : (
             <>
               <span>Kirim Pesan</span>
-              <svg className="w-5 h-5 ml-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M6 12L3.269 3.126A59.768 59.768 0 0121.485 12 59.77 59.77 0 013.27 20.876L5.999 12zm0 0h7.5" /></svg>
+              <Send className="w-4 h-4 ml-1" />
             </>
           )}
         </button>
@@ -349,7 +350,7 @@ export default function ContactForm() {
         {rateLimitError && (
           <div className="p-4 bg-amber-50 border-2 border-amber-300 text-amber-900 rounded-2xl flex items-start gap-3.5 shadow-sm animate-fade-in">
             <div className="w-7 h-7 rounded-full bg-amber-600 text-white flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+              <AlertTriangle className="w-4 h-4" />
             </div>
             <div className="flex-1">
               <p className="font-bold text-sm text-amber-900">Perhatian Pengiriman Pesan</p>
@@ -364,10 +365,13 @@ export default function ContactForm() {
         {isSuccess && (
           <div className="p-4 bg-emerald-50 border-2 border-emerald-300 text-[#0E3B2E] rounded-2xl flex items-start gap-3.5 shadow-sm animate-fade-in">
             <div className="w-7 h-7 rounded-full bg-[#0E3B2E] text-white flex items-center justify-center shrink-0 mt-0.5 shadow-xs">
-              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2.5"><path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" /></svg>
+              <Check className="w-4 h-4" />
             </div>
             <div className="flex-1">
-              <p className="font-bold text-sm text-[#0E3B2E]">Pesan Berhasil Terkirim! 🎉</p>
+              <p className="font-bold text-sm text-[#0E3B2E] flex items-center gap-1.5">
+                <span>Pesan Berhasil Terkirim!</span>
+                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+              </p>
               <p className="text-xs text-emerald-900/90 mt-1 leading-relaxed">
                 Terima kasih telah menghubungi Grand Bedahan Residence. Tim sales kami akan segera merespon dan menghubungi nomor WhatsApp Anda.
               </p>
@@ -377,7 +381,7 @@ export default function ContactForm() {
 
         {/* Security & Privacy Assurance */}
         <div className="pt-2 text-center flex items-center justify-center gap-1.5 text-[11px] text-gray-400">
-          <svg className="w-3.5 h-3.5 text-emerald-700" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2"><path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+          <ShieldCheck className="w-3.5 h-3.5 text-emerald-700" />
           <span>Data privasi Anda terenkripsi aman & terlindungi dari spam.</span>
         </div>
       </form>

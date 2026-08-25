@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import { MessageSquare, Bot, X, Send } from 'lucide-react';
 
 export default function ChatbotWidget() {
   const [isOpen, setIsOpen] = useState(false);
@@ -50,9 +51,7 @@ export default function ChatbotWidget() {
           <span className="absolute bottom-16 right-0 bg-white text-gray-800 text-xs font-semibold px-3 py-1.5 rounded-lg shadow-md opacity-0 group-hover:opacity-100 transition-opacity duration-300 whitespace-nowrap pointer-events-none border border-gray-100">
             Tanya AI Assistant
           </span>
-          <svg className="w-7 h-7" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path>
-          </svg>
+          <MessageSquare className="w-7 h-7" />
         </button>
       )}
 
@@ -65,8 +64,8 @@ export default function ChatbotWidget() {
         {/* Header */}
         <div className="bg-[#047857] text-white p-4 flex justify-between items-center shrink-0">
           <div className="flex items-center">
-            <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#047857] mr-3 font-bold">
-              AI
+            <div className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-[#047857] mr-3 font-bold shadow-xs">
+              <Bot className="w-6 h-6 text-[#047857]" />
             </div>
             <div>
               <h3 className="font-semibold leading-tight text-white">AI Assistant</h3>
@@ -75,11 +74,9 @@ export default function ChatbotWidget() {
           </div>
           <button 
             onClick={toggleChat}
-            className="text-white hover:text-emerald-100 focus:outline-none p-1"
+            className="text-white hover:text-emerald-100 focus:outline-none p-1 cursor-pointer"
           >
-            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12"></path>
-            </svg>
+            <X className="w-5 h-5" />
           </button>
         </div>
 
@@ -119,9 +116,7 @@ export default function ChatbotWidget() {
                   : 'bg-gray-200 text-gray-400 cursor-not-allowed'
               }`}
             >
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z"></path>
-              </svg>
+              <Send className="w-4 h-4" />
             </button>
           </form>
           <p className="text-center text-[10px] text-gray-400 mt-2">

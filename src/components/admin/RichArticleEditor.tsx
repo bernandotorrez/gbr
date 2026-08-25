@@ -15,7 +15,8 @@ import {
   Eye,
   Edit3,
   FileText,
-  HelpCircle
+  HelpCircle,
+  Lightbulb
 } from 'lucide-react';
 
 interface RichArticleEditorProps {
@@ -265,7 +266,10 @@ Rangkum pesan utama artikel ini dan berikan saran terbaik untuk pembaca yang sed
       {/* Helper Guide Drawer */}
       {showHelper && (
         <div className="p-4 bg-emerald-50/70 border-b border-emerald-100 text-xs text-[#0B2E24] space-y-1.5">
-          <p className="font-bold">💡 Tips Format Markdown & HTML:</p>
+          <p className="font-bold flex items-center gap-1.5">
+            <Lightbulb className="w-3.5 h-3.5 text-amber-600 shrink-0" />
+            <span>Tips Format Markdown &amp; HTML:</span>
+          </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 font-mono text-[11px]">
             <div><span className="text-[#0E3B2E] font-bold">## Judul</span> = Heading 2</div>
             <div><span className="text-[#0E3B2E] font-bold">**Teks**</span> = <strong>Tebal</strong></div>

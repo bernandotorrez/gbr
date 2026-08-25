@@ -14,7 +14,8 @@ import {
   Save,
   Loader2,
   Eye,
-  AlertTriangle
+  AlertTriangle,
+  Wrench
 } from 'lucide-react';
 
 export default function AdminTipeRumah() {
@@ -549,8 +550,9 @@ export default function AdminTipeRumah() {
 
               {/* Spesifikasi Teknis Material Section */}
               <div className="p-5 bg-gray-50/80 rounded-2xl border border-gray-200/80 space-y-3">
-                <h4 className="text-xs font-bold text-[#0E3B2E] uppercase tracking-wider">
-                  🛠️ Spesifikasi Teknis Material Bangunan
+                <h4 className="text-xs font-bold text-[#0E3B2E] uppercase tracking-wider flex items-center gap-1.5">
+                  <Wrench className="w-3.5 h-3.5" />
+                  <span>Spesifikasi Teknis Material Bangunan</span>
                 </h4>
                 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">

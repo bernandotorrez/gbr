@@ -24,7 +24,10 @@ import {
   ShieldCheck,
   CheckCircle2,
   Activity,
-  ChevronDown
+  ChevronDown,
+  MessageSquare,
+  Zap,
+  MapPin
 } from 'lucide-react';
 
 interface ChartPoint {
@@ -78,6 +81,9 @@ export default function AdminAnalitik() {
   const [totalActivities, setTotalActivities] = useState(0);
   const [loadingMoreActivities, setLoadingMoreActivities] = useState(false);
 
+  // Paginated top pages state
+  const [topPagesLimit, setTopPagesLimit] = useState(5);
+
   const fetchStats = async (selectedRange: string) => {
     setLoading(true);
     try {
@@ -89,6 +95,7 @@ export default function AdminAnalitik() {
         setActivityPage(1);
         setTotalActivities(json.totalActivities || (json.recentActivities?.length || 0));
         setHasMoreActivities(!!json.hasMoreActivities);
+        setTopPagesLimit(5);
       }
     } catch (err) {
       console.error('Error fetching analytics stats:', err);
@@ -321,33 +328,36 @@ export default function AdminAnalitik() {
           <div className="flex items-center gap-1.5 bg-[#FAF9F6] p-1 rounded-2xl border border-gray-200 text-xs font-bold">
             <button
               onClick={() => setChartMetric('views')}
-              className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${
                 chartMetric === 'views'
                   ? 'bg-[#0E3B2E] text-white shadow-xs'
                   : 'text-gray-600 hover:text-black'
               }`}
             >
-              👀 Kunjungan &amp; Visitor
+              <Eye className="w-3.5 h-3.5" />
+              <span>Kunjungan &amp; Visitor</span>
             </button>
             <button
               onClick={() => setChartMetric('whatsapp')}
-              className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${
                 chartMetric === 'whatsapp'
                   ? 'bg-[#0E3B2E] text-white shadow-xs'
                   : 'text-gray-600 hover:text-black'
               }`}
             >
-              💬 Klik WhatsApp
+              <MessageSquare className="w-3.5 h-3.5" />
+              <span>Klik WhatsApp</span>
             </button>
             <button
               onClick={() => setChartMetric('kpr')}
-              className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer ${
+              className={`px-3 py-1.5 rounded-xl transition-all cursor-pointer flex items-center gap-1.5 ${
                 chartMetric === 'kpr'
                   ? 'bg-[#0E3B2E] text-white shadow-xs'
                   : 'text-gray-600 hover:text-black'
               }`}
             >
-              🧮 Simulasi KPR
+              <Calculator className="w-3.5 h-3.5" />
+              <span>Simulasi KPR</span>
             </button>
           </div>
         </div>
@@ -527,43 +537,80 @@ export default function AdminAnalitik() {
       {/* 2-Column Grid: Top Pages & Live Activity Stream */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         {/* Top Pages Table (7 cols) */}
-        <div className="lg:col-span-7 bg-white p-6 sm:p-7 rounded-3xl border border-gray-100 shadow-sm space-y-5">
-          <div className="flex items-center justify-between pb-3 border-b border-gray-100">
-            <h3 className="text-lg font-bold text-[#17201C] font-serif">Halaman Paling Sering Dikunjungi</h3>
-            <span className="text-xs text-gray-400 font-medium">Top Pages by Hits</span>
-          </div>
+        <div className="lg:col-span-7 bg-white p-6 sm:p-7 rounded-3xl border border-gray-100 shadow-sm space-y-4 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center justify-between pb-3 border-b border-gray-100 mb-4">
+              <h3 className="text-lg font-bold text-[#17201C] font-serif">Halaman Paling Sering Dikunjungi</h3>
+              <span className="text-xs text-gray-400 font-medium">
+                {data?.topPages && data.topPages.length > 0
+                  ? `${Math.min(topPagesLimit, data.topPages.length)} dari ${data.topPages.length} Halaman`
+                  : 'Top Pages'}
+              </span>
+            </div>
 
-          <div className="space-y-3">
-            {data?.topPages.map((page, idx) => (
-              <div
-                key={page.path}
-                className="p-3.5 rounded-2xl bg-[#FAF9F6] border border-gray-100 space-y-2"
-              >
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-2.5">
-                    <span className="w-5 h-5 rounded-full bg-[#0E3B2E] text-white text-[11px] font-bold flex items-center justify-center shrink-0">
-                      {idx + 1}
-                    </span>
-                    <div>
-                      <p className="text-xs sm:text-sm font-bold text-[#17201C]">{page.title}</p>
-                      <p className="text-[11px] text-gray-400 font-mono">{page.path}</p>
+            <div className="space-y-3 max-h-[520px] overflow-y-auto pr-1">
+              {data?.topPages && data.topPages.length > 0 ? (
+                data.topPages.slice(0, topPagesLimit).map((page, idx) => (
+                  <div
+                    key={page.path}
+                    className="p-3.5 rounded-2xl bg-[#FAF9F6] border border-gray-100 space-y-2 hover:border-emerald-200 transition-colors"
+                  >
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2.5">
+                        <span className="w-5 h-5 rounded-full bg-[#0E3B2E] text-white text-[11px] font-bold flex items-center justify-center shrink-0 shadow-xs">
+                          {idx + 1}
+                        </span>
+                        <div>
+                          <p className="text-xs sm:text-sm font-bold text-[#17201C]">{page.title}</p>
+                          <p className="text-[11px] text-gray-400 font-mono">{page.path}</p>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-xs sm:text-sm font-bold text-[#0E3B2E]">{page.views.toLocaleString()}</span>
+                        <span className="text-[10px] text-gray-400 block">{page.percentage}%</span>
+                      </div>
+                    </div>
+
+                    <div className="w-full h-1.5 rounded-full bg-gray-200 overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-[#0E3B2E]"
+                        style={{ width: `${page.percentage}%` }}
+                      ></div>
                     </div>
                   </div>
-                  <div className="text-right">
-                    <span className="text-xs sm:text-sm font-bold text-[#0E3B2E]">{page.views.toLocaleString()}</span>
-                    <span className="text-[10px] text-gray-400 block">{page.percentage}%</span>
-                  </div>
+                ))
+              ) : (
+                <div className="py-12 text-center text-xs text-gray-400">
+                  Belum ada data kunjungan halaman
                 </div>
-
-                <div className="w-full h-1.5 rounded-full bg-gray-200 overflow-hidden">
-                  <div
-                    className="h-full rounded-full bg-[#0E3B2E]"
-                    style={{ width: `${page.percentage}%` }}
-                  ></div>
-                </div>
-              </div>
-            ))}
+              )}
+            </div>
           </div>
+
+          {data?.topPages && (data.topPages.length > topPagesLimit || topPagesLimit > 5) && (
+            <div className="pt-2 border-t border-gray-100 flex items-center gap-2">
+              {data.topPages.length > topPagesLimit && (
+                <button
+                  type="button"
+                  onClick={() => setTopPagesLimit((prev) => prev + 5)}
+                  className="flex-1 py-2.5 px-4 bg-emerald-50 hover:bg-emerald-100/80 text-[#0E3B2E] text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer border border-emerald-200/60 shadow-xs active:scale-[0.99]"
+                >
+                  <ChevronDown className="w-4 h-4" />
+                  <span>Muat Lebih Banyak (+5 data)</span>
+                </button>
+              )}
+              {topPagesLimit > 5 && (
+                <button
+                  type="button"
+                  onClick={() => setTopPagesLimit(5)}
+                  className="py-2.5 px-4 bg-gray-50 hover:bg-gray-100 text-gray-600 text-xs font-bold rounded-xl transition-all flex items-center justify-center gap-1 cursor-pointer border border-gray-200 shadow-xs active:scale-[0.99]"
+                  title="Tampilkan 5 Teratas"
+                >
+                  <span>Reset (5 Teratas)</span>
+                </button>
+              )}
+            </div>
+          )}
         </div>
 
         {/* Real-time Activity Stream (5 cols) */}
@@ -592,12 +639,13 @@ export default function AdminAnalitik() {
                       {act.time}
                     </span>
                   </div>
-                  <p className="text-[11px] font-semibold text-gray-700 bg-white p-1.5 rounded-lg border border-gray-100">
-                    ⚡ {act.eventText}
+                  <p className="text-[11px] font-semibold text-gray-700 bg-white p-1.5 rounded-lg border border-gray-100 flex items-center gap-1.5">
+                    <Zap className="w-3 h-3 text-amber-500 shrink-0" />
+                    <span>{act.eventText}</span>
                   </p>
                   <div className="flex items-center justify-between text-[10px] text-gray-400 pt-0.5">
                     <span>{act.device}</span>
-                    <span>📍 {act.location}</span>
+                    <span className="flex items-center gap-1"><MapPin className="w-2.5 h-2.5" />{act.location}</span>
                   </div>
                 </div>
               ))

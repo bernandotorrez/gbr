@@ -1,5 +1,5 @@
 ---
-import { Play, RotateCw } from 'lucide-react';
+import { Play, RotateCw, X } from 'lucide-react';
 ---
 
 <section id="virtual-tour" class="py-12 sm:py-16 bg-white scroll-mt-20">
@@ -62,7 +62,7 @@ import { Play, RotateCw } from 'lucide-react';
         class="absolute top-3 right-3 z-30 w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-black/70 hover:bg-black text-white flex items-center justify-center border border-white/20 transition-all cursor-pointer shadow-lg hover:scale-110"
         aria-label="Tutup Video"
       >
-        ✕
+        <X className="w-5 h-5 text-white" />
       </button>
       <video 
         id="modal-video"

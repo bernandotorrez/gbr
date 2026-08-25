@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { ChevronLeft, ChevronRight, X } from 'lucide-react';
+import { ChevronLeft, ChevronRight, X, ZoomIn } from 'lucide-react';
 
 interface HouseDetailGalleryProps {
   photos: string[];
@@ -64,9 +64,8 @@ export default function HouseDetailGallery({ photos, title }: HouseDetailGallery
           <div className="absolute top-4 left-4 bg-black/60 backdrop-blur-md text-white text-xs font-semibold px-3 py-1.5 rounded-full">
             Foto {activeIndex + 1} dari {photos.length}
           </div>
-          {/* Zoom hint badge */}
           <div className="absolute bottom-3 right-3 bg-[#0E3B2E]/80 text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5 backdrop-blur-sm opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="11" y1="8" x2="11" y2="14"/><line x1="8" y1="11" x2="14" y2="11"/></svg>
+            <ZoomIn className="w-3.5 h-3.5" />
             Klik untuk perbesar
           </div>
         </div>
