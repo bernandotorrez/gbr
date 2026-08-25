@@ -1,40 +1,46 @@
 ---
-import { HelpCircle, Plus } from 'lucide-react';
+import { HelpCircle, Plus } from "lucide-react";
 
 const faqs = [
   {
-    pertanyaan: 'Apakah sudah sertifikat SHM semua unit?',
-    jawaban: 'Ya, seluruh unit di Grand Bedahan Residence sudah memiliki legalitas lengkap berupa Sertifikat Hak Milik (SHM) dan Izin Mendirikan Bangunan (IMB/PBG) yang sudah pecah per kavling.'
+    pertanyaan: "Apakah sudah sertifikat SHM semua unit?",
+    jawaban:
+      "Ya, seluruh unit di Grand Bedahan Residence sudah memiliki legalitas lengkap berupa Sertifikat Hak Milik (SHM) dan Izin Mendirikan Bangunan (IMB/PBG) yang sudah pecah per kavling.",
   },
   {
-    pertanyaan: 'Bagaimana cara pembayaran?',
-    jawaban: 'Kami menyediakan berbagai skema pembayaran yang fleksibel: Cash Keras (dengan diskon khusus), Cash Bertahap (hingga 12-24 bulan), dan KPR Bank dengan bunga promo.'
+    pertanyaan: "Bagaimana cara pembayaran?",
+    jawaban:
+      "Kami menyediakan berbagai skema pembayaran yang fleksibel: Cash Keras (dengan diskon khusus), Cash Bertahap (hingga 12-24 bulan), dan KPR Bank dengan bunga promo.",
   },
   {
-    pertanyaan: 'Apakah bisa KPR?',
-    jawaban: 'Bisa. Kami telah bekerja sama dengan berbagai bank rekanan (BCA, BTN, Mandiri, BSI, dll) untuk memfasilitasi pengajuan KPR sampai disetujui (ACC).'
+    pertanyaan: "Apakah bisa KPR?",
+    jawaban:
+      "Bisa. Kami telah bekerja sama dengan berbagai bank rekanan (BCA, BTN, Mandiri, BSI, dll) untuk memfasilitasi pengajuan KPR sampai disetujui (ACC).",
   },
   {
-    pertanyaan: 'Apakah ada biaya tambahan?',
-    jawaban: 'Selama periode promo berlangsung, seluruh biaya BPHTB, AJB, BBN (Balik Nama), dan biaya surat-surat lainnya sudah GRATIS dan ditanggung oleh developer.'
+    pertanyaan: "Apakah ada biaya tambahan?",
+    jawaban:
+      "Selama periode promo berlangsung, seluruh biaya BPHTB, AJB, BBN (Balik Nama), dan biaya surat-surat lainnya sudah GRATIS dan ditanggung oleh developer.",
   },
   {
-    pertanyaan: 'Bagaimana cara booking unit?',
-    jawaban: 'Booking fee sebesar Rp 5.000.000 (mengurangi harga jual) dapat dibayarkan saat survei lokasi untuk mengunci unit dan promo yang Anda pilih.'
-  }
+    pertanyaan: "Bagaimana cara booking unit?",
+    jawaban:
+      "Booking fee sebesar Rp 3.000.000 (mengurangi harga jual) dapat dibayarkan saat survei lokasi untuk mengunci unit dan promo yang Anda pilih.",
+  },
 ];
 ---
 
 <section id="faq" class="py-20 bg-[#FAF9F6] scroll-mt-20">
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="lg:grid lg:grid-cols-12 lg:gap-12 items-center">
-      
       <!-- Left Column: Interior Living Room Image (5 Cols) -->
       <div class="lg:col-span-5 mb-10 lg:mb-0">
-        <div class="relative w-full h-[400px] sm:h-[500px] rounded-3xl overflow-hidden shadow-xl border border-gray-200">
-          <img 
-            src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1000&q=80" 
-            alt="Interior Mewah Grand Bedahan Residence" 
+        <div
+          class="relative w-full h-[400px] sm:h-[500px] rounded-3xl overflow-hidden shadow-xl border border-gray-200"
+        >
+          <img
+            src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1000&q=80"
+            alt="Interior Mewah Grand Bedahan Residence"
             class="w-full h-full object-cover object-center"
           />
         </div>
@@ -42,35 +48,38 @@ const faqs = [
 
       <!-- Right Column: FAQ Accordion (7 Cols) -->
       <div class="lg:col-span-7">
-        <div class="inline-flex items-center text-sm font-bold text-gray-500 uppercase tracking-wider mb-2">
+        <div
+          class="inline-flex items-center text-sm font-bold text-gray-500 uppercase tracking-wider mb-2"
+        >
           <HelpCircle className="w-4 h-4 mr-2 text-gray-400" />
           PERTANYAAN YANG SERING DITANYAKAN
         </div>
-        <h2 class="text-3xl sm:text-4xl font-bold tracking-tight text-[#17201C] font-serif mb-8">
+        <h2
+          class="text-3xl sm:text-4xl font-bold tracking-tight text-[#17201C] font-serif mb-8"
+        >
           Frequently Asked Questions
         </h2>
 
         <div class="space-y-3.5">
-          {faqs.map((faq, index) => (
-            <details class="group bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden [&_summary::-webkit-details-marker]:hidden transition-all">
-              <summary class="flex items-center justify-between cursor-pointer px-6 py-4.5 focus:outline-none select-none">
-                <h3 class="text-base sm:text-lg font-bold text-[#17201C] pr-4">
-                  {faq.pertanyaan}
-                </h3>
-                <span class="ml-2 flex-shrink-0 text-gray-400 group-open:rotate-45 group-open:text-[#0E3B2E] transition-transform duration-200 text-2xl font-semibold">
-                  +
-                </span>
-              </summary>
-              <div class="px-6 pb-6 pt-1 text-sm sm:text-base text-[#374151] leading-relaxed border-t border-gray-100">
-                <p>{faq.jawaban}</p>
-              </div>
-            </details>
-          ))}
+          {
+            faqs.map((faq, index) => (
+              <details class="group bg-white rounded-xl border border-gray-200 shadow-xs overflow-hidden [&_summary::-webkit-details-marker]:hidden transition-all">
+                <summary class="flex items-center justify-between cursor-pointer px-6 py-4.5 focus:outline-none select-none">
+                  <h3 class="text-base sm:text-lg font-bold text-[#17201C] pr-4">
+                    {faq.pertanyaan}
+                  </h3>
+                  <span class="ml-2 flex-shrink-0 text-gray-400 group-open:rotate-45 group-open:text-[#0E3B2E] transition-transform duration-200 text-2xl font-semibold">
+                    +
+                  </span>
+                </summary>
+                <div class="px-6 pb-6 pt-1 text-sm sm:text-base text-[#374151] leading-relaxed border-t border-gray-100">
+                  <p>{faq.jawaban}</p>
+                </div>
+              </details>
+            ))
+          }
         </div>
-
       </div>
-
     </div>
   </div>
 </section>
-
