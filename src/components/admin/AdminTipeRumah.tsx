@@ -15,7 +15,14 @@ import {
   Loader2,
   Eye,
   AlertTriangle,
-  Wrench
+  Wrench,
+  Zap,
+  Droplet,
+  Car,
+  Layers,
+  Maximize2,
+  Bed,
+  Bath
 } from 'lucide-react';
 
 export default function AdminTipeRumah() {
@@ -418,46 +425,142 @@ export default function AdminTipeRumah() {
                 />
               </div>
 
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+              {/* Dimensi & Ruangan Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5 p-4 bg-gray-50/80 rounded-2xl border border-gray-200/80">
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Luas Tanah (m²)</label>
+                  <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">Luas Tanah (m²) *</label>
                   <input
                     type="number"
+                    step="any"
                     required
                     value={formData.ukuran_tanah}
                     onChange={(e) => setFormData({ ...formData, ukuran_tanah: Number(e.target.value) })}
-                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#0E3B2E]"
+                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#0E3B2E]"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Luas Bangunan (m²)</label>
+                  <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">Luas Bangunan (m²) *</label>
                   <input
                     type="number"
+                    step="any"
                     required
                     value={formData.ukuran_bangunan}
                     onChange={(e) => setFormData({ ...formData, ukuran_bangunan: Number(e.target.value) })}
-                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#0E3B2E]"
+                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#0E3B2E]"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Kamar Tidur</label>
+                  <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">Kamar Tidur</label>
                   <input
                     type="number"
+                    min="0"
                     required
                     value={formData.jumlah_kamar_tidur}
                     onChange={(e) => setFormData({ ...formData, jumlah_kamar_tidur: Number(e.target.value) })}
-                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#0E3B2E]"
+                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#0E3B2E]"
                   />
                 </div>
                 <div>
-                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Kamar Mandi</label>
+                  <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">Kamar Mandi</label>
                   <input
                     type="number"
+                    min="0"
                     required
                     value={formData.jumlah_kamar_mandi}
                     onChange={(e) => setFormData({ ...formData, jumlah_kamar_mandi: Number(e.target.value) })}
-                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#0E3B2E]"
+                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#0E3B2E]"
                   />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">Carport (Mobil)</label>
+                  <input
+                    type="number"
+                    min="0"
+                    required
+                    value={formData.jumlah_carport}
+                    onChange={(e) => setFormData({ ...formData, jumlah_carport: Number(e.target.value) })}
+                    placeholder="1"
+                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#0E3B2E]"
+                  />
+                  <p className="text-[10px] text-gray-400 mt-0.5">Isi 0 jika tidak ada carport</p>
+                </div>
+                <div>
+                  <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">Jumlah Lantai</label>
+                  <input
+                    type="number"
+                    min="1"
+                    required
+                    value={formData.jumlah_lantai}
+                    onChange={(e) => setFormData({ ...formData, jumlah_lantai: Number(e.target.value) })}
+                    placeholder="1"
+                    className="w-full px-3 py-2 bg-white border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#0E3B2E]"
+                  />
+                </div>
+              </div>
+
+              {/* Utilitas: Daya Listrik & Sumber Air */}
+              <div className="p-4 bg-emerald-50/50 rounded-2xl border border-emerald-200/60 space-y-3">
+                <h4 className="text-xs font-bold text-[#0E3B2E] uppercase tracking-wider flex items-center gap-1.5">
+                  <Zap className="w-3.5 h-3.5 text-[#0E3B2E]" />
+                  <span>Utilitas Daya Listrik &amp; Sumber Air</span>
+                </h4>
+                
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Daya Listrik (VA / Watt) *</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.daya_listrik}
+                      onChange={(e) => setFormData({ ...formData, daya_listrik: e.target.value })}
+                      placeholder="Contoh: 1.300 VA"
+                      className="w-full px-3.5 py-2 bg-white border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#0E3B2E] font-medium"
+                    />
+                    <div className="flex flex-wrap gap-1.5 mt-1.5">
+                      {['900 VA', '1.300 VA', '2.200 VA', '3.500 VA', '4.400 VA'].map((val) => (
+                        <button
+                          key={val}
+                          type="button"
+                          onClick={() => setFormData({ ...formData, daya_listrik: val })}
+                          className={`px-2 py-0.5 rounded-md text-[11px] font-semibold border transition-all cursor-pointer ${
+                            formData.daya_listrik === val
+                              ? 'bg-[#0E3B2E] text-white border-[#0E3B2E]'
+                              : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-100'
+                          }`}
+                        >
+                          {val}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
+                  <div>
+                    <label className="block text-xs font-bold text-gray-700 mb-1">Sumber Air Bersih *</label>
+                    <input
+                      type="text"
+                      required
+                      value={formData.sumber_air}
+                      onChange={(e) => setFormData({ ...formData, sumber_air: e.target.value })}
+                      placeholder="Contoh: Sumur Bor + Pompa Listrik"
+                      className="w-full px-3.5 py-2 bg-white border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#0E3B2E] font-medium"
+                    />
+                    <div className="flex flex-wrap gap-1.5 mt-1.5">
+                      {['Sumur Bor + Pompa Listrik', 'Sumur Bor + Jetpump', 'PDAM'].map((val) => (
+                        <button
+                          key={val}
+                          type="button"
+                          onClick={() => setFormData({ ...formData, sumber_air: val })}
+                          className={`px-2 py-0.5 rounded-md text-[11px] font-semibold border transition-all cursor-pointer ${
+                            formData.sumber_air === val
+                              ? 'bg-[#0E3B2E] text-white border-[#0E3B2E]'
+                              : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-100'
+                          }`}
+                        >
+                          {val}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
                 </div>
               </div>
 

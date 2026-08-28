@@ -175,7 +175,7 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
           </div>
           <div class="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50/80 border border-gray-100">
             <Bed className="w-4 h-4 text-[#047857] shrink-0" />
-            <span><strong>{tipe.jumlah_kamar_tidur}</strong> K. Tidur</span>
+            <span><strong>{tipe.jumlah_kamar_tidur > 0 ? `${tipe.jumlah_kamar_tidur} K. Tidur` : 'Ruang Usaha'}</strong></span>
           </div>
           <div class="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50/80 border border-gray-100">
             <Bath className="w-4 h-4 text-[#047857] shrink-0" />
@@ -183,7 +183,7 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
           </div>
           <div class="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50/80 border border-gray-100">
             <Car className="w-4 h-4 text-[#047857] shrink-0" />
-            <span><strong>{tipe.jumlah_carport}</strong> Carport</span>
+            <span><strong>{tipe.jumlah_carport > 0 ? `${tipe.jumlah_carport} Carport` : 'Tanpa Carport'}</strong></span>
           </div>
           <div class="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50/80 border border-gray-100">
             <ShieldCheck className="w-4 h-4 text-[#047857] shrink-0" />
@@ -271,7 +271,7 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
                   </div>
                   <div>
                     <p class="text-xs text-gray-500 font-medium">Kamar Tidur</p>
-                    <p class="text-base sm:text-lg font-bold text-[#17201C]">{tipe.jumlah_kamar_tidur} Ruang</p>
+                    <p class="text-base sm:text-lg font-bold text-[#17201C]">{tipe.jumlah_kamar_tidur > 0 ? `${tipe.jumlah_kamar_tidur} Ruang` : 'Ruang Usaha'}</p>
                   </div>
                 </div>
 
@@ -291,7 +291,7 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
                   </div>
                   <div>
                     <p class="text-xs text-gray-500 font-medium">Carport</p>
-                    <p class="text-base sm:text-lg font-bold text-[#17201C]">{tipe.jumlah_carport} Mobil</p>
+                    <p class="text-base sm:text-lg font-bold text-[#17201C]">{tipe.jumlah_carport > 0 ? `${tipe.jumlah_carport} Mobil` : 'Tanpa Carport'}</p>
                   </div>
                 </div>
 
