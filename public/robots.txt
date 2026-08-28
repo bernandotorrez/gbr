@@ -11,9 +11,6 @@ Disallow: /admin
 Disallow: /404
 Disallow: /_astro/
 Disallow: /api/
-Disallow: /*.json$
-Disallow: /*.map$
 
 # Sitemap
 Sitemap: https://grandbedahanresidence.com/sitemap.xml
-Sitemap: https://grandbedahanresidence.com/sitemap-index.xml

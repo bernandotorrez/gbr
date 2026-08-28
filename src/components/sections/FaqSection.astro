@@ -33,9 +33,24 @@ const faqs = [
       "Proyek Grand Bedahan Residence resmi dimulai sejak 2 September 2022 dengan komitmen menghadirkan hunian berkualitas tinggi, legalitas SHM terjamin, dan lingkungan asri yang nyaman bagi keluarga.",
   },
 ];
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": faqs.map((faq) => ({
+    "@type": "Question",
+    "name": faq.pertanyaan,
+    "acceptedAnswer": {
+      "@type": "Answer",
+      "text": faq.jawaban,
+    },
+  })),
+};
 ---
 
 <section id="faq" class="py-20 bg-[#FAF9F6] scroll-mt-20">
+  <!-- JSON-LD FAQPage Schema for Google Rich Snippets -->
+  <script type="application/ld+json" set:html={JSON.stringify(faqSchema)} />
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="lg:grid lg:grid-cols-12 lg:gap-12 items-center">
       <!-- Left Column: Interior Living Room Image (5 Cols) -->

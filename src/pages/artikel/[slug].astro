@@ -11,6 +11,8 @@ if (!articleItem) {
   return Astro.redirect('/artikel');
 }
 
+const SITE_URL = 'https://grandbedahanresidence.com';
+
 const formatDate = (dateString?: string) => {
   if (!dateString) return '';
   const options: Intl.DateTimeFormatOptions = { day: 'numeric', month: 'long', year: 'numeric' };
@@ -20,15 +22,55 @@ const formatDate = (dateString?: string) => {
 const rawContent = articleItem.isi_konten || '<p>Maaf, konten artikel yang Anda cari tidak tersedia.</p>';
 const formattedHtml = renderMarkdownAndHtml(rawContent);
 
+// Strip HTML tags to get plain text for description
+const plainText = rawContent.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').trim();
+const metaDescription = plainText.slice(0, 155) + (plainText.length > 155 ? '...' : '');
+
 const article = {
   judul: articleItem.judul,
   tanggal: formatDate(articleItem.tanggal_publish),
+  tanggal_iso: articleItem.tanggal_publish ?? '',
   gambar_utama_url: articleItem.gambar_utama_url,
   konten: formattedHtml
 };
+
+const articleSchema = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": article.judul,
+  "description": metaDescription,
+  "image": article.gambar_utama_url ? [article.gambar_utama_url] : [`${SITE_URL}/assets/banner.webp`],
+  "datePublished": article.tanggal_iso,
+  "dateModified": article.tanggal_iso,
+  "author": {
+    "@type": "Organization",
+    "name": "Grand Bedahan Residence",
+    "url": SITE_URL
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "Grand Bedahan Residence",
+    "logo": {
+      "@type": "ImageObject",
+      "url": `${SITE_URL}/android-chrome-512x512.png`
+    }
+  },
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": `${SITE_URL}/artikel/${slug}/`
+  }
+};
 ---
 
-<MainLayout title={article.judul}>
+<MainLayout 
+  title={article.judul}
+  description={metaDescription}
+  ogImage={article.gambar_utama_url || undefined}
+  ogType="article"
+>
+  <!-- JSON-LD Article Schema -->
+  <script type="application/ld+json" set:html={JSON.stringify(articleSchema)} slot="head" />
+
   <div class="bg-[--color-background-alt] py-10 lg:py-20">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
       
@@ -61,7 +103,7 @@ const article = {
         {article.tanggal && (
           <div class="flex items-center justify-center text-[--color-text-secondary] text-sm">
             <Calendar className="w-4 h-4 mr-2" />
-            <time>{article.tanggal}</time>
+            <time datetime={article.tanggal_iso}>{article.tanggal}</time>
           </div>
         )}
       </header>
@@ -94,6 +136,7 @@ const article = {
     </div>
   </div>
 </MainLayout>
+
 
 <style is:global>
   /* Rich styles for prose content rendered from Markdown / HTML */
