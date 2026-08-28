@@ -150,6 +150,20 @@ export async function getTipeRumahList(): Promise<TipeRumah[]> {
             parsedSpesifikasi = {};
           }
 
+          // Determine kategori & dimensi
+          const isCommercial = 
+            item.kategori === 'ruko' || 
+            item.kategori === 'kios' || 
+            parsedSpesifikasi?.kategori === 'ruko' || 
+            parsedSpesifikasi?.kategori === 'kios' || 
+            item.slug.includes('ruko') || 
+            item.slug.includes('kios') || 
+            item.nama_tipe.toLowerCase().includes('ruko') || 
+            item.nama_tipe.toLowerCase().includes('kios');
+
+          const kategori = item.kategori || parsedSpesifikasi?.kategori || (isCommercial ? 'kios' : 'rumah');
+          const dimensi = item.dimensi || parsedSpesifikasi?.dimensi || (isCommercial ? '4m x 6.2m' : undefined);
+
           return {
             id: index + 1,
             slug: item.slug,
@@ -171,6 +185,8 @@ export async function getTipeRumahList(): Promise<TipeRumah[]> {
             galeri: allPhotos,
             denah_url: item.denah_url || '',
             fitur: parsedFitur,
+            kategori,
+            dimensi,
             spesifikasi: parsedSpesifikasi
           };
         });

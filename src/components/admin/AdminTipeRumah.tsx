@@ -22,7 +22,8 @@ import {
   Layers,
   Maximize2,
   Bed,
-  Bath
+  Bath,
+  Store
 } from 'lucide-react';
 
 export default function AdminTipeRumah() {
@@ -33,6 +34,8 @@ export default function AdminTipeRumah() {
   const [deleteModalId, setDeleteModalId] = useState<string | null>(null);
 
   const defaultSpesifikasi = {
+    kategori: 'rumah',
+    dimensi: '',
     pondasi: 'Batu Kali',
     struktur: 'Beton Bertulang',
     dinding: 'Bata Ringan (Hebel) Plester Aci + Cat Weatherproof',
@@ -56,6 +59,8 @@ export default function AdminTipeRumah() {
     nama_tipe: '',
     slug: '',
     tagline: '',
+    kategori: 'rumah',
+    dimensi: '',
     ukuran_tanah: 72,
     ukuran_bangunan: 36,
     jumlah_kamar_tidur: 2,
@@ -109,12 +114,27 @@ export default function AdminTipeRumah() {
   };
 
   const openEditModal = (item: any) => {
+    const isCommercial = 
+      item.kategori === 'ruko' || 
+      item.kategori === 'kios' || 
+      item.spesifikasi?.kategori === 'ruko' || 
+      item.spesifikasi?.kategori === 'kios' || 
+      item.slug.includes('ruko') || 
+      item.slug.includes('kios') || 
+      item.nama_tipe.toLowerCase().includes('ruko') || 
+      item.nama_tipe.toLowerCase().includes('kios');
+
+    const itemKategori = item.kategori || item.spesifikasi?.kategori || (isCommercial ? 'kios' : 'rumah');
+    const itemDimensi = item.dimensi || item.spesifikasi?.dimensi || (isCommercial ? '4m x 6.2m' : '');
+
     const itemFitur = Array.isArray(item.fitur) && item.fitur.length > 0 ? item.fitur : defaultFitur;
     const itemDeskripsiLengkap = Array.isArray(item.deskripsi_lengkap) && item.deskripsi_lengkap.length > 0
       ? item.deskripsi_lengkap.join('\n\n')
       : item.deskripsi || '';
 
     const itemSpesifikasi = {
+      kategori: itemKategori,
+      dimensi: itemDimensi,
       pondasi: item.spesifikasi?.pondasi || defaultSpesifikasi.pondasi,
       struktur: item.spesifikasi?.struktur || defaultSpesifikasi.struktur,
       dinding: item.spesifikasi?.dinding || defaultSpesifikasi.dinding,
@@ -130,6 +150,8 @@ export default function AdminTipeRumah() {
       nama_tipe: item.nama_tipe,
       slug: item.slug,
       tagline: item.tagline || '',
+      kategori: itemKategori,
+      dimensi: itemDimensi,
       ukuran_tanah: Number(item.ukuran_tanah),
       ukuran_bangunan: Number(item.ukuran_bangunan),
       jumlah_kamar_tidur: item.jumlah_kamar_tidur,
@@ -176,6 +198,12 @@ export default function AdminTipeRumah() {
         .map((s) => s.trim())
         .filter(Boolean);
 
+      const updatedSpesifikasi = {
+        ...formData.spesifikasi,
+        kategori: formData.kategori,
+        dimensi: formData.dimensi
+      };
+
       const payload: any = {
         nama_tipe: formData.nama_tipe.trim(),
         slug: formData.slug.trim(),
@@ -196,7 +224,7 @@ export default function AdminTipeRumah() {
         galeri: formData.galeri || [],
         denah_url: formData.denah_url?.trim() || null,
         fitur: fiturArray.length > 0 ? fiturArray : defaultFitur,
-        spesifikasi: formData.spesifikasi,
+        spesifikasi: updatedSpesifikasi,
         urutan_tampil: Number(formData.urutan_tampil),
         is_active: formData.is_active
       };
@@ -385,6 +413,39 @@ export default function AdminTipeRumah() {
             </div>
 
             <form onSubmit={handleSave} className="p-6 overflow-y-auto space-y-4 flex-1 text-sm">
+              {/* Jenis Unit Selector */}
+              <div>
+                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">
+                  Jenis / Kategori Unit *
+                </label>
+                <div className="grid grid-cols-2 gap-3">
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, kategori: 'rumah' })}
+                    className={`flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border font-bold text-xs transition-all cursor-pointer ${
+                      formData.kategori === 'rumah'
+                        ? 'bg-[#0E3B2E] text-white border-[#0E3B2E] shadow-sm'
+                        : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
+                    }`}
+                  >
+                    <Home className="w-4 h-4" />
+                    <span>Rumah Tinggal (Hunian)</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setFormData({ ...formData, kategori: 'kios', dimensi: formData.dimensi || '4m x 6.2m' })}
+                    className={`flex items-center justify-center gap-2 py-2.5 px-4 rounded-xl border font-bold text-xs transition-all cursor-pointer ${
+                      formData.kategori === 'kios' || formData.kategori === 'ruko'
+                        ? 'bg-[#B4833E] text-white border-[#B4833E] shadow-sm'
+                        : 'bg-gray-50 text-gray-700 border-gray-200 hover:bg-gray-100'
+                    }`}
+                  >
+                    <Store className="w-4 h-4" />
+                    <span>Kios / Ruko (Komersial)</span>
+                  </button>
+                </div>
+              </div>
+
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Nama Tipe *</label>
@@ -396,7 +457,7 @@ export default function AdminTipeRumah() {
                       setFormData({ ...formData, nama_tipe: e.target.value });
                       if (!formData.id) handleSlugGenerate(e.target.value);
                     }}
-                    placeholder="Contoh: Tipe 36/72"
+                    placeholder={formData.kategori === 'kios' ? 'Contoh: Kios Tipe 4 x 6.2' : 'Contoh: Tipe 36/72'}
                     className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#0E3B2E]"
                   />
                 </div>
@@ -408,27 +469,44 @@ export default function AdminTipeRumah() {
                     required
                     value={formData.slug}
                     onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                    placeholder="tipe-36-72"
+                    placeholder={formData.kategori === 'kios' ? 'kios' : 'tipe-36-72'}
                     className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#0E3B2E]"
                   />
                 </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Tagline Singkat</label>
-                <input
-                  type="text"
-                  value={formData.tagline}
-                  onChange={(e) => setFormData({ ...formData, tagline: e.target.value })}
-                  placeholder="Hunian Modern Kompak & Efisien"
-                  className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#0E3B2E]"
-                />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">Tagline Singkat</label>
+                  <input
+                    type="text"
+                    value={formData.tagline}
+                    onChange={(e) => setFormData({ ...formData, tagline: e.target.value })}
+                    placeholder={formData.kategori === 'kios' ? 'Kios Usaha Strategis di Depan Kawasan' : 'Hunian Modern Kompak & Efisien'}
+                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#0E3B2E]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1">
+                    {formData.kategori === 'kios' ? 'Dimensi Kios (Panjang x Lebar) *' : 'Dimensi Tambahan (Opsional)'}
+                  </label>
+                  <input
+                    type="text"
+                    value={formData.dimensi}
+                    onChange={(e) => setFormData({ ...formData, dimensi: e.target.value })}
+                    placeholder="Contoh: 4m x 6.2m"
+                    className="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-xl outline-none focus:ring-2 focus:ring-[#0E3B2E]"
+                  />
+                </div>
               </div>
 
               {/* Dimensi & Ruangan Grid */}
               <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5 p-4 bg-gray-50/80 rounded-2xl border border-gray-200/80">
                 <div>
-                  <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">Luas Tanah (m²) *</label>
+                  <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">
+                    {formData.kategori === 'kios' ? 'Luas Tanah / Kios (m²) *' : 'Luas Tanah (m²) *'}
+                  </label>
                   <input
                     type="number"
                     step="any"
@@ -439,7 +517,9 @@ export default function AdminTipeRumah() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">Luas Bangunan (m²) *</label>
+                  <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">
+                    {formData.kategori === 'kios' ? 'Luas Bangunan (m²) *' : 'Luas Bangunan (m²) *'}
+                  </label>
                   <input
                     type="number"
                     step="any"
@@ -450,7 +530,9 @@ export default function AdminTipeRumah() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">Kamar Tidur</label>
+                  <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">
+                    {formData.kategori === 'kios' ? 'K. Tidur (0 = Ruang Usaha)' : 'Kamar Tidur'}
+                  </label>
                   <input
                     type="number"
                     min="0"
@@ -461,7 +543,9 @@ export default function AdminTipeRumah() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">Kamar Mandi</label>
+                  <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">
+                    {formData.kategori === 'kios' ? 'Toilet / K. Mandi' : 'Kamar Mandi'}
+                  </label>
                   <input
                     type="number"
                     min="0"
@@ -472,7 +556,9 @@ export default function AdminTipeRumah() {
                   />
                 </div>
                 <div>
-                  <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">Carport (Mobil)</label>
+                  <label className="block text-[11px] font-bold text-gray-700 uppercase tracking-wider mb-1">
+                    {formData.kategori === 'kios' ? 'Carport / Parkir (Mobil)' : 'Carport (Mobil)'}
+                  </label>
                   <input
                     type="number"
                     min="0"

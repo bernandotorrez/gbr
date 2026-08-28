@@ -36,7 +36,8 @@ import {
   Hammer,
   Calculator,
   ZoomIn,
-  X
+  X,
+  Store
 } from 'lucide-react';
 
 const { slug } = Astro.params;
@@ -49,6 +50,13 @@ if (!tipe) {
 }
 
 const otherTypes = fullList.filter((t) => t.slug !== tipe.slug);
+const isCommercial = 
+  tipe.kategori === 'ruko' || 
+  tipe.kategori === 'kios' || 
+  tipe.slug.includes('ruko') || 
+  tipe.slug.includes('kios') || 
+  tipe.nama_tipe.toLowerCase().includes('ruko') || 
+  tipe.nama_tipe.toLowerCase().includes('kios');
 
 // 1. Fallback Galeri: Gunakan foto utama jika galeri kosong
 const galleryPhotos = (tipe.galeri && tipe.galeri.length > 0)
@@ -58,29 +66,36 @@ const galleryPhotos = (tipe.galeri && tipe.galeri.length > 0)
 // 2. Fallback Deskripsi Lengkap
 const deskripsiLengkap = (Array.isArray(tipe.deskripsi_lengkap) && tipe.deskripsi_lengkap.length > 0)
   ? tipe.deskripsi_lengkap
-  : [tipe.deskripsi || 'Hunian modern bernuansa asri dan bebas banjir di kawasan strategis Sawangan Depok.'];
+  : [tipe.deskripsi || (isCommercial ? 'Kios komersial strategis siap pakai di gerbang utama Grand Bedahan Residence.' : 'Hunian modern bernuansa asri dan bebas banjir di kawasan strategis Sawangan Depok.')];
 
 // 3. Fallback Fitur Unggulan
 const fiturList = (Array.isArray(tipe.fitur) && tipe.fitur.length > 0)
   ? tipe.fitur
-  : [
+  : (isCommercial ? [
+    'Luas Bangunan 22 m² (Dimensi 4m x 6.2m)',
+    'Lokasi Terdepan Gerbang Utama Kawasan',
+    'Tata Ruang Plong / Siap Buka Usaha',
+    '1 Kamar Mandi / Toilet Bersih',
+    'Sertifikat Hak Milik (SHM) & IMB/PBG Lengkap',
+    'Area Parkir Pengunjung Luas & Bebas Banjir'
+  ] : [
     'Sertifikat Hak Milik (SHM) & IMB/PBG Sudah Pecah',
     'Row Jalan Perumahan Lebar 6-7 Meter Paving Block',
     'One Gate System dengan Keamanan CCTV 24 Jam',
     'Taman Terbuka Hijau & Area Bermain Ramah Anak',
     'Lokasi Strategis Dekat Pintu Tol & Pusat Kota Depok'
-  ];
+  ]);
 
 // 4. Fallback Spesifikasi Teknis Material
 const spesifikasi = {
-  pondasi: tipe.spesifikasi?.pondasi || 'Batu Kali',
+  pondasi: tipe.spesifikasi?.pondasi || 'Batu Kali & Beton Bertulang',
   struktur: tipe.spesifikasi?.struktur || 'Beton Bertulang SNI',
   dinding: tipe.spesifikasi?.dinding || 'Bata Ringan (Hebel) Plester Aci + Cat Weatherproof',
   lantai: tipe.spesifikasi?.lantai || 'Granit Tile 60x60 cm',
-  atap: tipe.spesifikasi?.atap || 'Rangka Baja Ringan + Genteng Beton Flat',
-  kusen_pintu: tipe.spesifikasi?.kusen_pintu || 'Kusen Aluminium & Pintu Solid Engineering',
+  atap: tipe.spesifikasi?.atap || 'Rangka Baja Ringan + Genteng Flat',
+  kusen_pintu: tipe.spesifikasi?.kusen_pintu || (isCommercial ? 'Kusen Aluminium & Pintu Kaca / Rolling Door' : 'Kusen Aluminium & Pintu Solid Engineering'),
   sanitair: tipe.spesifikasi?.sanitair || 'Kloset Duduk Standar + Hand Shower',
-  listrik_air: tipe.spesifikasi?.listrik_air || `${tipe.daya_listrik || '1.300 VA'} / ${tipe.sumber_air || 'Sumur Bor + Pompa Listrik'}`
+  listrik_air: tipe.spesifikasi?.listrik_air || `${tipe.daya_listrik || (isCommercial ? '900 VA' : '1.300 VA')} / ${tipe.sumber_air || 'Sumur Bor + Pompa Listrik'}`
 };
 
 const waText = encodeURIComponent(
@@ -91,7 +106,7 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
 
 <MainLayout 
   title={`${tipe.nama_tipe} | Spesifikasi, Denah & Harga - Grand Bedahan Residence`}
-  description={`${tipe.nama_tipe} di Grand Bedahan Residence. ${tipe.tagline}. Luas Tanah ${tipe.ukuran_tanah}m², Luas Bangunan ${tipe.ukuran_bangunan}m², ${tipe.jumlah_kamar_tidur} K. Tidur, ${tipe.jumlah_kamar_mandi} K. Mandi.`}
+  description={`${tipe.nama_tipe} di Grand Bedahan Residence. ${tipe.tagline}. Luas ${tipe.ukuran_bangunan}m², ${isCommercial ? `Dimensi ${tipe.dimensi || '4m x 6.2m'}` : `Luas Tanah ${tipe.ukuran_tanah}m²`}.`}
 >
   <!-- Top Breadcrumbs & Back Navigation -->
   <div class="bg-[#F5F3EE] border-b border-gray-200/70 pt-24 pb-4">
@@ -104,7 +119,7 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
           </a>
           <ChevronRight className="w-4 h-4 mx-1.5 text-gray-400" />
           <a href="/tipe-rumah" class="hover:text-[#0E3B2E] transition-colors">
-            Tipe Rumah
+            Tipe Unit
           </a>
           <ChevronRight className="w-4 h-4 mx-1.5 text-gray-400" />
           <span class="text-[#17201C] font-bold truncate">{tipe.nama_tipe}</span>
@@ -129,10 +144,17 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
         <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-6 pb-6 border-b border-gray-100">
           <div class="max-w-3xl">
             <!-- Badge -->
-            <div class="inline-flex items-center px-3.5 py-1 rounded-full bg-emerald-50 text-[#0E3B2E] border border-emerald-200/60 text-xs font-bold uppercase tracking-wider mb-3">
-              <Sparkles className="w-3.5 h-3.5 mr-1.5 text-[#E5C695]" />
-              CLUSTER EKSKLUSIF • GRAND BEDAHAN RESIDENCE
-            </div>
+            {isCommercial ? (
+              <div class="inline-flex items-center px-3.5 py-1 rounded-full bg-[#0E3B2E] text-[#E5C695] border border-[#E5C695]/40 text-xs font-extrabold uppercase tracking-wider mb-3">
+                <Store className="w-3.5 h-3.5 mr-1.5 text-[#E5C695]" />
+                UNIT KOMERSIAL &amp; KIOS USAHA • GRAND BEDAHAN RESIDENCE
+              </div>
+            ) : (
+              <div class="inline-flex items-center px-3.5 py-1 rounded-full bg-emerald-50 text-[#0E3B2E] border border-emerald-200/60 text-xs font-bold uppercase tracking-wider mb-3">
+                <Sparkles className="w-3.5 h-3.5 mr-1.5 text-[#E5C695]" />
+                CLUSTER EKSKLUSIF • GRAND BEDAHAN RESIDENCE
+              </div>
+            )}
 
             <!-- Main Title -->
             <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#17201C] font-serif tracking-tight">
@@ -163,32 +185,63 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
           </div>
         </div>
 
-        <!-- Quick Specs Badges Row -->
+        <!-- Quick Specs Badges Row (Dynamic for Commercial vs Residential) -->
         <div class="pt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4 text-xs sm:text-sm text-[#17201C] font-semibold">
-          <div class="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50/80 border border-gray-100">
-            <Maximize2 className="w-4 h-4 text-[#047857] shrink-0" />
-            <span>Bangunan: <strong class="text-[#0E3B2E]">{tipe.ukuran_bangunan} m²</strong></span>
-          </div>
-          <div class="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50/80 border border-gray-100">
-            <Layers className="w-4 h-4 text-[#047857] shrink-0" />
-            <span>Tanah: <strong class="text-[#0E3B2E]">{tipe.ukuran_tanah} m²</strong></span>
-          </div>
-          <div class="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50/80 border border-gray-100">
-            <Bed className="w-4 h-4 text-[#047857] shrink-0" />
-            <span><strong>{tipe.jumlah_kamar_tidur > 0 ? `${tipe.jumlah_kamar_tidur} K. Tidur` : 'Ruang Usaha'}</strong></span>
-          </div>
-          <div class="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50/80 border border-gray-100">
-            <Bath className="w-4 h-4 text-[#047857] shrink-0" />
-            <span><strong>{tipe.jumlah_kamar_mandi}</strong> K. Mandi</span>
-          </div>
-          <div class="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50/80 border border-gray-100">
-            <Car className="w-4 h-4 text-[#047857] shrink-0" />
-            <span><strong>{tipe.jumlah_carport > 0 ? `${tipe.jumlah_carport} Carport` : 'Tanpa Carport'}</strong></span>
-          </div>
-          <div class="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50/80 border border-gray-100">
-            <ShieldCheck className="w-4 h-4 text-[#047857] shrink-0" />
-            <span>Legalitas: <strong class="text-[#0E3B2E]">SHM</strong></span>
-          </div>
+          {isCommercial ? (
+            <>
+              <div class="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50/80 border border-gray-100">
+                <Maximize2 className="w-4 h-4 text-[#B4833E] shrink-0" />
+                <span>Luas Kios: <strong class="text-[#0E3B2E]">{tipe.ukuran_bangunan} m²</strong></span>
+              </div>
+              <div class="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50/80 border border-gray-100">
+                <Layers className="w-4 h-4 text-[#B4833E] shrink-0" />
+                <span>Dimensi: <strong class="text-[#0E3B2E]">{tipe.dimensi || '4m x 6.2m'}</strong></span>
+              </div>
+              <div class="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50/80 border border-gray-100">
+                <Store className="w-4 h-4 text-[#B4833E] shrink-0" />
+                <span><strong>Ruang Usaha</strong></span>
+              </div>
+              <div class="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50/80 border border-gray-100">
+                <Bath className="w-4 h-4 text-[#B4833E] shrink-0" />
+                <span><strong>{tipe.jumlah_kamar_mandi}</strong> Toilet</span>
+              </div>
+              <div class="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50/80 border border-gray-100">
+                <Car className="w-4 h-4 text-[#B4833E] shrink-0" />
+                <span><strong>Parkir Luas</strong></span>
+              </div>
+              <div class="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50/80 border border-gray-100">
+                <ShieldCheck className="w-4 h-4 text-[#B4833E] shrink-0" />
+                <span>Legalitas: <strong class="text-[#0E3B2E]">SHM</strong></span>
+              </div>
+            </>
+          ) : (
+            <>
+              <div class="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50/80 border border-gray-100">
+                <Maximize2 className="w-4 h-4 text-[#047857] shrink-0" />
+                <span>Bangunan: <strong class="text-[#0E3B2E]">{tipe.ukuran_bangunan} m²</strong></span>
+              </div>
+              <div class="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50/80 border border-gray-100">
+                <Layers className="w-4 h-4 text-[#047857] shrink-0" />
+                <span>Tanah: <strong class="text-[#0E3B2E]">{tipe.ukuran_tanah} m²</strong></span>
+              </div>
+              <div class="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50/80 border border-gray-100">
+                <Bed className="w-4 h-4 text-[#047857] shrink-0" />
+                <span><strong>{tipe.jumlah_kamar_tidur > 0 ? `${tipe.jumlah_kamar_tidur} K. Tidur` : 'Ruang Usaha'}</strong></span>
+              </div>
+              <div class="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50/80 border border-gray-100">
+                <Bath className="w-4 h-4 text-[#047857] shrink-0" />
+                <span><strong>{tipe.jumlah_kamar_mandi}</strong> K. Mandi</span>
+              </div>
+              <div class="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50/80 border border-gray-100">
+                <Car className="w-4 h-4 text-[#047857] shrink-0" />
+                <span><strong>{tipe.jumlah_carport > 0 ? `${tipe.jumlah_carport} Carport` : 'Tanpa Carport'}</strong></span>
+              </div>
+              <div class="flex items-center gap-2 p-2.5 rounded-xl bg-gray-50/80 border border-gray-100">
+                <ShieldCheck className="w-4 h-4 text-[#047857] shrink-0" />
+                <span>Legalitas: <strong class="text-[#0E3B2E]">SHM</strong></span>
+              </div>
+            </>
+          )}
         </div>
       </div>
 
@@ -250,7 +303,7 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
                     <Maximize2 className="w-5 h-5" />
                   </div>
                   <div>
-                    <p class="text-xs text-gray-500 font-medium">Luas Bangunan</p>
+                    <p class="text-xs text-gray-500 font-medium">{isCommercial ? 'Luas Kios' : 'Luas Bangunan'}</p>
                     <p class="text-base sm:text-lg font-bold text-[#17201C]">{tipe.ukuran_bangunan} m²</p>
                   </div>
                 </div>
@@ -260,18 +313,18 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
                     <Layers className="w-5 h-5" />
                   </div>
                   <div>
-                    <p class="text-xs text-gray-500 font-medium">Luas Tanah</p>
-                    <p class="text-base sm:text-lg font-bold text-[#17201C]">{tipe.ukuran_tanah} m²</p>
+                    <p class="text-xs text-gray-500 font-medium">{isCommercial ? 'Tipe Dimensi' : 'Luas Tanah'}</p>
+                    <p class="text-base sm:text-lg font-bold text-[#17201C]">{isCommercial ? (tipe.dimensi || '4m x 6.2m') : `${tipe.ukuran_tanah} m²`}</p>
                   </div>
                 </div>
 
                 <div class="p-4 rounded-2xl bg-[#FAF9F6] border border-gray-100 flex flex-col justify-between">
                   <div class="w-10 h-10 rounded-xl bg-emerald-50 text-[#0E3B2E] border border-emerald-100 flex items-center justify-center mb-3">
-                    <Bed className="w-5 h-5" />
+                    {isCommercial ? <Store className="w-5 h-5" /> : <Bed className="w-5 h-5" />}
                   </div>
                   <div>
-                    <p class="text-xs text-gray-500 font-medium">Kamar Tidur</p>
-                    <p class="text-base sm:text-lg font-bold text-[#17201C]">{tipe.jumlah_kamar_tidur > 0 ? `${tipe.jumlah_kamar_tidur} Ruang` : 'Ruang Usaha'}</p>
+                    <p class="text-xs text-gray-500 font-medium">{isCommercial ? 'Tipe Ruang' : 'Kamar Tidur'}</p>
+                    <p class="text-base sm:text-lg font-bold text-[#17201C]">{isCommercial ? 'Ruang Usaha' : (tipe.jumlah_kamar_tidur > 0 ? `${tipe.jumlah_kamar_tidur} Ruang` : 'Ruang Usaha')}</p>
                   </div>
                 </div>
 
@@ -280,7 +333,7 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
                     <Bath className="w-5 h-5" />
                   </div>
                   <div>
-                    <p class="text-xs text-gray-500 font-medium">Kamar Mandi</p>
+                    <p class="text-xs text-gray-500 font-medium">{isCommercial ? 'Toilet / Sanitasi' : 'Kamar Mandi'}</p>
                     <p class="text-base sm:text-lg font-bold text-[#17201C]">{tipe.jumlah_kamar_mandi} Ruang</p>
                   </div>
                 </div>
@@ -290,8 +343,8 @@ const waUrl = `https://wa.me/6281215776218?text=${waText}`;
                     <Car className="w-5 h-5" />
                   </div>
                   <div>
-                    <p class="text-xs text-gray-500 font-medium">Carport</p>
-                    <p class="text-base sm:text-lg font-bold text-[#17201C]">{tipe.jumlah_carport > 0 ? `${tipe.jumlah_carport} Mobil` : 'Tanpa Carport'}</p>
+                    <p class="text-xs text-gray-500 font-medium">{isCommercial ? 'Area Parkir' : 'Carport'}</p>
+                    <p class="text-base sm:text-lg font-bold text-[#17201C]">{isCommercial ? 'Parkir Luas' : (tipe.jumlah_carport > 0 ? `${tipe.jumlah_carport} Mobil` : 'Tanpa Carport')}</p>
                   </div>
                 </div>
 

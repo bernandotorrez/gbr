@@ -19,6 +19,8 @@ export interface TipeRumah {
   galeri: string[];
   denah_url: string;
   fitur: string[];
+  kategori?: 'rumah' | 'ruko' | 'kios' | string;
+  dimensi?: string;
   spesifikasi: {
     pondasi: string;
     dinding: string;
@@ -28,6 +30,8 @@ export interface TipeRumah {
     kusen_pintu: string;
     sanitair: string;
     listrik_air: string;
+    kategori?: string;
+    dimensi?: string;
   };
 }
 

@@ -14,15 +14,16 @@ import {
   ShieldCheck,
   CheckCircle2,
   Sparkles,
-  Home
+  Home,
+  Store
 } from 'lucide-react';
 
 const daftarTipeRumah = await getTipeRumahList();
 ---
 
 <MainLayout 
-  title="Pilihan Tipe Rumah" 
-  description="Daftar lengkap tipe rumah di Grand Bedahan Residence, Depok. Desain modern, lingkungan asri, legalitas SHM, dan bebas banjir."
+  title="Pilihan Tipe Unit Hunian & Komersial" 
+  description="Daftar lengkap tipe rumah dan kios/ruko di Grand Bedahan Residence, Depok. Desain modern, lingkungan asri, legalitas SHM, dan bebas banjir."
 >
   <!-- Breadcrumb -->
   <div class="bg-[#F5F3EE] border-b border-gray-200/70 py-4">
@@ -33,7 +34,7 @@ const daftarTipeRumah = await getTipeRumahList();
           <span>Beranda</span>
         </a>
         <ChevronRight className="w-4 h-4 mx-2 text-gray-400" />
-        <span class="text-[#17201C] font-semibold">Tipe Rumah</span>
+        <span class="text-[#17201C] font-semibold">Tipe Unit</span>
       </nav>
     </div>
   </div>
@@ -44,13 +45,13 @@ const daftarTipeRumah = await getTipeRumahList();
       <div class="text-center max-w-3xl mx-auto">
         <div class="inline-flex items-center px-3.5 py-1 rounded-full bg-emerald-50 text-[#047857] text-xs font-semibold uppercase tracking-wider mb-3 border border-emerald-200">
           <LayoutGrid className="w-3.5 h-3.5 mr-1.5" />
-          Katalog Unit Hunian
+          Katalog Unit Properti
         </div>
         <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-[#17201C] font-serif tracking-tight">
-          Pilihan Tipe Rumah Terbaik
+          Pilihan Unit Hunian &amp; Komersial
         </h1>
         <p class="mt-4 text-base sm:text-lg text-[#34413B] leading-relaxed">
-          Temukan pilihan unit rumah modern berkonsep tropis asri di Sawangan, Depok. Dirancang dengan spesifikasi material berkualitas dan penataan ruang yang fungsional untuk kenyamanan keluarga Anda.
+          Temukan pilihan unit rumah modern dan kios komersial strategis di Grand Bedahan Residence, Sawangan, Depok.
         </p>
       </div>
     </div>
@@ -59,8 +60,16 @@ const daftarTipeRumah = await getTipeRumahList();
   <!-- Units List Section -->
   <section class="py-12 sm:py-20 bg-white">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-10 max-w-5xl mx-auto">
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
         {daftarTipeRumah.map((tipe) => {
+          const isCommercial = 
+            tipe.kategori === 'ruko' || 
+            tipe.kategori === 'kios' || 
+            tipe.slug.includes('ruko') || 
+            tipe.slug.includes('kios') || 
+            tipe.nama_tipe.toLowerCase().includes('ruko') || 
+            tipe.nama_tipe.toLowerCase().includes('kios');
+
           const waText = encodeURIComponent(
             `Halo Marketing Grand Bedahan Residence, saya tertarik dengan ${tipe.nama_tipe}. Boleh minta info promo, pricelist, dan jadwal survei lokasi?`
           );
@@ -69,47 +78,88 @@ const daftarTipeRumah = await getTipeRumahList();
           return (
             <div class="bg-white rounded-2xl shadow-md hover:shadow-2xl transition-all duration-300 overflow-hidden border border-gray-100 flex flex-col group">
               <!-- Card Image with Pill Badge -->
-              <div class="relative h-64 sm:h-76 overflow-hidden">
+              <div class="relative h-64 sm:h-72 overflow-hidden">
                 <img 
                   src={tipe.foto_url} 
                   alt={tipe.nama_tipe} 
                   class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
-                <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-bold text-[#17201C] shadow-md">
-                  {tipe.nama_tipe}
-                </div>
+                {isCommercial ? (
+                  <div class="absolute top-4 right-4 bg-[#0E3B2E] text-[#E5C695] border border-[#E5C695]/40 px-3.5 py-1.5 rounded-full text-xs font-extrabold uppercase tracking-wider shadow-md flex items-center gap-1.5 backdrop-blur-sm">
+                    <Store className="w-3.5 h-3.5 text-[#E5C695]" />
+                    <span>KIOS &amp; RUANG USAHA</span>
+                  </div>
+                ) : (
+                  <div class="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-4 py-1.5 rounded-full text-sm font-bold text-[#17201C] shadow-md">
+                    {tipe.nama_tipe}
+                  </div>
+                )}
               </div>
               
               <!-- Card Body -->
-              <div class="p-6 sm:p-8 flex flex-col flex-grow">
-                <h2 class="text-2xl sm:text-3xl font-bold text-[#17201C] font-serif mb-1 group-hover:text-[#0E3B2E] transition-colors">
+              <div class="p-6 sm:p-7 flex flex-col flex-grow">
+                <div class="flex items-center gap-2 mb-1">
+                  <span class={`text-[10px] font-extrabold uppercase tracking-wider px-2 py-0.5 rounded-md ${
+                    isCommercial ? 'bg-amber-100/80 text-[#B4833E]' : 'bg-emerald-50 text-[#0E3B2E]'
+                  }`}>
+                    {isCommercial ? 'Unit Komersial' : 'Rumah Tinggal'}
+                  </span>
+                </div>
+
+                <h2 class="text-xl sm:text-2xl font-bold text-[#17201C] font-serif mb-1 group-hover:text-[#0E3B2E] transition-colors">
                   {tipe.nama_tipe}
                 </h2>
                 <p class="text-2xl sm:text-3xl font-bold text-[#0E3B2E] mb-2 font-sans">
                   {formatRupiah(tipe.harga)}
                 </p>
-                <p class="text-xs sm:text-sm text-[#595959] mb-4">
-                  Luas Tanah: <span class="font-bold text-[#17201C]">{tipe.ukuran_tanah} m²</span> • Luas Bangunan: <span class="font-bold text-[#17201C]">{tipe.ukuran_bangunan} m²</span>
-                </p>
+
+                {isCommercial ? (
+                  <p class="text-xs sm:text-sm text-[#595959] mb-4">
+                    Luas Kios: <span class="font-bold text-[#17201C]">{tipe.ukuran_bangunan} m²</span> • Dimensi: <span class="font-bold text-[#17201C]">{tipe.dimensi || '4m x 6.2m'}</span>
+                  </p>
+                ) : (
+                  <p class="text-xs sm:text-sm text-[#595959] mb-4">
+                    Luas Tanah: <span class="font-bold text-[#17201C]">{tipe.ukuran_tanah} m²</span> • Luas Bangunan: <span class="font-bold text-[#17201C]">{tipe.ukuran_bangunan} m²</span>
+                  </p>
+                )}
                 
                 <p class="text-sm text-[#4A5568] mb-6 leading-relaxed line-clamp-2">
                   {tipe.deskripsi}
                 </p>
 
-                <!-- Specs Row (Bed, Bath, Carport) -->
-                <div class="flex items-center justify-between text-sm text-[#4A5568] py-3.5 border-y border-gray-100 mb-6 font-semibold bg-[#FAF9F6] px-4 rounded-xl">
-                  <div class="flex items-center gap-1.5">
-                    <Bed className="w-4.5 h-4.5 text-[#047857]" />
-                    <span>{tipe.jumlah_kamar_tidur} K. Tidur</span>
-                  </div>
-                  <div class="flex items-center gap-1.5">
-                    <Bath className="w-4.5 h-4.5 text-[#047857]" />
-                    <span>{tipe.jumlah_kamar_mandi} K. Mandi</span>
-                  </div>
-                  <div class="flex items-center gap-1.5">
-                    <Car className="w-4.5 h-4.5 text-[#047857]" />
-                    <span>{tipe.jumlah_carport} Carport</span>
-                  </div>
+                <!-- Specs Row (Dynamic for Commercial vs Residential) -->
+                <div class="flex items-center justify-between text-xs sm:text-sm text-[#4A5568] py-3.5 border-y border-gray-100 mb-6 font-semibold bg-[#FAF9F6] px-4 rounded-xl">
+                  {isCommercial ? (
+                    <>
+                      <div class="flex items-center gap-1.5">
+                        <Store className="w-4 h-4 text-[#B4833E]" />
+                        <span>Ruang Usaha</span>
+                      </div>
+                      <div class="flex items-center gap-1.5">
+                        <Bath className="w-4 h-4 text-[#B4833E]" />
+                        <span>{tipe.jumlah_kamar_mandi} Toilet</span>
+                      </div>
+                      <div class="flex items-center gap-1.5">
+                        <Car className="w-4 h-4 text-[#B4833E]" />
+                        <span>Parkir Luas</span>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div class="flex items-center gap-1.5">
+                        <Bed className="w-4.5 h-4.5 text-[#047857]" />
+                        <span>{tipe.jumlah_kamar_tidur} K. Tidur</span>
+                      </div>
+                      <div class="flex items-center gap-1.5">
+                        <Bath className="w-4.5 h-4.5 text-[#047857]" />
+                        <span>{tipe.jumlah_kamar_mandi} K. Mandi</span>
+                      </div>
+                      <div class="flex items-center gap-1.5">
+                        <Car className="w-4.5 h-4.5 text-[#047857]" />
+                        <span>{tipe.jumlah_carport > 0 ? `${tipe.jumlah_carport} Carport` : 'Tanpa Carport'}</span>
+                      </div>
+                    </>
+                  )}
                 </div>
 
                 <!-- Action Buttons -->
