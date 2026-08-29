@@ -108,8 +108,9 @@ const SITE_URL = 'https://grandbedahanresidence.com';
 const listingSchema = {
   "@context": "https://schema.org",
   "@type": "Product",
-  "name": tipe.nama_tipe,
-  "description": `${tipe.tagline}. Luas bangunan ${tipe.ukuran_bangunan}m², luas tanah ${tipe.ukuran_tanah}m². ${isCommercial ? 'Unit komersial' : 'Hunian'} di Grand Bedahan Residence, Sawangan, Depok.`,
+  "name": `${tipe.nama_tipe} — Grand Bedahan Residence`,
+  "description": `${tipe.tagline}. Luas bangunan ${tipe.ukuran_bangunan}m², ${isCommercial ? `dimensi ${tipe.dimensi || '4m x 6.2m'}` : `luas tanah ${tipe.ukuran_tanah}m²`}. Pilihan perumahan di Sawangan Depok bebas banjir dengan legalitas SHM.`,
+  "keywords": `${tipe.nama_tipe}, Perumahan di Sawangan, Perumahan di Depok, Rumah di Sawangan Depok, Grand Bedahan Residence, Rumah ${tipe.nama_tipe} Depok`,
   "image": galleryPhotos.length > 0 ? galleryPhotos : [`${SITE_URL}/assets/banner.webp`],
   "url": `${SITE_URL}/tipe-rumah/${tipe.slug}/`,
   "brand": {
@@ -141,8 +142,19 @@ const listingSchema = {
 ---
 
 <MainLayout 
-  title={`${tipe.nama_tipe} | Spesifikasi, Denah & Harga - Grand Bedahan Residence`}
-  description={`${tipe.nama_tipe} di Grand Bedahan Residence. ${tipe.tagline}. Luas ${tipe.ukuran_bangunan}m², ${isCommercial ? `Dimensi ${tipe.dimensi || '4m x 6.2m'}` : `Luas Tanah ${tipe.ukuran_tanah}m²`}. Harga mulai ${tipe.cicilan_mulai}/bulan.`}
+  title={`${tipe.nama_tipe} | Perumahan di Sawangan Depok - Grand Bedahan Residence`}
+  description={`${tipe.nama_tipe} di Grand Bedahan Residence — Perumahan di Sawangan Depok. ${tipe.tagline}. Luas ${tipe.ukuran_bangunan}m², ${isCommercial ? `dimensi ${tipe.dimensi || '4m x 6.2m'}` : `luas tanah ${tipe.ukuran_tanah}m²`}. Legalitas SHM, bebas banjir & cicilan mulai ${tipe.cicilan_mulai}/bulan.`}
+  keywords={[
+    tipe.nama_tipe,
+    "Perumahan di Sawangan",
+    "Perumahan di Depok",
+    `Rumah ${tipe.nama_tipe} Sawangan`,
+    `Rumah ${tipe.nama_tipe} Depok`,
+    "Rumah di Sawangan Depok",
+    "Perumahan Bebas Banjir Sawangan",
+    "Grand Bedahan Residence",
+    "Jual Rumah Sawangan Depok"
+  ]}
   ogImage={galleryPhotos[0] || undefined}
 >
   <!-- JSON-LD RealEstateListing Schema -->

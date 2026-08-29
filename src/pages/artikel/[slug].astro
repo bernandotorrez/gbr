@@ -65,6 +65,14 @@ const articleSchema = {
 <MainLayout 
   title={article.judul}
   description={metaDescription}
+  keywords={[
+    article.judul,
+    articleItem.kategori || "Properti",
+    "Perumahan di Sawangan",
+    "Perumahan di Depok",
+    "Grand Bedahan Residence",
+    "Tips Rumah Sawangan Depok"
+  ]}
   ogImage={article.gambar_utama_url || undefined}
   ogType="article"
 >

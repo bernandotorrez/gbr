@@ -8,9 +8,12 @@ import VisitorTracker from '../components/islands/VisitorTracker';
 const SITE_URL = 'https://grandbedahanresidence.com';
 const DEFAULT_OG_IMAGE = `${SITE_URL}/assets/banner.webp`;
 
+const DEFAULT_KEYWORDS = "Perumahan di Sawangan, Perumahan di Depok, Rumah di Sawangan Depok, Perumahan Sawangan Depok, Perumahan Bebas Banjir Depok, Rumah Bebas Banjir Sawangan, Grand Bedahan Residence, Cluster Sawangan Depok, Rumah SHM Sawangan Depok, Rumah DP 0 Depok, Perumahan Murah di Depok, Jual Rumah Sawangan Depok, Perumahan Dekat Tol Sawangan, Perumahan Dekat Stasiun Citayam";
+
 interface Props {
   title: string;
   description?: string;
+  keywords?: string | string[];
   ogImage?: string;
   canonicalUrl?: string;
   ogType?: 'website' | 'article';
@@ -18,14 +21,18 @@ interface Props {
 
 const { 
   title, 
-  description = "Grand Bedahan Residence — Perumahan modern bebas banjir di Sawangan, Depok. Legalitas SHM, DP 0%, KPR bank, lingkungan asri, one gate system. Mulai dari harga terjangkau.",
+  description = "Grand Bedahan Residence — Pilihan terbaik perumahan di Sawangan, Depok. Hunian modern bebas banjir dengan legalitas SHM, DP 0%, KPR bank, lingkungan asri, one gate system. Mulai dari harga terjangkau.",
+  keywords,
   ogImage = DEFAULT_OG_IMAGE,
   canonicalUrl,
   ogType = 'website',
 } = Astro.props;
 
-const pageTitle = `${title} | Grand Bedahan Residence`;
+const pageTitle = title.includes('Grand Bedahan Residence') ? title : `${title} | Grand Bedahan Residence`;
 const canonical = canonicalUrl ?? `${SITE_URL}${Astro.url.pathname}`;
+const keywordsContent = Array.isArray(keywords) 
+  ? keywords.join(', ') 
+  : (keywords || DEFAULT_KEYWORDS);
 ---
 
 <!DOCTYPE html>
@@ -37,7 +44,15 @@ const canonical = canonicalUrl ?? `${SITE_URL}${Astro.url.pathname}`;
     <!-- Primary SEO -->
     <title>{pageTitle}</title>
     <meta name="description" content={description} />
+    <meta name="keywords" content={keywordsContent} />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
     <link rel="canonical" href={canonical} />
+
+    <!-- Geo Tags for Local SEO (Sawangan, Depok) -->
+    <meta name="geo.region" content="ID-JB" />
+    <meta name="geo.placename" content="Sawangan, Depok" />
+    <meta name="geo.position" content="-6.4267651;106.7710141" />
+    <meta name="ICBM" content="-6.4267651, 106.7710141" />
 
     <!-- Open Graph / Facebook / WhatsApp -->
     <meta property="og:type" content={ogType} />

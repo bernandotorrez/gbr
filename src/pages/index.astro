@@ -21,14 +21,16 @@ const localBusinessSchema = {
   "@type": ["RealEstateAgent", "LocalBusiness"],
   "name": "Grand Bedahan Residence",
   "alternateName": "GBR Sawangan",
-  "description": "Perumahan modern bebas banjir di Sawangan, Depok. Legalitas SHM, DP 0%, KPR bank, lingkungan asri, one gate system. Tipe rumah 2 & 3 kamar tidur, serta kios komersial.",
+  "slogan": "Perumahan Modern Bebas Banjir di Sawangan Depok",
+  "description": "Grand Bedahan Residence adalah perumahan modern bebas banjir di Sawangan, Depok. Menawarkan pilihan rumah berkualitas dengan legalitas SHM, DP 0%, KPR bank, lingkungan asri, one gate system, dan lokasi strategis.",
+  "keywords": "Perumahan di Sawangan, Perumahan di Depok, Rumah di Sawangan Depok, Perumahan Sawangan Depok, Perumahan Bebas Banjir Depok, Cluster Sawangan Depok, Grand Bedahan Residence, Rumah Murah Depok, Rumah SHM Sawangan",
   "url": SITE_URL,
   "logo": `${SITE_URL}/android-chrome-512x512.png`,
   "image": OG_IMAGE,
   "telephone": "+6281215776218",
   "address": {
     "@type": "PostalAddress",
-    "streetAddress": "Jl. Bedahan, Sawangan",
+    "streetAddress": "Jl. Masjid Al-Mukhlisin No.006, RT.002, Bedahan, Kec. Sawangan",
     "addressLocality": "Depok",
     "addressRegion": "Jawa Barat",
     "postalCode": "16519",
@@ -50,16 +52,36 @@ const localBusinessSchema = {
     { "@type": "City", "name": "Depok" },
     { "@type": "City", "name": "Sawangan" },
     { "@type": "City", "name": "Bogor" },
-    { "@type": "City", "name": "Tangerang Selatan" }
+    { "@type": "City", "name": "Tangerang Selatan" },
+    { "@type": "City", "name": "Jakarta Selatan" }
   ],
-  "sameAs": [],
-  "priceRange": "Rp 400.000.000 - Rp 1.200.000.000"
+  "sameAs": [
+    "https://www.instagram.com/grandbedahan.id",
+    "https://www.tiktok.com/@grandbedahanresidence"
+  ],
+  "priceRange": "Rp 500.000.000 - Rp 600.000.000"
 };
 ---
 
 <MainLayout 
-  title="Beranda"
-  description="Grand Bedahan Residence — Perumahan modern bebas banjir di Sawangan, Depok. Legalitas SHM, DP 0%, KPR bank rekanan, lingkungan asri & one gate system. Mulai dari harga terjangkau."
+  title="Perumahan di Sawangan Depok Bebas Banjir & Asri"
+  description="Grand Bedahan Residence — Pilihan utama perumahan di Sawangan, Depok. Hunian modern bebas banjir dengan legalitas SHM, DP 0%, cicilan ringan, one gate system & lokasi strategis dekat tol dan stasiun."
+  keywords={[
+    "Perumahan di Sawangan",
+    "Perumahan di Depok",
+    "Rumah di Sawangan Depok",
+    "Perumahan Sawangan Depok",
+    "Perumahan Bebas Banjir Depok",
+    "Rumah Bebas Banjir Sawangan",
+    "Grand Bedahan Residence",
+    "Cluster Sawangan Depok",
+    "Rumah SHM Sawangan Depok",
+    "Rumah DP 0 Depok",
+    "Perumahan Murah di Depok",
+    "Jual Rumah Sawangan Depok",
+    "Perumahan Dekat Tol Sawangan",
+    "Perumahan Dekat Stasiun Citayam"
+  ]}
 >
   <!-- JSON-LD LocalBusiness Schema -->
   <script type="application/ld+json" set:html={JSON.stringify(localBusinessSchema)} slot="head" />
